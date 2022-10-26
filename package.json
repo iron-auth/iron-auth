@@ -1,0 +1,34 @@
+{
+  "name": "root",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "tsc": "turbo run tsc",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{js,ts,tsx,md}\"",
+    "clean": "turbo run clean && rimraf node_modules",
+    "postinstall": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "turbo": "latest"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "yarn": ">=3.0.0",
+    "node": ">=16.0.0"
+  },
+  "packageManager": "yarn@3.2.1"
+}

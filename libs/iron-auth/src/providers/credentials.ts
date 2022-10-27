@@ -1,3 +1,4 @@
+import { emailRegex, passwordRegex } from '../../constants';
 import type { GenericProviderConfig, InternalRequest } from '../../types';
 import { IronAuthError } from '../helpers';
 
@@ -16,11 +17,6 @@ export type CredentialsPreCheckResponse = {
    */
   password: string;
 };
-
-// Regex used in type=”email” input element.
-const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
-// If there is not at least: 8 characters, 1 special char, 1 uppercase, 1 lowercase, and 1 number.
-const passwordRegex = /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/;
 
 /**
  * A credentials provider for Iron Auth.

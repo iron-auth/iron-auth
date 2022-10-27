@@ -1,4 +1,5 @@
 import { getIronSession } from 'iron-session/edge';
+import type { LayoutRequest } from '../src/helpers';
 import { getServerSideSession as getServerSideSessionOriginal, parseConfig } from '../src/helpers';
 import type { EdgeRequest, IronAuthConfig, Session } from '../types';
 
@@ -12,13 +13,13 @@ import type { EdgeRequest, IronAuthConfig, Session } from '../types';
  * @returns The session data.
  */
 export const getServerSideSession = async (
-  req: EdgeRequest,
+  req: EdgeRequest | LayoutRequest,
   config: IronAuthConfig,
   env?: Record<string, string | undefined>,
 ): Promise<Session> => {
   const parsedConfig = parseConfig(config, env);
 
-  const session = await getIronSession(req, new Response(), parsedConfig.iron);
+  const session = await getIronSession(req as EdgeRequest, new Response(), parsedConfig.iron);
 
   return getServerSideSessionOriginal(session);
 };

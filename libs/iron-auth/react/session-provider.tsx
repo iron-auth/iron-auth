@@ -108,7 +108,7 @@ export const useSession = <DefinedSession extends boolean = false>() =>
 type Props = {
   basePath?: string;
   children: React.ReactNode;
-  session?: Session | undefined;
+  session?: Session | undefined | null;
 };
 
 /**
@@ -192,7 +192,7 @@ export const SessionProvider = ({
 
   // Fetch session initially if no page session is provided
   useEffect(() => {
-    if (!pageSession) {
+    if (typeof pageSession === 'undefined') {
       fetchSession({ initial: true });
     }
   }, [fetchSession, pageSession]);

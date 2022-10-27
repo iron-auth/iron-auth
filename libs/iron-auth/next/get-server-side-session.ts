@@ -1,5 +1,6 @@
 import { getIronSession } from 'iron-session';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { LayoutRequest } from '../src/helpers';
 import { getServerSideSession as getServerSideSessionOriginal, parseConfig } from '../src/helpers';
 import type { IronAuthConfig, Session } from '../types';
 
@@ -13,13 +14,13 @@ import type { IronAuthConfig, Session } from '../types';
  * @returns The session data.
  */
 export const getServerSideSession = async (
-  req: NextApiRequest,
+  req: NextApiRequest | LayoutRequest,
   res: NextApiResponse,
   config: IronAuthConfig,
 ): Promise<Session> => {
   const parsedConfig = parseConfig(config, process.env);
 
-  const session = await getIronSession(req, res, parsedConfig.iron);
+  const session = await getIronSession(req as NextApiRequest, res, parsedConfig.iron);
 
   return getServerSideSessionOriginal(session);
 };

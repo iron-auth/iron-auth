@@ -291,6 +291,8 @@ export type IronAuthConfig = {
   /**
    * Define redirect URLs for providers.
    *
+   * @note It is NOT possible to set cookies/headers when redirecting.
+   *
    * Either strings or functions may be provided. A function must return a string for the redirect to occur.
    *
    * If a function is provided, either the response data or the error will be passed, depending on the type of redirect.
@@ -302,24 +304,35 @@ export type IronAuthConfig = {
      * Redirect URL for when the sign in route succeeds.
      *
      * For functions, the response data is passed through.
+     *
+     * @note It is NOT possible to set or modify cookies/headers when redirecting.
+     *
      */
     signIn?: string | ((data: SigninResponse) => string);
     /**
      * Redirect URL for when the sign up route succeeds.
      *
      * For functions, the response data is passed through.
+     *
+     * @note It is NOT possible to set or modify cookies/headers when redirecting.
+     *
      */
     signUp?: string | ((data: SignupResponse) => string);
     /**
      * Redirect URL for when the sign out route succeeds.
      *
      * For functions, the response data is passed through.
+     *
+     * @note It is NOT possible to set or modify cookies/headers when redirecting.
+     *
      */
     signOut?: string | ((data: SignoutResponse) => string);
     /**
      * Redirect URL for when the link account route succeeds.
      *
      * For functions, the response data is passed through.
+     *
+     * @note It is NOT possible to set or modify cookies/headers when redirecting.
      */
     linkAccount?: string | ((data: SignoutResponse) => string);
     /**
@@ -330,6 +343,8 @@ export type IronAuthConfig = {
      * The redirect will have a query parameter with the error code and error message.
      *
      * e.g. /auth-error-page?error=UNAUTHORIZED&message=Invalid credentials
+     *
+     * @note It is NOT possible to set or modify cookies/headers when redirecting.
      */
     error?: string | ((error: IronAuthError) => string);
   };

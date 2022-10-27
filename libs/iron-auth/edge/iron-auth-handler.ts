@@ -40,15 +40,17 @@ export const ironAuthHandler = async (
       credentials: 'same-origin',
     };
 
+    const internalRes = new Response();
+
     const session = await getIronSession(
       internalReq as unknown as Request,
-      new Response(),
+      internalRes,
       parsedConfig.iron,
     );
 
     const resp = processCallback({
       config: parsedConfig,
-      resp: await requestHandler(parsedConfig, internalReq, new Response(), session),
+      resp: await requestHandler(parsedConfig, internalReq, internalRes, session),
     });
 
     if (resp.redirect) {

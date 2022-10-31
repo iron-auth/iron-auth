@@ -26,7 +26,8 @@
     "msw": "^0.47.4",
     "next": "^13.0.0",
     "node-mocks-http": "^1.11.0",
-    "prisma": "^4.3.0",
+    "prisma": "^4.5.0",
+    "prisma-mock-vitest": "^0.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
@@ -36,7 +37,7 @@
   },
   "dependencies": {
     "@iron-auth/prisma-adapter": "workspace:^",
-    "@prisma/client": "^4.3.0",
+    "@prisma/client": "^4.5.0",
     "base64-arraybuffer": "^1.0.2",
     "iron-auth": "workspace:^",
     "iron-session": "^6.2.1"

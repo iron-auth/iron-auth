@@ -1,26 +1,33 @@
 import type { SignupResponse } from 'iron-auth';
 import { IronAuthError } from 'iron-auth';
 import { ironAuthHandler, modifySession } from 'iron-auth/next';
-import type { IronAuthApiResponse } from 'iron-auth/types';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
 import type { IronSession } from 'iron-session';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from './helpers';
 import {
+  AccountBasket,
+  resetPrisma,
   getCookieFromHeaderAsString,
   getCsrfToken,
   getHttpMock,
   getJsonResp,
-  ironAuthOptions,
+  getIronAuthOptions,
 } from './helpers';
 
 suite('Request handler treats request correctly', () => {
+  let ironAuthOptions: IronAuthConfig;
+  let accounts: AccountBasket;
   let csrfInfo: CsrfInfo;
   let cookie: string;
 
   beforeAll(async () => {
     vi.clearAllMocks();
+    await resetPrisma();
 
+    ironAuthOptions = await getIronAuthOptions();
     csrfInfo = await getCsrfToken();
+    accounts = new AccountBasket();
   });
 
   test('No session throws error', async () => {
@@ -41,6 +48,8 @@ suite('Request handler treats request correctly', () => {
   });
 
   test('Session exists and returns session data', async () => {
+    const { email, password } = accounts.get('primary');
+
     let { req, res } = getHttpMock({
       method: 'POST',
       query: {
@@ -49,7 +58,7 @@ suite('Request handler treats request correctly', () => {
         providerId: 'email-pass-provider',
       },
       cookies: { ...csrfInfo.cookies },
-      body: { ...csrfInfo.body, email: 'test-email@ixionlabs.com', password: 'Password_123' },
+      body: { ...csrfInfo.body, email, password },
     });
 
     await ironAuthHandler(ironAuthOptions, req, res);
@@ -57,8 +66,8 @@ suite('Request handler treats request correctly', () => {
     const data = getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
 
     expect(res.statusCode).toEqual(200);
-    expect(data.data.email).toEqual('test-email@ixionlabs.com');
-    expect(data.data.id.length).toBeGreaterThan(0);
+    expect(data.data.email).toEqual(email);
+    expect(data.data.id.toString().length).toBeGreaterThan(0);
 
     cookie = getCookieFromHeaderAsString(res);
 

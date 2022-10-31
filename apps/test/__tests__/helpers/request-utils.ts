@@ -1,11 +1,13 @@
 import { prismaAdapter } from '@iron-auth/prisma-adapter';
+import type { PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { credentialsProvider } from 'iron-auth';
 import { ironAuthHandler } from 'iron-auth/next';
 import type { IronAuthConfig, IronAuthApiResponse } from 'iron-auth/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { MockResponse, RequestOptions, ResponseOptions } from 'node-mocks-http';
 import { createMocks } from 'node-mocks-http';
-import { prisma } from '../../__mocks__/prisma';
+import { createPrismaClient } from 'prisma-mock-vitest';
 
 type ApiRequest = NextApiRequest & ReturnType<typeof createMocks>['req'];
 type ApiResponse = NextApiResponse & ReturnType<typeof createMocks>['res'];
@@ -21,7 +23,7 @@ export const getJsonResp = <T extends object>(res: ApiResponse) => {
   return res._getJSONData() as T;
 };
 
-export const ironAuthOptions: IronAuthConfig = {
+const ironAuthOptions = (prisma: PrismaClient): IronAuthConfig => ({
   debug: false,
   iron: {
     cookieName: 'iron-auth.session',
@@ -38,6 +40,26 @@ export const ironAuthOptions: IronAuthConfig = {
     signIn: [{ type: 'credentials', id: 'email-pass-provider' }],
     linkAccount: [{ type: 'credentials', id: 'email-pass-provider-alt' }],
   },
+});
+
+let opts: IronAuthConfig | undefined;
+let prisma: PrismaClient;
+export const getIronAuthOptions = async () => {
+  if (!opts || !prisma) {
+    prisma = await createPrismaClient<PrismaClient>({}, Prisma.dmmf.datamodel);
+    opts = ironAuthOptions(prisma);
+  }
+
+  return opts;
+};
+export const getPrisma = () => prisma;
+
+export const resetPrisma = async () => {
+  if (prisma) {
+    const models = Object.keys(prisma).filter((k) => !k.startsWith('_'));
+    // @ts-expect-error - They are valid keys.
+    await Promise.all(models.map((m) => prisma[m].deleteMany()));
+  }
 };
 
 export const cookieFromHeader = (res: MockResponse<ApiResponse>) => {
@@ -77,7 +99,7 @@ export const getCsrfToken = async (): Promise<CsrfInfo> => {
     },
   });
 
-  await ironAuthHandler(ironAuthOptions, req, res);
+  await ironAuthHandler(await getIronAuthOptions(), req, res);
 
   const resp = getJsonResp<IronAuthApiResponse<'success', string>>(res);
 

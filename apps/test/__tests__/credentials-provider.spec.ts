@@ -1,31 +1,38 @@
+import type { PrismaClient } from '@prisma/client';
 import type { SignupResponse } from 'iron-auth';
 import { ironAuthHandler } from 'iron-auth/next';
-import type { IronAuthApiResponse } from 'iron-auth/types';
-import { suite, test, expect, vi, beforeAll, afterAll } from 'vitest';
-import { prisma, destroy } from '../__mocks__/prisma';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
+import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from './helpers';
 import {
+  getPrisma,
   AccountBasket,
   getCookieFromHeaderAsString,
   getCsrfToken,
   getHttpMock,
   getJsonResp,
-  ironAuthOptions,
+  getIronAuthOptions,
+  resetPrisma,
 } from './helpers';
 
 suite('Credentials Provider', () => {
+  let ironAuthOptions: IronAuthConfig;
+  let p: PrismaClient;
+
+  beforeAll(async () => {
+    ironAuthOptions = await getIronAuthOptions();
+    p = getPrisma();
+  });
+
   suite('Sign up', () => {
     const accounts: AccountBasket = new AccountBasket();
     let csrfInfo: CsrfInfo;
 
     beforeAll(async () => {
       vi.clearAllMocks();
+      await resetPrisma();
 
       csrfInfo = await getCsrfToken();
-    });
-
-    afterAll(() => {
-      destroy();
     });
 
     test('Precheck fails with invalid body', async () => {
@@ -118,10 +125,10 @@ suite('Credentials Provider', () => {
       expect(res.statusCode).toEqual(200);
       expect(data.code).toEqual('OK');
       expect(data.data.email).toEqual(email);
-      expect(data.data.id.length).toBeGreaterThan(0);
+      expect(data.data.id.toString().length).toBeGreaterThan(0);
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(1);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(1);
 
       accounts.update('primary', { cookie: getCookieFromHeaderAsString(res) });
     });
@@ -149,8 +156,8 @@ suite('Credentials Provider', () => {
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Account already exists');
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(1);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(1);
     });
 
     test('Creates new account linked to user when sign up with active session', async () => {
@@ -178,10 +185,10 @@ suite('Credentials Provider', () => {
       expect(res.statusCode).toEqual(200);
       expect(data.code).toEqual('OK');
       expect(data.data.email).toEqual(originalEmail);
-      expect(data.data.id.length).toBeGreaterThan(0);
+      expect(data.data.id.toString().length).toBeGreaterThan(0);
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(2);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(2);
     });
 
     test('Fails with existing session when account linking is disabled', async () => {
@@ -211,8 +218,8 @@ suite('Credentials Provider', () => {
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Already signed in');
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(2);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(2);
     });
   });
 
@@ -221,6 +228,9 @@ suite('Credentials Provider', () => {
     let csrfInfo: CsrfInfo;
 
     beforeAll(async () => {
+      vi.clearAllMocks();
+      await resetPrisma();
+
       csrfInfo = await getCsrfToken();
 
       const { email, password } = accounts.get('primary');
@@ -249,8 +259,8 @@ suite('Credentials Provider', () => {
 
       accounts.update('primary', { cookie });
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(1);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(1);
     });
 
     test('Precheck fails with invalid body', async () => {
@@ -348,13 +358,13 @@ suite('Credentials Provider', () => {
       expect(data.code).toEqual('OK');
       expect(data.success).toEqual(true);
       expect(data.data.email).toEqual(email);
-      expect(data.data.id.length).toBeGreaterThan(0);
+      expect(data.data.id.toString().length).toBeGreaterThan(0);
 
       expect(cookie.length).toBeGreaterThan(0);
       accounts.update('primary', { cookie });
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(1);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(1);
     });
 
     test('Link account fails with invalid provider', async () => {
@@ -386,8 +396,8 @@ suite('Credentials Provider', () => {
 
       expect(cookie.length).toEqual(0);
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(1);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(1);
     });
 
     test('Link account succeeds with valid provider', async () => {
@@ -418,12 +428,12 @@ suite('Credentials Provider', () => {
       expect(data.code).toEqual('OK');
       expect(data.success).toEqual(true);
       expect(data.data.email).toEqual(primaryEmail);
-      expect(data.data.id.length).toBeGreaterThan(0);
+      expect(data.data.id.toString().length).toBeGreaterThan(0);
 
       expect(cookie.length).toEqual(0);
 
-      expect(prisma.user.count()).toEqual(1);
-      expect(prisma.account.count()).toEqual(2);
+      await expect(p.user.count()).resolves.toEqual(1);
+      await expect(p.account.count()).resolves.toEqual(2);
     });
   });
 });

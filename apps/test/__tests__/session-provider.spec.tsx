@@ -3,8 +3,7 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import { SessionProvider, useSession } from 'iron-auth/react';
 import type { Session } from 'iron-auth/types';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
-import { destroy } from '../__mocks__/prisma';
-import { AccountBasket, basePath } from './helpers';
+import { AccountBasket, basePath, resetPrisma } from './helpers';
 
 const GeneralComponent = () => {
   const { session, loading, error, authenticated } = useSession();
@@ -119,9 +118,9 @@ const FetchSessionComponent = () => {
 suite('React Session Provider', () => {
   const accounts = new AccountBasket();
 
-  beforeAll(() => {
+  beforeAll(async () => {
     vi.clearAllMocks();
-    destroy();
+    await resetPrisma();
   });
 
   test('No session returns session not found', async () => {

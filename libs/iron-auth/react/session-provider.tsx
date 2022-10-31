@@ -192,7 +192,7 @@ export const SessionProvider = ({
 
   // Fetch session initially if no page session is provided
   useEffect(() => {
-    if (typeof pageSession === 'undefined') {
+    if (pageSession === undefined) {
       fetchSession({ initial: true });
     }
   }, [fetchSession, pageSession]);

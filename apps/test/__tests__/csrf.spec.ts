@@ -4,14 +4,15 @@ import { parseConfig } from 'iron-auth/src/helpers';
 import { verifyCsrfToken, verifyCsrfTokenForReq } from 'iron-auth/src/helpers/verify-csrf-token';
 import type { IronAuthApiResponse, InternalRequest, ParsedIronAuthConfig } from 'iron-auth/types';
 import { suite, test, expect, beforeAll } from 'vitest';
-import { getHttpMock, getJsonResp, ironAuthOptions as unparsedIronAuthOptions } from './helpers';
+import { getHttpMock, getJsonResp, getIronAuthOptions, resetPrisma } from './helpers';
 
 suite('CSRF Token', () => {
   let csrfCookie: string;
   let ironAuthOptions: ParsedIronAuthConfig;
 
-  beforeAll(() => {
-    ironAuthOptions = parseConfig(unparsedIronAuthOptions);
+  beforeAll(async () => {
+    await resetPrisma();
+    ironAuthOptions = parseConfig(await getIronAuthOptions());
   });
 
   test('CSRF route returns a token', async () => {

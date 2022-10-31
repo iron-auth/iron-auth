@@ -3,7 +3,7 @@ import type { ResponseTransformer } from 'msw';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import type { NextApiRequest } from 'next';
-import { getHttpMock, getJsonResp, ironAuthOptions } from './request-utils';
+import { getHttpMock, getJsonResp, getIronAuthOptions } from './request-utils';
 
 const basePath = 'http://localhost';
 const basePathApi = `${basePath}/api/auth`;
@@ -36,7 +36,7 @@ const handlers = [
       json: () => JSON.parse(body),
     } as unknown as NextApiRequest;
 
-    await ironAuthHandler(ironAuthOptions, reqMock, resMock);
+    await ironAuthHandler(await getIronAuthOptions(), reqMock, resMock);
 
     const cookies: ResponseTransformer[] = [];
 

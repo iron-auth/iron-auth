@@ -29,17 +29,18 @@ export const signinRoute = async (
             accountId: email,
           });
 
-          if (!account || !account.providerAccountData) {
-            throw new IronAuthError({ code: 'UNAUTHORIZED', message: 'Invalid credentials' });
-          }
+          let hash;
+          try {
+            hash =
+              !!account &&
+              !!account.providerAccountData &&
+              (JSON.parse(account.providerAccountData) as { hash?: string })?.hash;
 
-          const validPassword = await compare(
-            password,
-            account.providerAccountData,
-            assertSecret(config),
-          );
+            if (!account || !hash) throw new Error();
 
-          if (!validPassword) {
+            const validPassword = await compare(password, hash, assertSecret(config));
+            if (!validPassword) throw new Error();
+          } catch (error) {
             throw new IronAuthError({ code: 'UNAUTHORIZED', message: 'Invalid credentials' });
           }
 

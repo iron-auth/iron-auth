@@ -42,7 +42,7 @@ export const signupRoute = async (
             type: provider.type,
             providerId: provider.id,
             accountId: email,
-            accountData: encryptedPassword,
+            accountData: JSON.stringify({ hash: encryptedPassword }),
             email,
           });
 

@@ -1,8 +1,15 @@
-import { IronAuthError } from 'iron-auth';
-import { ironAuthHandler } from 'iron-auth/next';
-import { parseConfig } from 'iron-auth/src/helpers';
-import { verifyCsrfToken, verifyCsrfTokenForReq } from 'iron-auth/src/helpers/verify-csrf-token';
-import type { IronAuthApiResponse, InternalRequest, ParsedIronAuthConfig } from 'iron-auth/types';
+import { IronAuthError } from '@iron-auth/core';
+import { parseConfig } from '@iron-auth/core/src/helpers';
+import {
+  verifyCsrfToken,
+  verifyCsrfTokenForReq,
+} from '@iron-auth/core/src/helpers/verify-csrf-token';
+import type {
+  IronAuthApiResponse,
+  InternalRequest,
+  ParsedIronAuthConfig,
+} from '@iron-auth/core/types';
+import { ironAuthHandler } from '@iron-auth/next';
 import { suite, test, expect, beforeAll } from 'vitest';
 import { getHttpMock, getJsonResp, getIronAuthOptions, resetPrisma } from './helpers';
 

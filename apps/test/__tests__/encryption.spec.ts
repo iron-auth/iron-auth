@@ -1,5 +1,11 @@
-import { compare, compareHash, decrypt, encrypt, hash } from 'iron-auth/src/helpers/encryption';
-import { getCrypto } from 'iron-auth/src/helpers/webcrypto';
+import {
+  compare,
+  compareHash,
+  decrypt,
+  encrypt,
+  hash,
+} from '@iron-auth/core/src/helpers/encryption';
+import { getCrypto } from '@iron-auth/core/src/helpers/webcrypto';
 import { beforeAll, expect, suite, test } from 'vitest';
 
 suite('Encryption', () => {

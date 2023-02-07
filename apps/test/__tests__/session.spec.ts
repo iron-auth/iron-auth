@@ -1,7 +1,7 @@
-import type { SignupResponse } from 'iron-auth';
-import { IronAuthError } from 'iron-auth';
-import { ironAuthHandler, modifySession } from 'iron-auth/next';
-import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
+import type { SignupResponse } from '@iron-auth/core';
+import { IronAuthError } from '@iron-auth/core';
+import type { IronAuthApiResponse, IronAuthConfig } from '@iron-auth/core/types';
+import { ironAuthHandler, modifySession } from '@iron-auth/next';
 import type { IronSession } from 'iron-session';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from './helpers';

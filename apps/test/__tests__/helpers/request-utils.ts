@@ -1,9 +1,9 @@
+import { credentialsProvider } from '@iron-auth/core';
+import type { IronAuthConfig, IronAuthApiResponse } from '@iron-auth/core/types';
+import { ironAuthHandler } from '@iron-auth/next';
 import { prismaAdapter } from '@iron-auth/prisma-adapter';
 import type { PrismaClient } from '@prisma/client';
 import { Prisma } from '@prisma/client';
-import { credentialsProvider } from 'iron-auth';
-import { ironAuthHandler } from 'iron-auth/next';
-import type { IronAuthConfig, IronAuthApiResponse } from 'iron-auth/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { MockResponse, RequestOptions, ResponseOptions } from 'node-mocks-http';
 import { createMocks } from 'node-mocks-http';
@@ -18,10 +18,9 @@ export const getHttpMock = (reqOptions: RequestOptions = {}, resOptions: Respons
   return { req, res };
 };
 
-export const getJsonResp = <T extends object>(res: ApiResponse) => {
+export const getJsonResp = <T extends object>(res: ApiResponse) =>
   // eslint-disable-next-line no-underscore-dangle
-  return res._getJSONData() as T;
-};
+  res._getJSONData() as T;
 
 const ironAuthOptions = (prisma: PrismaClient): IronAuthConfig => ({
   debug: false,

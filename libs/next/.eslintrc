@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": ["ixn-next"],
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off"
+  }
+}

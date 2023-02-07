@@ -1,5 +1,5 @@
+import type { GenericAdapterConfig } from '@iron-auth/core/types';
 import type { PrismaClient } from '@prisma/client';
-import type { GenericAdapterConfig } from 'iron-auth/types';
 
 /**
  * A prisma adapter for Iron Auth.

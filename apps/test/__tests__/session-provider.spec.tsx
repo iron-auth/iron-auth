@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import type { Session } from '@iron-auth/core/types';
+import { SessionProvider, useSession } from '@iron-auth/react';
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
-import { SessionProvider, useSession } from 'iron-auth/react';
-import type { Session } from 'iron-auth/types';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
 import { AccountBasket, basePath, resetPrisma } from './helpers';
 

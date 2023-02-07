@@ -1,4 +1,4 @@
-import { ironAuthHandler } from 'iron-auth/next';
+import { ironAuthHandler } from '@iron-auth/next';
 import type { ResponseTransformer } from 'msw';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';

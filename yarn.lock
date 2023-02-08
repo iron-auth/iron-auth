@@ -30,7 +30,7 @@ __metadata:
     base64-arraybuffer: ^1.0.2
     cuid: ^2.1.8
     eslint: ^8.33.0
-    eslint-config-ixn-react: ^1.3.0
+    eslint-config-ixn-react: ^1.3.1
     happy-dom: ^7.0.0
     iron-session: ^6.2.1
     msw: ^1.0.0
@@ -639,7 +639,7 @@ __metadata:
     base64-arraybuffer: ^1.0.2
     cuid: ^2.1.8
     eslint: ^8.33.0
-    eslint-config-ixn: ^1.3.0
+    eslint-config-ixn: ^1.3.1
     happy-dom: ^7.0.0
     iron-session: ^6.2.1
     msw: ^1.0.0
@@ -662,7 +662,7 @@ __metadata:
     "@tsconfig/strictest": ^1.0.2
     "@vitejs/plugin-react": ^2.1.0
     eslint: ^8.33.0
-    eslint-config-ixn-next: ^1.3.0
+    eslint-config-ixn-next: ^1.3.1
     iron-session: ^6.2.1
     next: ^13.1.6
     prettier: ^2.8.3
@@ -683,7 +683,7 @@ __metadata:
     "@tsconfig/strictest": ^1.0.2
     "@vitejs/plugin-react": ^2.1.0
     eslint: ^8.33.0
-    eslint-config-ixn: ^1.3.0
+    eslint-config-ixn: ^1.3.1
     prettier: ^2.8.3
     rimraf: ^3.0.2
     typescript: ^4.9.5
@@ -701,7 +701,7 @@ __metadata:
     "@iron-auth/core": "workspace:^"
     "@tsconfig/strictest": ^1.0.2
     eslint: ^8.33.0
-    eslint-config-ixn-react: ^1.3.0
+    eslint-config-ixn-react: ^1.3.1
     prettier: ^2.8.3
     react: ^18.2.0
     rimraf: ^3.0.2
@@ -3624,9 +3624,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-ixn-base@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "eslint-config-ixn-base@npm:1.3.0"
+"eslint-config-ixn-base@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "eslint-config-ixn-base@npm:1.3.1"
   dependencies:
     eslint-config-airbnb-base: ^15.0.0
     eslint-config-prettier: ^8.6.0
@@ -3635,17 +3635,17 @@ __metadata:
   peerDependencies:
     eslint: ^8.33.0
     prettier: ^2.8.3
-  checksum: 6c4278b63f076fdcc867ee00714aeaa6943c646b4080adb7cf1f071edf7a93f542681961d7762feb494a815a97ae1088b25464da9e23f4cc8352672e5ee93c16
+  checksum: e2199a9e4cc56de754757bfca5b08b7910997ddef47dbb2509c5b8ffe971d2fa81252a7eba71cd2a004038f3c5156d33e535f390ac00569f10fb27ab612ef33b
   languageName: node
   linkType: hard
 
-"eslint-config-ixn-next@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "eslint-config-ixn-next@npm:1.3.0"
+"eslint-config-ixn-next@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "eslint-config-ixn-next@npm:1.3.1"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^5.51.0
     "@typescript-eslint/parser": ^5.42.0
-    eslint-config-ixn-react: ^1.3.0
+    eslint-config-ixn-react: ^1.3.1
     eslint-config-next: ^13.1.6
     eslint-config-prettier: ^8.6.0
     eslint-import-resolver-typescript: ^3.5.2
@@ -3661,18 +3661,18 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     typescript: ^4.9.5
-  checksum: c47b1b2add0acd33f9f5c36c7056cb8554d7f21feec0f204c0ada76b8a6deab170a0ae386396afe3720c005f159aa82b8d36f2d9f8d695c62a321d8ee269c658
+  checksum: d442483b8722c4fbe8f5809d2627e5626040d11604ae84a89c4e42aeb5cb5c02e604a6b4348f4080bb5eae0a8c352ad7b23b5380776210d0c0a0d351dcf5b499
   languageName: node
   linkType: hard
 
-"eslint-config-ixn-react@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "eslint-config-ixn-react@npm:1.3.0"
+"eslint-config-ixn-react@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "eslint-config-ixn-react@npm:1.3.1"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^5.51.0
     "@typescript-eslint/parser": ^5.42.0
     eslint-config-airbnb: ^19.0.4
-    eslint-config-ixn: ^1.3.0
+    eslint-config-ixn: ^1.3.1
     eslint-config-prettier: ^8.6.0
     eslint-import-resolver-typescript: ^3.5.2
     eslint-plugin-import: ^2.26.0
@@ -3685,18 +3685,18 @@ __metadata:
     prettier: ^2.8.3
     react: ^18.2.0
     typescript: ^4.9.5
-  checksum: fc799ad431563418287340576e73fe1e9098efb8245c3928827d920831503f8a8dd9e8e2ed6a9bd50364c16ad92f6e77c34393a0aa04befe095185121a3180ca
+  checksum: 97cb1c786dafffd1be549d214778a74fc000e3ad2fc1b30c36e9004069b51f83222c8ff0f2b33bb9cd095a769bb2606808e22be1abb657c77436861139aff4fe
   languageName: node
   linkType: hard
 
-"eslint-config-ixn@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "eslint-config-ixn@npm:1.3.0"
+"eslint-config-ixn@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "eslint-config-ixn@npm:1.3.1"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^5.51.0
     "@typescript-eslint/parser": ^5.42.0
     eslint-config-airbnb-typescript: ^17.0.0
-    eslint-config-ixn-base: ^1.3.0
+    eslint-config-ixn-base: ^1.3.1
     eslint-config-prettier: ^8.6.0
     eslint-import-resolver-typescript: ^3.5.2
     eslint-plugin-import: ^2.26.0
@@ -3705,7 +3705,7 @@ __metadata:
     eslint: ^8.33.0
     prettier: ^2.8.3
     typescript: ^4.9.5
-  checksum: 97b16fdf00b89f4f96d0139ac22008abc53e9bcd0fdfb350d20b114e427c065a5d6adfdd95a161e1d0ba95f89a30f9e6d9bde42c83df3e93e192af906a076a3f
+  checksum: ba7e9e4523995607c06727e427b6ab55d6f4c12e6a72d4863818c60cbcf0f47fae489b8bd59a5a52af586678698f45e28e2402d2e90c9923a3fde3f4e35d5ee5
   languageName: node
   linkType: hard
 

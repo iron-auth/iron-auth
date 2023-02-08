@@ -46,3 +46,9 @@ export const verifyCsrfTokenForReq = async (req: InternalRequest, config: Parsed
 
   return valid;
 };
+
+export const validateCsrfToken = async (config: ParsedIronAuthConfig, req: InternalRequest) => {
+  if (!(await verifyCsrfTokenForReq(req, config))) {
+    throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
+  }
+};

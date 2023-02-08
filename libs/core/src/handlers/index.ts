@@ -1,2 +1,1 @@
-export * from './request-handler';
-export * from './response-handler';
+export { requestHandler } from './request-handler';

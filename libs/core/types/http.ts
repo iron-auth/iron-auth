@@ -16,7 +16,7 @@ export type IncomingResponse = EdgeResponse | ServerResponse;
 export type InternalRequest = {
   url: string | undefined;
   path: string | string[] | undefined;
-  method: string | undefined;
+  method: 'GET' | 'POST' | string | undefined;
   query: Partial<Record<string, string | string[]>>;
   body: Record<string, unknown>;
   cookies: Partial<{

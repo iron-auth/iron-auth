@@ -41,6 +41,13 @@ export const credentialsProvider: CredentialsProviderConfig = {
       throw new IronAuthError({ code: 'BAD_REQUEST', message: 'Invalid password' });
     }
 
+    if (!email || !password) {
+      throw new IronAuthError({
+        code: 'BAD_REQUEST',
+        message: 'Invalid credentials',
+      });
+    }
+
     return { email, password } as T;
   },
 };

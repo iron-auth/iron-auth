@@ -100,7 +100,7 @@ export type GenericProviderConfig = {
    *
    * For example, checking that a user's credentials fit the required format.
    */
-  precheck: <T>(req: InternalRequest) => T | null;
+  precheck: <T>(req: InternalRequest) => T;
 };
 
 /**

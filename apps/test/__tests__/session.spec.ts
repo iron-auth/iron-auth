@@ -138,7 +138,7 @@ suite('Request handler treats request correctly', () => {
     await ironAuthHandler(ironAuthOptions, req, res);
 
     const resp = getJsonResp<IronAuthApiResponse<'success', IronSession>>(res);
-    console.log(resp);
+
     expect(res.statusCode).toEqual(200);
     expect(resp.code).toEqual('OK');
     expect(resp.data.user?.email).toEqual('updated email');

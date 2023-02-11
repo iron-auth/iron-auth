@@ -1,6 +1,4 @@
 import type { IronSession } from 'iron-session';
-import { getServerSideSession } from '../helpers';
+import { isValidSession } from '../helpers';
 
-export const sessionRoute = async (session: IronSession) => {
-  return getServerSideSession(session);
-};
+export const sessionRoute = async (session: IronSession) => isValidSession(session);

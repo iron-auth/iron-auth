@@ -1,7 +1,5 @@
 import { getIronSession } from 'iron-session/edge';
-import type { ModifySessionProps } from '../src/helpers';
-import { parseConfig, modifySession as modifySessionOriginal } from '../src/helpers';
-import type { EdgeRequest, EdgeResponse, IronAuthConfig, Session } from '../types';
+import { createModifySession } from '../src/helpers';
 
 /**
  * Update the user object in the session.
@@ -17,19 +15,4 @@ import type { EdgeRequest, EdgeResponse, IronAuthConfig, Session } from '../type
  *
  * @returns The updated session data.
  */
-export const modifySession = async <Override extends boolean = false>(
-  req: EdgeRequest,
-  res: EdgeResponse,
-  config: IronAuthConfig,
-  data: Override extends true ? Session['user'] : Partial<Session['user']>,
-  {
-    env,
-    override,
-  }: ModifySessionProps<Override> & { env?: Record<string, string | undefined> } = {},
-): Promise<Session> => {
-  const parsedConfig = parseConfig(config, env);
-
-  const session = await getIronSession(req, res, parsedConfig.iron);
-
-  return modifySessionOriginal(session, data, { override });
-};
+export const modifySession = createModifySession(getIronSession);

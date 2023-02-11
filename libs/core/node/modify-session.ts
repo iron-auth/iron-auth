@@ -1,5 +1,6 @@
 import { getIronSession } from 'iron-session';
-import { createModifySession } from '@iron-auth/core/src/helpers';
+import { createModifySession } from '../src/helpers';
+import type { IncomingRequest } from '../types';
 
 /**
  * Update the user object in the session.
@@ -15,4 +16,4 @@ import { createModifySession } from '@iron-auth/core/src/helpers';
  *
  * @returns The updated session data.
  */
-export const modifySession = createModifySession(getIronSession);
+export const modifySession = createModifySession<IncomingRequest>(getIronSession);

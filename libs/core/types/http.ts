@@ -10,8 +10,13 @@ type PartialNextRequest = IncomingMessage & {
 export type EdgeRequest = Request;
 export type EdgeResponse = Response;
 
-export type IncomingRequest = EdgeRequest | PartialNextRequest;
+export type IncomingRequest = EdgeRequest | IncomingMessage | PartialNextRequest;
 export type IncomingResponse = EdgeResponse | ServerResponse;
+
+export type LayoutRequest = {
+  headers: Headers;
+  credentials: 'same-origin' | 'include';
+};
 
 export type InternalRequest = {
   url: string | undefined;

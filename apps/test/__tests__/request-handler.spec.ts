@@ -1,4 +1,4 @@
-import type { IronAuthApiResponse, IronAuthConfig } from '@iron-auth/core/types';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
 import { ironAuthHandler } from '@iron-auth/next';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from './helpers';

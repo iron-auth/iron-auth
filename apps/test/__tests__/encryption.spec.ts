@@ -4,8 +4,8 @@ import {
   decrypt,
   encrypt,
   hash,
-} from '@iron-auth/core/src/helpers/encryption';
-import { getCrypto } from '@iron-auth/core/src/helpers/webcrypto';
+  getCrypto,
+} from 'iron-auth/src/utils/encryption';
 import { beforeAll, expect, suite, test } from 'vitest';
 
 suite('Encryption', () => {

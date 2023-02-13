@@ -14,9 +14,9 @@ import type {
   SigninResponse,
   SignupResponse,
   LinkAccountResponse,
-} from '@iron-auth/core';
-import { fetchApiData } from '@iron-auth/core/src/helpers';
-import type { ProviderType, Session } from '@iron-auth/core/types';
+} from 'iron-auth';
+import { fetchApiData } from 'iron-auth/src/utils';
+import type { ProviderType, Session } from 'iron-auth/types';
 
 export type ISessionContext<DefinedSession extends boolean = false> = {
   authenticated: boolean;

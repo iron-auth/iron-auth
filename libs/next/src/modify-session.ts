@@ -1,5 +1,5 @@
 import { getIronSession } from 'iron-session';
-import { createModifySession } from '@iron-auth/core/src/helpers';
+import { createModifySession } from 'iron-auth/src/utils';
 
 /**
  * Update the user object in the session.

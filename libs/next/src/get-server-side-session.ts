@@ -1,5 +1,5 @@
-import { createGsss } from '@iron-auth/core/src/helpers';
-import type { LayoutRequest } from '@iron-auth/core/types';
+import { createGsss } from 'iron-auth/src/utils';
+import type { LayoutRequest } from 'iron-auth/types';
 import { getIronSession } from 'iron-session';
 import type { NextApiRequest } from 'next';
 

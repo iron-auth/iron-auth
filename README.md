@@ -46,7 +46,7 @@ Inspiration for the library's design was drawn from Next Auth, as well as databa
 To get started with Iron Auth, install the [core library](https://github.com/iron-auth/iron-auth/tree/main/libs/iron-auth).
 
 ```bash
-npm install @iron-auth/core
+npm install iron-auth
 ```
 
 If you are using Next.js, you should also install the [Next.js package](https://github.com/iron-auth/iron-auth/tree/main/libs/next). If you are using the Edge runtime, skip this step.

@@ -15,6 +15,7 @@
     "clean": "rimraf .turbo && rimraf node_modules && rimraf dist"
   },
   "devDependencies": {
+    "@edge-runtime/vm": "^2.0.5",
     "@tsconfig/strictest": "^1.0.2",
     "@vitejs/plugin-react": "^2.1.0",
     "cuid": "^2.1.8",
@@ -27,7 +28,8 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.9.5",
     "vite": "^3.1.6",
-    "vitest": "^0.24.0"
+    "vitest": "^0.28.4",
+    "vitest-mock-extended": "^1.0.9"
   },
   "peerDependencies": {
     "iron-session": "^6.2.1"

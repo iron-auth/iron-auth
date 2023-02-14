@@ -124,6 +124,7 @@ suite('React Session Provider', () => {
   });
 
   test('No session returns session not found', async () => {
+    console.log(basePath);
     render(
       <SessionProvider basePath={basePath}>
         <GeneralComponent />

@@ -12,14 +12,14 @@ import { IronAuthError } from './iron-auth-error';
  * @returns Whether the CSRF token is valid.
  */
 export const verifyCsrfToken = async (
-  cookie: string,
+  cookie: string | undefined,
   rawToken: string,
   config: ParsedIronAuthConfig,
 ) => {
-  const [token, tokenHash] = cookie.split('_') ?? '';
+  const [token, tokenHash] = cookie?.split('_') ?? '';
 
   if (!token || !tokenHash) {
-    throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
+    return false;
   }
 
   const expected = await hash(`${token}${config.csrfSecret}`);

@@ -1,16 +1,15 @@
 import type { CookieSerializeOptions } from 'cookie';
 import type { IronAuthError, SigninResponse, SignoutResponse, SignupResponse } from '../src';
 import type { InternalRequest } from './http';
+import type { Session } from './session';
+
+type UserId = NonNullable<Session['user']>['id'];
 
 type IronPassword = string | { [id: string]: string };
 
 type AccountWithUserResponse = {
   id: string;
-  /**
-   * @note Type of any allows for using either number or string for the user ID in the Prisma schema.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userId: any;
+  userId: UserId;
 
   type: string;
   provider: string;
@@ -18,11 +17,7 @@ type AccountWithUserResponse = {
   providerAccountData: string | null;
 
   user: {
-    /**
-     * @note Type of any allows for using either number or string for the user ID in the Prisma schema.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    id: any;
+    id: UserId;
     username: string | null;
     name: string | null;
     email: string | null;
@@ -47,16 +42,12 @@ export type GenericAdapterConfig = {
    * @returns Information about the newly created or linked account.
    */
   create: (account: {
-    /**
-     * @note Type of any allows for using either number or string for the user ID in the Prisma schema.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    userId?: any;
+    userId?: UserId;
 
     type: ProviderType;
     providerId: string;
     accountId: string;
-    accountData?: string;
+    accountData?: string | null;
 
     username?: string;
     name?: string;
@@ -70,16 +61,12 @@ export type GenericAdapterConfig = {
    * @returns The account information, along with information for the user that the account belongs to.
    */
   findAccount: (account: {
-    /**
-     * @note Type of any allows for using either number or string for the user ID in the Prisma schema.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    userId?: any;
+    userId?: UserId;
 
     type: ProviderType;
     providerId: string;
     accountId: string;
-    accountData?: string;
+    accountData?: string | null;
   }) => Promise<AccountWithUserResponse | null>;
 };
 

@@ -9,22 +9,25 @@ const basePath = 'http://localhost';
 const basePathApi = `${basePath}/api/auth`;
 
 const handlers = [
-  rest.all(`${basePathApi}/:ironauth`, async (req, res, ctx) => {
+  rest.all(`/api/auth/:ironauth`, async (req, res, ctx) => {
     const { res: resMock } = getHttpMock();
 
+    const url = new URL(req.url.toString().replace('///', `${basePathApi}/`));
+    console.log(req.url.toString(), url);
     const body: string = await req.text();
 
     const newParams: Partial<Record<string, string>> = {
       ...(req.params as Record<string, string>),
     };
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of req.url.searchParams.entries()) {
+    for (const [key, value] of url.searchParams?.entries() ??
+      new URLSearchParams(url.search).entries()) {
       newParams[key] = value;
     }
 
     const reqMock: NextApiRequest = {
       ...req,
-      url: req.url.href,
+      url: url.href,
       method: req.method,
       headers: {
         ...req.headers.all(),

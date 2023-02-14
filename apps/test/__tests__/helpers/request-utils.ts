@@ -1,5 +1,5 @@
-import { credentialsProvider } from '@iron-auth/core';
-import type { IronAuthConfig, IronAuthApiResponse } from '@iron-auth/core/types';
+import { credentialsProvider } from 'iron-auth';
+import type { IronAuthConfig, IronAuthApiResponse } from 'iron-auth/types';
 import { ironAuthHandler } from '@iron-auth/next';
 import { prismaAdapter } from '@iron-auth/prisma-adapter';
 import type { PrismaClient } from '@prisma/client';

@@ -1,8 +1,5 @@
 import { getIronSession } from 'iron-session';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import type { ModifySessionProps } from '@iron-auth/core/src/helpers';
-import { parseConfig, modifySession as modifySessionOriginal } from '@iron-auth/core/src/helpers';
-import type { EdgeRequest, EdgeResponse, IronAuthConfig, Session } from '@iron-auth/core/types';
+import { createModifySession } from 'iron-auth/src/utils';
 
 /**
  * Update the user object in the session.
@@ -11,22 +8,11 @@ import type { EdgeRequest, EdgeResponse, IronAuthConfig, Session } from '@iron-a
  * @param res - The response object.
  * @param config - The Iron Auth configuration.
  * @param data - The data to update in the session's user object.
+ * @param props.env - The environment variables.
  * @param props.override - Whether to override the existing session data or merge it.
  *
  * @default props.override = false
  *
  * @returns The updated session data.
  */
-export const modifySession = async <Override extends boolean = false>(
-  req: NextApiRequest | EdgeRequest,
-  res: NextApiResponse | EdgeResponse,
-  config: IronAuthConfig,
-  data: Override extends true ? Session['user'] : Partial<Session['user']>,
-  { override }: Omit<ModifySessionProps<Override>, 'env'> = {},
-): Promise<Session> => {
-  const parsedConfig = parseConfig(config, process.env);
-
-  const session = await getIronSession(req, res, parsedConfig.iron);
-
-  return modifySessionOriginal(session, data, { override });
-};
+export const modifySession = createModifySession(getIronSession);

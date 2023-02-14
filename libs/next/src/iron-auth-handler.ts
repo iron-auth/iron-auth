@@ -1,13 +1,13 @@
-import { requestHandler } from '@iron-auth/core/src/handlers';
+import { requestHandler } from 'iron-auth/src/handlers';
 import {
   IronAuthError,
   IronAuthResponse,
   jsonFromReq,
   parseConfig,
   processCallback,
-} from '@iron-auth/core/src/helpers';
-import { getCrypto } from '@iron-auth/core/src/helpers/webcrypto';
-import type { EdgeResponse, InternalRequest, IronAuthConfig } from '@iron-auth/core/types';
+} from 'iron-auth/src/utils';
+import { getCrypto } from 'iron-auth/src/utils/encryption';
+import type { EdgeResponse, InternalRequest, IronAuthConfig } from 'iron-auth/types';
 import { getIronSession } from 'iron-session';
 import type { NextApiRequest, NextApiResponse } from 'next';
 

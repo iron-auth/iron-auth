@@ -1,6 +1,6 @@
-import type { SignupResponse } from '@iron-auth/core';
-import { IronAuthError } from '@iron-auth/core';
-import type { IronAuthApiResponse, IronAuthConfig } from '@iron-auth/core/types';
+import type { SignupResponse } from 'iron-auth';
+import { IronAuthError } from 'iron-auth';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
 import { ironAuthHandler, modifySession } from '@iron-auth/next';
 import type { IronSession } from 'iron-session';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
@@ -138,7 +138,7 @@ suite('Request handler treats request correctly', () => {
     await ironAuthHandler(ironAuthOptions, req, res);
 
     const resp = getJsonResp<IronAuthApiResponse<'success', IronSession>>(res);
-    console.log(resp);
+
     expect(res.statusCode).toEqual(200);
     expect(resp.code).toEqual('OK');
     expect(resp.data.user?.email).toEqual('updated email');

@@ -1,5 +1,5 @@
-import type { SignupResponse } from '@iron-auth/core';
-import type { IronAuthApiResponse, IronAuthConfig } from '@iron-auth/core/types';
+import type { SignupResponse } from 'iron-auth';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
 import { ironAuthHandler } from '@iron-auth/next';
 import type { PrismaClient } from '@prisma/client';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
@@ -386,7 +386,6 @@ suite('Credentials Provider', () => {
       await ironAuthHandler(ironAuthOptions, req, res);
 
       const data = getJsonResp<IronAuthApiResponse<'error'>>(res);
-      console.log(data);
 
       const cookie = getCookieFromHeaderAsString(res);
 
@@ -421,8 +420,6 @@ suite('Credentials Provider', () => {
       const data = getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
-
-      console.log(data);
 
       expect(res.statusCode).toEqual(200);
       expect(data.code).toEqual('OK');

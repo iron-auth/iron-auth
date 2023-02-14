@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Session } from '@iron-auth/core/types';
+import type { Session } from 'iron-auth/types';
 import { SessionProvider, useSession } from '@iron-auth/react';
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { suite, test, expect, vi, beforeAll } from 'vitest';
@@ -124,6 +124,7 @@ suite('React Session Provider', () => {
   });
 
   test('No session returns session not found', async () => {
+    console.log(basePath);
     render(
       <SessionProvider basePath={basePath}>
         <GeneralComponent />

@@ -7,7 +7,7 @@ This package contains the React components for Iron Auth.
 Add the following packages to your project.
 
 ```bash
-npm install @iron-auth/core @iron-auth/react
+npm install iron-auth @iron-auth/react
 ```
 
 ## Usage

@@ -9,410 +9,147 @@ import {
   useRef,
   useState,
 } from 'react';
-import type {
-  CredentialsPreCheckResponse,
-  SigninResponse,
-  SignupResponse,
-  LinkAccountResponse,
-} from 'iron-auth';
-import { fetchApiData } from 'iron-auth/src/utils';
-import type { ProviderType, Session } from 'iron-auth/types';
+import type { ValidSession } from 'iron-auth/types';
+import { fetchDefaults } from 'iron-auth/methods/fetch-api-data';
+import { getSession } from 'iron-auth/methods';
+import type { EventShape } from 'iron-auth/methods/event-channel';
+import { EventChannel } from 'iron-auth/methods/event-channel';
 
-export type ISessionContext<DefinedSession extends boolean = false> = {
-  authenticated: boolean;
-  clearError: () => void;
-  error: string | undefined;
-  /**
-   * Fetch a user's session.
-   *
-   * @param props.rejects - Whether the promise should reject on an error. By default, it sets the   error state but does not throw the error.
-   * @returns The user's session, or null if no response was received.
-   */
-  fetchSession: (props?: FetchSessionProps) => Promise<Session | null>;
-  /**
-   * Link a new account to an existing user account.
-   *
-   * For providers that require account information, like with credentials providers, the relevant information should also be provided.
-   *
-   * @param props.type - The type of provider to link.
-   * @param props.provider - The ID of the provider.
-   * @param props.data - Optional data to send to the provider. This is useful for providers that require you to post the newly linked account's information to them, like credentials providers.
-   * @param props.rejects - Whether the promise should reject on an error. By default, it sets the error state but does not throw the error.
-   * @returns The link account response from the provider, or null if no response was received.
-   */
-  linkAccount: <T extends ProviderType>(
-    props: LinkAccountProps<T>,
-  ) => Promise<LinkAccountResponse | null>;
-  loading: boolean;
-  loadingInitial: boolean;
-  session: DefinedSession extends true ? Session : Session | undefined | null;
-  /**
-   * Sign in with a specific provider that is activated in your Iron Auth options.
-   *
-   * For providers that require account information, like with credentials providers, the relevant
-   * information should also be provided.
-   *
-   * @param props.type - The type of provider to sign in with.
-   * @param props.provider - The ID of the provider.
-   * @param props.data - Optional data to send to the provider. This is useful for providers that require you to post the sign in information to them, like credentials providers.
-   * @param props.rejects - Whether the promise should reject on an error. By default, it sets the error state but does not throw the error.
-   * @returns The sign in response from the provider, or null if no response was received.
-   */
-  signIn: <T extends ProviderType>(props: SigninProps<T>) => Promise<SigninResponse | null>;
-  /**
-   * Sign up with a specific provider that is activated in your Iron Auth options.
-   *
-   * For providers that require account information, like with credentials providers, the relevant information should also be provided.
-   *
-   * @param props.type - The type of provider to sign up with.
-   * @param props.provider - The ID of the provider.
-   * @param props.data - Optional data to send to the provider. This is useful for providers that require you to post the registration information to them, like credentials providers.
-   * @param props.rejects - Whether the promise should reject on an error. By default, it sets the error state but does not throw the error.
-   * @returns The sign up response from the provider, or null if no response was received.
-   */
-  signUp: <T extends ProviderType>(props: SignupProps<T>) => Promise<SignupResponse | null>;
-  /**
-   * Sign a user out and destroy the session.
-   *
-   * @param props.rejects - Whether the promise should reject on an error. By default, it sets the error state but does not throw the error.
-   * @returns A boolean indicating whether the session was destroyed and the user was signed out.
-   */
-  signOut: (props?: SignoutProps) => Promise<boolean>;
+export type ISessionContext<HasSession extends boolean = false> = {
+  session: HasSession extends true ? ValidSession : ValidSession | undefined | null;
 };
 
 const SessionContext = createContext<ISessionContext<boolean>>({
-  authenticated: false,
-
-  /** Clear the error state. */
-  clearError: () => {},
-  error: undefined,
-  fetchSession: async () => null,
-  linkAccount: async () => null,
-  loading: true,
-  loadingInitial: true,
   session: undefined,
-  signIn: async () => null,
-  signUp: async () => null,
-  signOut: async () => false,
 });
 
-export const useSession = <DefinedSession extends boolean = false>() =>
-  useContext<ISessionContext<DefinedSession>>(SessionContext);
+export const useSession = <HasSession extends boolean = false>() =>
+  useContext<ISessionContext<HasSession>>(SessionContext);
 
 type Props = {
   basePath?: string;
   children: React.ReactNode;
-  session?: Session | undefined | null;
+  session?: ValidSession | undefined | null;
+  fetchOnLoad?: boolean;
 };
 
 /**
- * Session provider for Iron Auth.
+ * Session context provider for Iron Auth.
  *
- * @param props.basePath - The base path of the API. Defaults to '/api/auth'.
- * @param props.children - React children.
- * @param props.session - The session data to use. If not provided, the session will be fetched from the API. Useful for passing in a session retrieved in server side rendering.
+ * @param props.basePath The base path of the API. Defaults to '/api/auth'.
+ * @param props.children React children.
+ * @param props.fetchOnLoad Whether to fetch the session on load - does not try fetching if a session is passed through. Defaults to false.
+ * @param props.session The session data to use. If not provided, the session will be fetched from the API. Useful for passing in a session retrieved in server side rendering.
  */
 export const SessionProvider = ({
-  basePath = '/api/auth',
+  basePath = fetchDefaults.basePath,
   children,
+  fetchOnLoad = false,
   session: pageSession,
 }: Props): JSX.Element => {
-  const [authenticated, setAuthenticated] = useState<boolean>(!!pageSession);
-  const [error, setError] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(!pageSession);
-  const [session, setSession] = useState<Session | undefined | null>(pageSession);
-
-  const [loadingInitial, setLoadingInitial] = useState<boolean>(!pageSession);
+  const [session, setSession] = useState<ValidSession | undefined | null>(pageSession);
 
   const basePathRef = useRef<string>(basePath);
 
-  const clearError = useCallback(() => setError(undefined), []);
+  const channel = useRef<EventChannel>(new EventChannel());
+  const tabState = useRef({
+    lastUpdate: pageSession ? Date.now() : 0,
+    lastSession: pageSession,
+  });
 
-  /**
-   * Fetch a CSRF token to use for post requests.
-   *
-   * Throws an error if the request fails.
-   *
-   * @returns A new CSRF token.
+  /*
+   * Helper to fetch the session, update the state, and broadcast the event between tabs.
    */
-  const fetchCsrfToken = useCallback(
-    async () =>
-      fetchApiData<string>('/csrf', undefined, {
-        basePath: basePathRef.current,
-        name: 'csrf token',
-      })
-        .then((data) => data)
-        .catch((err) => {
-          throw new Error(err);
-        }),
-    [],
-  );
-
-  const fetchSession = useCallback(async ({ initial, rejects }: FetchSessionProps = {}) => {
-    setError(undefined);
-    setLoading(true);
-
-    if (initial) {
-      setLoadingInitial(true);
-    }
-
-    return fetchApiData<Session>('/session', undefined, {
+  const fetchSession = useCallback(async (fromEvent?: boolean) => {
+    const newSession = await getSession({
       basePath: basePathRef.current,
-      name: 'session',
-    })
-      .then((data) => {
-        setAuthenticated(true);
-        setSession(data);
-        return data;
-      })
-      .catch((err) => {
-        setAuthenticated(false);
-        setSession(null);
+      notifyOnSuccess: !fromEvent,
+    });
 
-        if (!(initial && err === 'Session not found')) {
-          setError(err);
-          if (rejects) throw new Error(err);
-          else return null;
-        } else return null;
-      })
-      .finally(() => {
-        setLoading(false);
+    if (newSession) {
+      setSession(newSession);
 
-        if (initial) {
-          setLoadingInitial(false);
-        }
-      });
+      tabState.current.lastUpdate = Date.now();
+      tabState.current.lastSession = newSession;
+
+      // we dont need to notify on success here as it will notify in the getSession method.
+    } else {
+      // TODO: Decide if we should notify on getSession request failure.
+      // channel.current.notify({ event: 'no-session' });
+    }
   }, []);
 
-  // Fetch session initially if no page session is provided
+  /*
+   * Fetch session initially if no page session is provided.
+   */
   useEffect(() => {
-    if (pageSession === undefined) {
-      fetchSession({ initial: true });
+    if (fetchOnLoad && pageSession === undefined) {
+      fetchSession();
     }
-  }, [fetchSession, pageSession]);
+  }, [fetchOnLoad, fetchSession, pageSession]);
 
-  const signIn = useCallback(
-    async <T extends ProviderType>({ type, provider, data, rejects }: SigninProps<T>) => {
-      setError(undefined);
-      setLoading(true);
+  /*
+   * Listens for events from the update channel (through local storage) and handle them.
+   */
+  useEffect(() => {
+    const chan = channel.current;
 
-      const params = new URLSearchParams({ type, providerId: provider });
-      let csrfToken: string | undefined;
-
-      try {
-        csrfToken = await fetchCsrfToken();
-      } catch (err) {
-        setError(err as string);
-        setLoading(false);
-        if (rejects) throw new Error(err as string);
-        return null;
+    const handleEvent = ({ event, userId }: EventShape) => {
+      console.debug('Received cross-tab event:', { event, userId });
+      switch (event) {
+        case 'session-updated': {
+          if (!!userId && tabState.current.lastSession?.user?.id !== userId) {
+            fetchSession(true);
+          }
+          break;
+        }
+        case 'no-session': {
+          if (tabState.current.lastSession) {
+            setSession(null);
+            tabState.current.lastSession = null;
+            tabState.current.lastUpdate = Date.now();
+          }
+          break;
+        }
+        case 'sign-in': {
+          if (!!userId && tabState.current.lastSession?.user?.id !== userId) {
+            fetchSession(true);
+          }
+          break;
+        }
+        case 'sign-up': {
+          if (!!userId && tabState.current.lastSession?.user?.id !== userId) {
+            fetchSession(true);
+          }
+          break;
+        }
+        case 'sign-out': {
+          if (tabState.current.lastSession) {
+            setSession(null);
+            tabState.current.lastSession = null;
+            tabState.current.lastUpdate = Date.now();
+          }
+          break;
+        }
+        default: {
+          // do nothing as it is not a valid event.
+          console.debug('Invalid cross-tab event:', event);
+        }
       }
+    };
 
-      return fetchApiData<SigninResponse>(
-        `/signin?${params.toString()}`,
-        {
-          method: 'POST',
-          headers: new Headers({ 'Content-Type': 'application/json' }),
-          body: JSON.stringify({ ...data, csrfToken }),
-        },
-        {
-          basePath: basePathRef.current,
-          name: 'signin',
-        },
-      )
-        .then((respData) => {
-          setAuthenticated(true);
-          setSession({ user: respData });
-          return respData;
-        })
-        .catch((err) => {
-          setAuthenticated(false);
-          setSession(null);
-          setError(err);
-          if (rejects) throw new Error(err);
-          else return null;
-        })
-        .finally(() => setLoading(false));
-    },
-    [fetchCsrfToken],
-  );
+    chan.subscribe('session-provider', handleEvent);
+    chan.open();
 
-  const signUp = useCallback(
-    async <T extends ProviderType>({ type, provider, data, rejects }: SignupProps<T>) => {
-      setError(undefined);
-      setLoading(true);
+    return () => {
+      chan.unsubscribe('session-provider');
+      chan.close();
+    };
+  }, [fetchSession]);
 
-      const params = new URLSearchParams({ type, providerId: provider });
-      let csrfToken: string | undefined;
-
-      try {
-        csrfToken = await fetchCsrfToken();
-      } catch (err) {
-        setError(err as string);
-        setLoading(false);
-        if (rejects) throw new Error(err as string);
-        return null;
-      }
-
-      return fetchApiData<SigninResponse>(
-        `/signup?${params.toString()}`,
-        {
-          method: 'POST',
-          headers: new Headers({ 'Content-Type': 'application/json' }),
-          body: JSON.stringify({ ...data, csrfToken }),
-        },
-        {
-          basePath: basePathRef.current,
-          name: 'signup',
-        },
-      )
-        .then((respData) => {
-          setAuthenticated(true);
-          setSession({ user: respData });
-          return respData;
-        })
-        .catch((err) => {
-          setAuthenticated(false);
-          setSession(null);
-          setError(err);
-          if (rejects) throw new Error(err);
-          else return null;
-        })
-        .finally(() => setLoading(false));
-    },
-    [fetchCsrfToken],
-  );
-
-  const linkAccount = useCallback(
-    async <T extends ProviderType>({ type, provider, data, rejects }: LinkAccountProps<T>) => {
-      setError(undefined);
-      setLoading(true);
-
-      const params = new URLSearchParams({ type, providerId: provider });
-      let csrfToken: string | undefined;
-
-      try {
-        csrfToken = await fetchCsrfToken();
-      } catch (err) {
-        setError(err as string);
-        setLoading(false);
-        if (rejects) throw new Error(err as string);
-        return null;
-      }
-
-      return fetchApiData<LinkAccountResponse>(
-        `/linkaccount?${params.toString()}`,
-        {
-          method: 'POST',
-          headers: new Headers({ 'Content-Type': 'application/json' }),
-          body: JSON.stringify({ ...data, csrfToken }),
-        },
-        {
-          basePath: basePathRef.current,
-          name: 'link account',
-        },
-      )
-        .then((respData) => respData)
-        .catch((err) => {
-          setError(err);
-          if (rejects) throw new Error(err);
-          else return null;
-        })
-        .finally(() => setLoading(false));
-    },
-    [fetchCsrfToken],
-  );
-
-  const signOut = useCallback(
-    async ({ rejects }: SignoutProps = {}) => {
-      setError(undefined);
-      setLoading(true);
-
-      let csrfToken: string | undefined;
-
-      try {
-        csrfToken = await fetchCsrfToken();
-      } catch (err) {
-        setError(err as string);
-        setLoading(false);
-        if (rejects) throw new Error(err as string);
-        return false;
-      }
-
-      return fetchApiData<boolean>(
-        '/signout',
-        {
-          method: 'POST',
-          headers: new Headers({ 'Content-Type': 'application/json' }),
-          body: JSON.stringify({ csrfToken }),
-        },
-        {
-          basePath: basePathRef.current,
-          name: 'signout',
-        },
-      )
-        .then((respData) => {
-          setAuthenticated(false);
-          setSession(null);
-          return respData;
-        })
-        .catch((err) => {
-          setAuthenticated(false);
-          setSession(null);
-          setError(err);
-          if (rejects) throw new Error(err);
-          else return false;
-        })
-        .finally(() => setLoading(false));
-    },
-    [fetchCsrfToken],
-  );
-
-  const value = useMemo(
-    () => ({
-      authenticated,
-      clearError,
-      error,
-      fetchSession,
-      linkAccount,
-      loading,
-      loadingInitial,
-      session,
-      signIn,
-      signUp,
-      signOut,
-    }),
-    [
-      authenticated,
-      clearError,
-      error,
-      fetchSession,
-      linkAccount,
-      loading,
-      loadingInitial,
-      session,
-      signIn,
-      signOut,
-      signUp,
-    ],
-  );
+  const value = useMemo(() => ({ session }), [session]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
-};
-
-type SigninProps<T extends ProviderType> = {
-  type: T;
-  provider: string;
-  rejects?: boolean;
-} & (T extends 'credentials' ? { data: CredentialsPreCheckResponse } : { data?: never });
-
-type SignupProps<T extends ProviderType> = SigninProps<T>;
-type SignoutProps = { rejects?: boolean };
-type LinkAccountProps<T extends ProviderType> = SigninProps<T>;
-
-type FetchSessionProps = {
-  rejects?: boolean;
-  initial?: boolean;
 };
 
 export type { Props as SessionProviderProps };

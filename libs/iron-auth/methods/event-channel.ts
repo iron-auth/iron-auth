@@ -18,7 +18,9 @@ export class EventChannel {
   constructor(name = defaultChannelName) {
     this.name = name;
     this.receivers = new Map<string, (event: EventShape) => void>();
+  }
 
+  public open() {
     window.addEventListener('storage', this.handleStorageEvent);
   }
 
@@ -27,8 +29,8 @@ export class EventChannel {
   }
 
   private handleStorageEvent = (event: StorageEvent) => {
-    if (event.key === this.name && !!event.newValue) {
-      this.receivers.forEach((cb) => cb(JSON.parse(event.newValue as string)));
+    if (event.key === this.name && typeof event.newValue === 'string') {
+      this.receivers.forEach((cb) => cb(JSON.parse(event.newValue ?? '{}')));
     }
   };
 

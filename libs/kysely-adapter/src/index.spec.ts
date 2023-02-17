@@ -2,8 +2,8 @@ import crypto from 'crypto';
 import { Kysely, PostgresDialect } from 'kysely';
 import { DataType, newDb } from 'pg-mem';
 import { afterAll, beforeAll, expect, suite, test } from 'vitest';
-import type { Database } from './db';
-import { buildPostgresTables } from './postgres';
+import { buildPostgresTables } from '../builders/postgres';
+import type { Database } from '../types';
 import { kyselyAdapter } from '.';
 
 let db: Kysely<Database>;

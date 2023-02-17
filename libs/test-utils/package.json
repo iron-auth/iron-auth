@@ -34,12 +34,11 @@
   },
   "dependencies": {
     "@iron-auth/kysely-adapter": "workspace:^",
-    "@iron-auth/next": "workspace:^",
     "@iron-auth/prisma-adapter": "workspace:^",
     "@iron-auth/react": "workspace:^",
     "@prisma/client": "^4.5.0",
     "iron-auth": "workspace:^",
-    "iron-session": "^6.2.1",
+    "iron-session": "^6.3.1",
     "kysely": "^0.23.4",
     "pg-mem": "^2.6.4"
   }

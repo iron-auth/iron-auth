@@ -94,13 +94,15 @@ export const kyselyAdapter = (db: Kysely<Database>): GenericAdapterConfig => ({
 
         return newQb;
       })
-      .executeTakeFirstOrThrow();
+      .executeTakeFirst();
+    if (!account) return null;
 
     const user = await db
       .selectFrom('users')
       .select(['id', 'name', 'username', 'email', 'image'])
       .where('id', '=', account.user_id)
-      .executeTakeFirstOrThrow();
+      .executeTakeFirst();
+    if (!user) return null;
 
     return {
       id: account.id,

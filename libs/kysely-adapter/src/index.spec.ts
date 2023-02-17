@@ -41,14 +41,14 @@ suite('kysely-adapter', () => {
   test('no result when account doesnt exist', async () => {
     const adapter = kyselyAdapter(db as Kysely<Database>);
 
-    await expect(
-      adapter.findAccount({
-        type: 'credentials',
-        providerId: 'email-pass-provider',
-        accountId: '',
-        accountData: null,
-      }),
-    ).rejects.toThrow('no result');
+    const account = await adapter.findAccount({
+      type: 'credentials',
+      providerId: 'email-pass-provider',
+      accountId: '',
+      accountData: null,
+    });
+
+    expect(account).toEqual(null);
   });
 
   test('creates account', async () => {

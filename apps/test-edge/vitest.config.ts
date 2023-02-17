@@ -7,6 +7,6 @@ export default defineConfig({
   test: {
     // setupFiles: './__tests__/helpers/setup.ts',
     globals: true,
-    environment: 'edge-runtime',
+    environment: 'edge',
   },
 });

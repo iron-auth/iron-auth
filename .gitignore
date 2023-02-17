@@ -49,6 +49,7 @@ storybook-static
 
 # temp files
 tsconfig.tsbuildinfo
+vitest.config.ts.*.mjs
 
 # Secrets
 .env

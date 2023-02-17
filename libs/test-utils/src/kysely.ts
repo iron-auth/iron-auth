@@ -24,4 +24,12 @@ export const setupKysely = async () => {
   return kysely;
 };
 
+export const countKyselyTable = async (db: Kysely<Database>, table: 'users' | 'accounts') => {
+  const { count } = db.fn;
+
+  const records = await db.selectFrom(table).select(count('id').as('id_count')).executeTakeFirst();
+
+  return records?.id_count ?? 0;
+};
+
 export type KyselyDb = Kysely<Database>;

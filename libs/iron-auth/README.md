@@ -28,7 +28,3 @@ export default function handler(req) {
   return ironAuthHandler(ironAuthOptions, req, env);
 }
 ```
-
-### Next.js
-
-When using Next.js, you should use the `ironAuthHandler` from `@iron-auth/next`.

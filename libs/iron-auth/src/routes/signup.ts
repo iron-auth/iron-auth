@@ -49,6 +49,7 @@ export const signupRoute = async (
           if (data.user) {
             // eslint-disable-next-line no-param-reassign
             session.user = data.user;
+
             await session.save();
 
             return data.user;

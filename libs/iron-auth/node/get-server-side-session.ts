@@ -1,6 +1,6 @@
 import { getIronSession } from 'iron-session';
 import { createGsss } from '../src/utils';
-import type { IncomingRequest } from '../types';
+import type { IncomingRequest, LayoutRequest } from '../types';
 
 /**
  * Get the session data from the request.
@@ -10,4 +10,4 @@ import type { IncomingRequest } from '../types';
  * @param env The environment variables.
  * @returns The session data.
  */
-export const getServerSideSession = createGsss<IncomingRequest>(getIronSession);
+export const getServerSideSession = createGsss<IncomingRequest | LayoutRequest>(getIronSession);

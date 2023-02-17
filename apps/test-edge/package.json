@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@edge-runtime/vm": "^2.0.5",
-    "@libs/test-utils": "workspace:^",
     "@testing-library/react": "^13.4.0",
     "@tsconfig/strictest": "^1.0.2",
     "@vitejs/plugin-react": "^3.1.0",
@@ -36,19 +35,19 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.9.5",
     "vite": "^4.1.1",
-    "vitest": "^0.28.5",
-    "vitest-mock-extended": "^1.0.9"
+    "vitest": "^0.28.5"
   },
   "dependencies": {
     "@iron-auth/kysely-adapter": "workspace:^",
-    "@iron-auth/next": "workspace:^",
     "@iron-auth/prisma-adapter": "workspace:^",
     "@iron-auth/react": "workspace:^",
+    "@libs/test-utils": "workspace:^",
     "@prisma/client": "^4.5.0",
     "base64-arraybuffer": "^1.0.2",
     "iron-auth": "workspace:^",
-    "iron-session": "^6.2.1",
+    "iron-session": "^6.3.1",
     "kysely": "^0.23.4",
-    "pg-mem": "^2.6.4"
+    "pg-mem": "^2.6.4",
+    "vitest-mock-extended": "^1.0.9"
   }
 }

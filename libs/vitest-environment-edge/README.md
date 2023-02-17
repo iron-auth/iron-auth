@@ -1,21 +1,10 @@
-# @iron-auth/prisma-adapter
+# vitest-environment-edge
 
-This package provides a Prisma adapter for use with Iron Auth.
+This is to needed make ArrayBuffer work in the Edge runtime VM. Not sure why this is needed, maybe Vitest's populateGlobal removes it?
 
-## Installation
+Per the Edge runtime docs, ArrayBuffer should be an available API from the V8 Primitives.
 
-```bash
-npm install @iron-auth/prisma-adapter
-```
+https://edge-runtime.vercel.app/features/available-apis#v8-primitives
 
-## Usage
-
-```ts
-import { prismaAdapter } from '@iron-auth/prisma-adapter';
-
-const ironAuthOptions: IronAuthConfig = {
-  // ...
-  adapter: prismaAdapter(prisma),
-  // ...
-};
-```
+Without this, the following error is thrown:
+`ArrayBuffer is not a constructor`

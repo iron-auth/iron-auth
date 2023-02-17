@@ -1,21 +1,3 @@
-# @iron-auth/prisma-adapter
+# @libs/test-utils
 
-This package provides a Prisma adapter for use with Iron Auth.
-
-## Installation
-
-```bash
-npm install @iron-auth/prisma-adapter
-```
-
-## Usage
-
-```ts
-import { prismaAdapter } from '@iron-auth/prisma-adapter';
-
-const ironAuthOptions: IronAuthConfig = {
-  // ...
-  adapter: prismaAdapter(prisma),
-  // ...
-};
-```
+This package provides various utilities for tests in this monorepo.

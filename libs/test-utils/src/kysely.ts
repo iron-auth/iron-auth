@@ -1,5 +1,5 @@
-import type { Database } from '@iron-auth/kysely-adapter/src/db';
-import { buildPostgresTables } from '@iron-auth/kysely-adapter/src/postgres';
+import { buildPostgresTables } from '@iron-auth/kysely-adapter/builders/postgres';
+import type { Database } from '@iron-auth/kysely-adapter/types';
 import { Kysely, PostgresDialect } from 'kysely';
 import { DataType, newDb } from 'pg-mem';
 

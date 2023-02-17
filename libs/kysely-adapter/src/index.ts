@@ -1,6 +1,6 @@
 import type { GenericAdapterConfig } from 'iron-auth/types';
 import type { Kysely } from 'kysely';
-import type { Database } from './db';
+import type { Database } from '../types';
 
 /**
  * A Kysely adapter for Iron Auth.

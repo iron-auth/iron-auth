@@ -1,6 +1,6 @@
 import { mock } from 'vitest-mock-extended';
 import { ironAuthHandler } from 'iron-auth/edge';
-import type { Database } from '@iron-auth/kysely-adapter/src/db';
+import type { Database } from '@iron-auth/kysely-adapter/types';
 import {
   ironAuthOptions,
   getCsrfToken as getCsrfTokenOriginal,

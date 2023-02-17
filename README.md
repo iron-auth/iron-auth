@@ -2,8 +2,6 @@
 
 A modular authentication library, designed with the Edge as a priority and built to be framework agnostic. Powered by Iron Session under the hood. Extendable, highly configurable, and extensively tested.
 
-Inspiration for the library's design was drawn from Next Auth, as well as database schema similarities for ease when switching between the two.
-
 ## Features
 
 ### Modular
@@ -43,7 +41,7 @@ Inspiration for the library's design was drawn from Next Auth, as well as databa
 
 ## Installation
 
-To get started with Iron Auth, install the [core library](https://github.com/iron-auth/iron-auth/tree/main/libs/iron-auth).
+To get started with Iron Auth, add the [main library](https://github.com/iron-auth/iron-auth/tree/main/libs/iron-auth) to your project.
 
 ```bash
 npm install iron-auth
@@ -55,18 +53,18 @@ Check out the documentation site for information about using Iron Auth - Coming 
 
 ## Roadmap
 
-While all features listed above are fully functional unless otherwise stated, this project is still under active development.
+While all features listed above are fully functional unless otherwise stated, this project is regularly being worked on to bring new features and functionality.
 
 ##### Core
 
-- [ ] Request handler for non-Next.js and non-Edge apps
-- [ ] Database adapter for Kysely
+- [x] Request handler for non-Next.js and non-Edge apps
+- [x] Database adapter for Kysely
 - [ ] Generic OAuth authentication provider
 - [ ] Support for running your own OAuth service
 
 ##### Other Languages
 
-- [ ] Golang implementation of iron-webcrypto / @hapi/iron
+- [x] Golang implementation of iron-webcrypto / @hapi/iron
 - [ ] Golang implementation of Iron Session
 - [ ] Golang implementation of Iron Auth
 

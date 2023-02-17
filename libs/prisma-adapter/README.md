@@ -13,7 +13,7 @@ npm install @iron-auth/prisma-adapter
 ```ts
 import { prismaAdapter } from '@iron-auth/prisma-adapter';
 
-const ironAuthOptions: IronAuthConfig = {
+const config: IronAuthConfig = {
   // ...
   adapter: prismaAdapter(prisma),
   // ...

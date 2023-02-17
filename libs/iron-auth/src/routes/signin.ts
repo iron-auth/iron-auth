@@ -1,5 +1,5 @@
 import type { IronSession } from 'iron-session';
-import type { InternalRequest, ParsedIronAuthConfig } from '../../types';
+import type { InternalRequest, ParsedIronAuthConfig, ValidSession } from '../../types';
 import { assertProvider, assertSecret, compare, IronAuthError } from '../utils';
 
 export const signinRoute = async (
@@ -85,13 +85,11 @@ export const signinRoute = async (
   });
 };
 
-export type SigninResponse = {
+export type SignInResponse = {
   /**
    * The user's unique ID in the database.
    */
-  // TODO: Fix ID type.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  id: any;
+  id: ValidSession['user']['id'];
   /**
    * The user's username.
    */

@@ -10,7 +10,7 @@ import {
   getCookieFromHeaderAsString,
   getJsonResp,
 } from '@libs/test-utils';
-import type { SigninResponse, SignupResponse } from 'iron-auth';
+import type { SignInResponse, SignUpResponse } from 'iron-auth';
 import { getCsrfToken, getIronAuthOptions, getKysely } from './helpers';
 
 let db: KyselyDb;
@@ -68,7 +68,7 @@ suite('edge runtime', () => {
 
       const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
 
-      const data = await getJsonResp<IronAuthApiResponse<'error', SigninResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'error', SignInResponse>>(res);
 
       expect(res.status).toEqual(401);
       expect(data).toEqual(edgeErrorResponse('UNAUTHORIZED', 'Invalid credentials'));
@@ -94,7 +94,7 @@ suite('edge runtime', () => {
 
       const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       expect(res.status).toEqual(200);
       expect(data.code).toEqual('OK');
@@ -163,7 +163,7 @@ suite('edge runtime', () => {
         {},
       );
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SigninResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignInResponse>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
 

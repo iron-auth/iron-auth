@@ -1,4 +1,4 @@
-import type { SignupResponse } from 'iron-auth';
+import type { SignUpResponse } from 'iron-auth';
 import { IronAuthError } from 'iron-auth';
 import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
 import { ironAuthHandler, modifySession } from 'iron-auth/node';
@@ -61,7 +61,7 @@ suite('Request handler treats request correctly', () => {
 
     await ironAuthHandler(ironAuthOptions, req, res);
 
-    const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+    const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
     expect(res.statusCode).toEqual(200);
     expect(data.data.email).toEqual(email);

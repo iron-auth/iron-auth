@@ -1,4 +1,4 @@
-import type { SignupResponse } from 'iron-auth';
+import type { SignUpResponse } from 'iron-auth';
 import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
 import { ironAuthHandler } from 'iron-auth/node';
 import type { PrismaClient } from '@prisma/client';
@@ -117,7 +117,7 @@ suite('Credentials Provider', () => {
 
       await ironAuthHandler(ironAuthOptions, req, res);
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       expect(res.statusCode).toEqual(200);
       expect(data.code).toEqual('OK');
@@ -177,7 +177,7 @@ suite('Credentials Provider', () => {
 
       await ironAuthHandler(ironAuthOptions, req, res);
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       expect(res.statusCode).toEqual(200);
       expect(data.code).toEqual('OK');
@@ -245,7 +245,7 @@ suite('Credentials Provider', () => {
 
       await ironAuthHandler(ironAuthOptions, req, res);
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       expect(res.statusCode).toEqual(200);
       expect(data.data.email).toEqual(email);
@@ -347,7 +347,7 @@ suite('Credentials Provider', () => {
 
       await ironAuthHandler({ ...ironAuthOptions, redirects: { signIn: undefined } }, req, res);
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
 
@@ -414,7 +414,7 @@ suite('Credentials Provider', () => {
 
       await ironAuthHandler(ironAuthOptions, req, res);
 
-      const data = await getJsonResp<IronAuthApiResponse<'success', SignupResponse>>(res);
+      const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
 

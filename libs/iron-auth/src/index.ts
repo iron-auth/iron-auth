@@ -1,8 +1,8 @@
 export * from './providers';
 export type {
-  SigninResponse,
-  SignupResponse,
-  SignoutResponse,
+  SignInResponse,
+  SignUpResponse,
+  SignOutResponse,
   LinkAccountResponse,
 } from './routes';
 export { IronAuthError, IronAuthResponse, verifyCsrfToken } from './utils';

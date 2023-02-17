@@ -1,17 +1,22 @@
 import type { IncomingMessage, ServerResponse } from 'http';
 import type { JointStatusCodes, ErrorStatusCodes } from '../src/utils/iron-auth-response';
 
-type PartialNextRequest = IncomingMessage & {
-  query: Partial<{ [key: string]: string | string[] }>;
-  cookies: Partial<{ [key: string]: string }>;
-  body: unknown;
-};
-
 export type EdgeRequest = Request;
 export type EdgeResponse = Response;
 
-export type IncomingRequest = EdgeRequest | IncomingMessage | PartialNextRequest;
-export type IncomingResponse = EdgeResponse | ServerResponse;
+export type NonEdgeRequest = IncomingMessage & {
+  query: Partial<{ [key: string]: string | string[] }>;
+  cookies?: Partial<{ [key: string]: string }>;
+  body?: unknown;
+};
+export type NonEdgeResponse = ServerResponse & {
+  json: (body: unknown) => void;
+  status: (statusCode: number) => NonEdgeResponse;
+  redirect(statusCode: number, url: string): NonEdgeResponse;
+};
+
+export type IncomingRequest = EdgeRequest | IncomingMessage | NonEdgeRequest;
+export type IncomingResponse = EdgeResponse | NonEdgeResponse;
 
 export type LayoutRequest = {
   headers: Headers;

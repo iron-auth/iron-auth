@@ -39,6 +39,7 @@ export const signinRoute = async (
             if (!account || !hash) throw new Error();
 
             const validPassword = await compare(password, hash, assertSecret(config));
+
             if (!validPassword) throw new Error();
           } catch (error) {
             throw new IronAuthError({ code: 'UNAUTHORIZED', message: 'Invalid credentials' });

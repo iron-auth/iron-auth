@@ -1,6 +1,6 @@
 import { getIronSession } from 'iron-session';
 import { createModifySession } from '../src/utils';
-import type { IncomingRequest } from '../types';
+import type { IncomingRequest, LayoutRequest } from '../types';
 
 /**
  * Update the user object in the session.
@@ -16,4 +16,4 @@ import type { IncomingRequest } from '../types';
  *
  * @returns The updated session data.
  */
-export const modifySession = createModifySession<IncomingRequest>(getIronSession);
+export const modifySession = createModifySession<IncomingRequest | LayoutRequest>(getIronSession);

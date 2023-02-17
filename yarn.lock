@@ -21,7 +21,6 @@ __metadata:
   dependencies:
     "@edge-runtime/vm": ^2.0.5
     "@iron-auth/kysely-adapter": "workspace:^"
-    "@iron-auth/next": "workspace:^"
     "@iron-auth/prisma-adapter": "workspace:^"
     "@iron-auth/react": "workspace:^"
     "@libs/test-utils": "workspace:^"
@@ -35,7 +34,7 @@ __metadata:
     eslint-config-ixn-react: ^1.3.1
     happy-dom: ^7.0.0
     iron-auth: "workspace:^"
-    iron-session: ^6.2.1
+    iron-session: ^6.3.1
     kysely: ^0.23.4
     msw: ^1.0.1
     next: ^13.0.0
@@ -60,9 +59,9 @@ __metadata:
   dependencies:
     "@edge-runtime/vm": ^2.0.5
     "@iron-auth/kysely-adapter": "workspace:^"
-    "@iron-auth/next": "workspace:^"
     "@iron-auth/prisma-adapter": "workspace:^"
     "@iron-auth/react": "workspace:^"
+    "@libs/test-utils": "workspace:^"
     "@prisma/client": ^4.5.0
     "@testing-library/react": ^13.4.0
     "@tsconfig/strictest": ^1.0.2
@@ -73,11 +72,10 @@ __metadata:
     eslint-config-ixn-react: ^1.3.1
     happy-dom: ^7.0.0
     iron-auth: "workspace:^"
-    iron-session: ^6.2.1
+    iron-session: ^6.3.1
     kysely: ^0.23.4
     msw: ^1.0.1
     next: ^13.0.0
-    node-mocks-http: ^1.11.0
     pg-mem: ^2.6.4
     prettier: ^2.8.3
     prisma: ^4.5.0
@@ -837,27 +835,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@iron-auth/next@workspace:^, @iron-auth/next@workspace:libs/next":
-  version: 0.0.0-use.local
-  resolution: "@iron-auth/next@workspace:libs/next"
-  dependencies:
-    "@tsconfig/strictest": ^1.0.2
-    "@vitejs/plugin-react": ^3.1.0
-    eslint: ^8.33.0
-    eslint-config-ixn-next: ^1.3.1
-    iron-auth: "workspace:^"
-    iron-session: ^6.2.1
-    next: ^13.1.6
-    prettier: ^2.8.3
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    rimraf: ^3.0.2
-    typescript: ^4.9.5
-    vite: ^4.1.1
-    vitest: ^0.28.5
-  languageName: unknown
-  linkType: soft
-
 "@iron-auth/prisma-adapter@workspace:^, @iron-auth/prisma-adapter@workspace:libs/prisma-adapter":
   version: 0.0.0-use.local
   resolution: "@iron-auth/prisma-adapter@workspace:libs/prisma-adapter"
@@ -965,7 +942,6 @@ __metadata:
   dependencies:
     "@edge-runtime/vm": ^2.0.5
     "@iron-auth/kysely-adapter": "workspace:^"
-    "@iron-auth/next": "workspace:^"
     "@iron-auth/prisma-adapter": "workspace:^"
     "@iron-auth/react": "workspace:^"
     "@prisma/client": ^4.5.0
@@ -976,7 +952,7 @@ __metadata:
     eslint-config-ixn-react: ^1.3.1
     happy-dom: ^7.0.0
     iron-auth: "workspace:^"
-    iron-session: ^6.2.1
+    iron-session: ^6.3.1
     kysely: ^0.23.4
     node-mocks-http: ^1.11.0
     pg-mem: ^2.6.4
@@ -1110,32 +1086,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/env@npm:13.1.6"
-  checksum: 0f911a18f0b3372007632fffa87f5d7f802c00d07b3bf757d2d09574735ae43f60000ecdf64b6f06e195971c508c2bcee82dd1e3aab27a08a4300eb0317652bb
-  languageName: node
-  linkType: hard
-
-"@next/eslint-plugin-next@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/eslint-plugin-next@npm:13.1.6"
-  dependencies:
-    glob: 7.1.7
-  checksum: 15d3b5913a56d40c7ad33c77f5285a2388a3a4b4da2eb80a3899ac4b871c7bfca74fd45f98fcac3d6a91c8dce738da2661cf71e7e3116a14d5da0d5b68939e8d
-  languageName: node
-  linkType: hard
-
 "@next/swc-android-arm-eabi@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-android-arm-eabi@npm:13.0.0"
-  conditions: os=android & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@next/swc-android-arm-eabi@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-android-arm-eabi@npm:13.1.6"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
@@ -1147,23 +1100,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-android-arm64@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-android-arm64@npm:13.1.6"
-  conditions: os=android & cpu=arm64
-  languageName: node
-  linkType: hard
-
 "@next/swc-darwin-arm64@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-darwin-arm64@npm:13.0.0"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@next/swc-darwin-arm64@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-darwin-arm64@npm:13.1.6"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -1175,23 +1114,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-darwin-x64@npm:13.1.6"
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@next/swc-freebsd-x64@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-freebsd-x64@npm:13.0.0"
-  conditions: os=freebsd & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@next/swc-freebsd-x64@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-freebsd-x64@npm:13.1.6"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
@@ -1203,23 +1128,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm-gnueabihf@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-linux-arm-gnueabihf@npm:13.1.6"
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@next/swc-linux-arm64-gnu@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-linux-arm64-gnu@npm:13.0.0"
-  conditions: os=linux & cpu=arm64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-"@next/swc-linux-arm64-gnu@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-linux-arm64-gnu@npm:13.1.6"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
@@ -1231,23 +1142,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-linux-arm64-musl@npm:13.1.6"
-  conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
 "@next/swc-linux-x64-gnu@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-linux-x64-gnu@npm:13.0.0"
-  conditions: os=linux & cpu=x64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-"@next/swc-linux-x64-gnu@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-linux-x64-gnu@npm:13.1.6"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -1259,23 +1156,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-linux-x64-musl@npm:13.1.6"
-  conditions: os=linux & cpu=x64 & libc=musl
-  languageName: node
-  linkType: hard
-
 "@next/swc-win32-arm64-msvc@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-win32-arm64-msvc@npm:13.0.0"
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@next/swc-win32-arm64-msvc@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-win32-arm64-msvc@npm:13.1.6"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -1287,23 +1170,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-win32-ia32-msvc@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-win32-ia32-msvc@npm:13.1.6"
-  conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
 "@next/swc-win32-x64-msvc@npm:13.0.0":
   version: 13.0.0
   resolution: "@next/swc-win32-x64-msvc@npm:13.0.0"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@next/swc-win32-x64-msvc@npm:13.1.6":
-  version: 13.1.6
-  resolution: "@next/swc-win32-x64-msvc@npm:13.1.6"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -1609,28 +1478,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rushstack/eslint-patch@npm:^1.1.3":
-  version: 1.2.0
-  resolution: "@rushstack/eslint-patch@npm:1.2.0"
-  checksum: faa749faae0e83c26ae9eb00ad36a897ac78f3cf27da8e8ff21c00bcf7973b598d823d8f2b3957ef66079288bcf577f94df831eae2d65f3f68d8ca32f18b6aff
-  languageName: node
-  linkType: hard
-
 "@swc/helpers@npm:0.4.11":
   version: 0.4.11
   resolution: "@swc/helpers@npm:0.4.11"
   dependencies:
     tslib: ^2.4.0
   checksum: 736857d524b41a8a4db81094e9b027f554004e0fa3e86325d85bdb38f7e6459ce022db079edb6c61ba0f46fe8583b3e663e95f7acbd13e51b8da6c34e45bba2e
-  languageName: node
-  linkType: hard
-
-"@swc/helpers@npm:0.4.14":
-  version: 0.4.14
-  resolution: "@swc/helpers@npm:0.4.14"
-  dependencies:
-    tslib: ^2.4.0
-  checksum: 273fd3f3fc461a92f3790cc551ea054745c6d6959afbe1232e6d7aa1c722bbc114d308aab96bef5c78fc0303c85c7b472ef00e2253251cc89737f3b1af56e5a5
   languageName: node
   linkType: hard
 
@@ -2910,16 +2763,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^6":
-  version: 6.0.3
-  resolution: "buffer@npm:6.0.3"
-  dependencies:
-    base64-js: ^1.3.1
-    ieee754: ^1.2.1
-  checksum: 5ad23293d9a731e4318e420025800b42bf0d264004c0286c8cc010af7a270c7a0f6522e84f54b9ad65cbd6db20b8badbfd8d2ebf4f80fa03dab093b89e68c3f9
-  languageName: node
-  linkType: hard
-
 "cac@npm:^6.7.14":
   version: 6.7.14
   resolution: "cac@npm:6.7.14"
@@ -4164,32 +4007,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-ixn-next@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "eslint-config-ixn-next@npm:1.3.1"
-  dependencies:
-    "@typescript-eslint/eslint-plugin": ^5.51.0
-    "@typescript-eslint/parser": ^5.42.0
-    eslint-config-ixn-react: ^1.3.1
-    eslint-config-next: ^13.1.6
-    eslint-config-prettier: ^8.6.0
-    eslint-import-resolver-typescript: ^3.5.2
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-jsx-a11y: ^6.5.1
-    eslint-plugin-prettier: ^4.2.1
-    eslint-plugin-react: ^7.31.7
-    eslint-plugin-react-hooks: ^4.5.0
-  peerDependencies:
-    eslint: ^8.33.0
-    next: ^13.1.6
-    prettier: ^2.8.3
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    typescript: ^4.9.5
-  checksum: d442483b8722c4fbe8f5809d2627e5626040d11604ae84a89c4e42aeb5cb5c02e604a6b4348f4080bb5eae0a8c352ad7b23b5380776210d0c0a0d351dcf5b499
-  languageName: node
-  linkType: hard
-
 "eslint-config-ixn-react@npm:^1.3.1":
   version: 1.3.1
   resolution: "eslint-config-ixn-react@npm:1.3.1"
@@ -4231,29 +4048,6 @@ __metadata:
     prettier: ^2.8.3
     typescript: ^4.9.5
   checksum: ba7e9e4523995607c06727e427b6ab55d6f4c12e6a72d4863818c60cbcf0f47fae489b8bd59a5a52af586678698f45e28e2402d2e90c9923a3fde3f4e35d5ee5
-  languageName: node
-  linkType: hard
-
-"eslint-config-next@npm:^13.1.6":
-  version: 13.1.6
-  resolution: "eslint-config-next@npm:13.1.6"
-  dependencies:
-    "@next/eslint-plugin-next": 13.1.6
-    "@rushstack/eslint-patch": ^1.1.3
-    "@typescript-eslint/parser": ^5.42.0
-    eslint-import-resolver-node: ^0.3.6
-    eslint-import-resolver-typescript: ^3.5.2
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-jsx-a11y: ^6.5.1
-    eslint-plugin-react: ^7.31.7
-    eslint-plugin-react-hooks: ^4.5.0
-  peerDependencies:
-    eslint: ^7.23.0 || ^8.0.0
-    typescript: ">=3.3.1"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 864b29060f87086802eeb6ea5922dd10764120aba814a1e67103ae9ebed667bc927a4c389217ce51c7b92981a8754f5607deaa2d3676e4716493ce8cc0878522
   languageName: node
   linkType: hard
 
@@ -5123,20 +4917,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:7.1.7":
-  version: 7.1.7
-  resolution: "glob@npm:7.1.7"
-  dependencies:
-    fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^3.0.4
-    once: ^1.3.0
-    path-is-absolute: ^1.0.0
-  checksum: b61f48973bbdcf5159997b0874a2165db572b368b931135832599875919c237fc05c12984e38fe828e69aa8a921eb0e8a4997266211c517c9cfaae8a93988bb8
-  languageName: node
-  linkType: hard
-
 "glob@npm:^7.1.3, glob@npm:^7.1.4":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
@@ -5571,7 +5351,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
+"ieee754@npm:^1.1.13":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
@@ -5721,7 +5501,7 @@ __metadata:
     eslint: ^8.33.0
     eslint-config-ixn: ^1.3.1
     happy-dom: ^7.0.0
-    iron-session: ^6.2.1
+    iron-session: ^6.3.1
     msw: ^1.0.1
     node-mocks-http: ^1.11.0
     prettier: ^2.8.3
@@ -5729,13 +5509,14 @@ __metadata:
     typescript: ^4.9.5
     vite: ^4.1.1
     vitest: ^0.28.5
+    vitest-environment-edge: "workspace:^"
     vitest-mock-extended: ^1.0.9
   peerDependencies:
     iron-session: ^6.2.1
   languageName: unknown
   linkType: soft
 
-"iron-session@npm:^6.2.1":
+"iron-session@npm:^6.3.1":
   version: 6.3.1
   resolution: "iron-session@npm:6.3.1"
   dependencies:
@@ -5762,11 +5543,9 @@ __metadata:
   linkType: hard
 
 "iron-webcrypto@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "iron-webcrypto@npm:0.2.5"
-  dependencies:
-    buffer: ^6
-  checksum: 7ece332782ddec52d106fa5b1b152edbc7d9d31cbc8a434d25ca87546bb452df5509ac8fd2b42dc39a920ae55c607e4bb41dd263b4ec6475ef19fdfaa017cf58
+  version: 0.5.0
+  resolution: "iron-webcrypto@npm:0.5.0"
+  checksum: 8e806c9fdafee83d7d328a60d5bb3c3529840e9de8085cebc93461879cf581a57812a5591b22d90699d9f9808bf8ce709baaeba36a1c8221cafcd4952ca77d8f
   languageName: node
   linkType: hard
 
@@ -6908,7 +6687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^3.0.2, minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
+"minimatch@npm:^3.0.2, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
   dependencies:
@@ -7260,74 +7039,6 @@ __metadata:
   bin:
     next: dist/bin/next
   checksum: 7b5c84728783433c07e3eac65d5d85434f6c056a3e55c417c7636e08d8e1af2532d83f75b8448ddc5c9525145a6a7c93e8482744ee3f2d647841b152306da939
-  languageName: node
-  linkType: hard
-
-"next@npm:^13.1.6":
-  version: 13.1.6
-  resolution: "next@npm:13.1.6"
-  dependencies:
-    "@next/env": 13.1.6
-    "@next/swc-android-arm-eabi": 13.1.6
-    "@next/swc-android-arm64": 13.1.6
-    "@next/swc-darwin-arm64": 13.1.6
-    "@next/swc-darwin-x64": 13.1.6
-    "@next/swc-freebsd-x64": 13.1.6
-    "@next/swc-linux-arm-gnueabihf": 13.1.6
-    "@next/swc-linux-arm64-gnu": 13.1.6
-    "@next/swc-linux-arm64-musl": 13.1.6
-    "@next/swc-linux-x64-gnu": 13.1.6
-    "@next/swc-linux-x64-musl": 13.1.6
-    "@next/swc-win32-arm64-msvc": 13.1.6
-    "@next/swc-win32-ia32-msvc": 13.1.6
-    "@next/swc-win32-x64-msvc": 13.1.6
-    "@swc/helpers": 0.4.14
-    caniuse-lite: ^1.0.30001406
-    postcss: 8.4.14
-    styled-jsx: 5.1.1
-  peerDependencies:
-    fibers: ">= 3.1.0"
-    node-sass: ^6.0.0 || ^7.0.0
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    sass: ^1.3.0
-  dependenciesMeta:
-    "@next/swc-android-arm-eabi":
-      optional: true
-    "@next/swc-android-arm64":
-      optional: true
-    "@next/swc-darwin-arm64":
-      optional: true
-    "@next/swc-darwin-x64":
-      optional: true
-    "@next/swc-freebsd-x64":
-      optional: true
-    "@next/swc-linux-arm-gnueabihf":
-      optional: true
-    "@next/swc-linux-arm64-gnu":
-      optional: true
-    "@next/swc-linux-arm64-musl":
-      optional: true
-    "@next/swc-linux-x64-gnu":
-      optional: true
-    "@next/swc-linux-x64-musl":
-      optional: true
-    "@next/swc-win32-arm64-msvc":
-      optional: true
-    "@next/swc-win32-ia32-msvc":
-      optional: true
-    "@next/swc-win32-x64-msvc":
-      optional: true
-  peerDependenciesMeta:
-    fibers:
-      optional: true
-    node-sass:
-      optional: true
-    sass:
-      optional: true
-  bin:
-    next: dist/bin/next
-  checksum: 584977e382bd826c21e7fc5f67bca50e4d95741a854b1686394d45331404479c7266569671227421975fc18e5cf70769a4ad7edede7450d4497213205bba77c8
   languageName: node
   linkType: hard
 
@@ -9335,22 +9046,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-jsx@npm:5.1.1":
-  version: 5.1.1
-  resolution: "styled-jsx@npm:5.1.1"
-  dependencies:
-    client-only: 0.0.1
-  peerDependencies:
-    react: ">= 16.8.0 || 17.x.x || ^18.0.0-0"
-  peerDependenciesMeta:
-    "@babel/core":
-      optional: true
-    babel-plugin-macros:
-      optional: true
-  checksum: 523a33b38603492547e861b98e29c873939b04e15fbe5ef16132c6f1e15958126647983c7d4675325038b428a5e91183d996e90141b18bdd1bbadf6e2c45b2fa
-  languageName: node
-  linkType: hard
-
 "supports-color@npm:^5.3.0":
   version: 5.5.0
   resolution: "supports-color@npm:5.5.0"
@@ -10220,6 +9915,23 @@ __metadata:
   checksum: aad14b660b69068f6596ab7e760dd71642862996328e404a4d265e090ae0d06c7064cf8415ffb135cd8b79d5157dc1dcb48b56386caaa96a474fb53bdd8cac3d
   languageName: node
   linkType: hard
+
+"vitest-environment-edge@workspace:^, vitest-environment-edge@workspace:libs/vitest-environment-edge":
+  version: 0.0.0-use.local
+  resolution: "vitest-environment-edge@workspace:libs/vitest-environment-edge"
+  dependencies:
+    "@edge-runtime/vm": ^2.0.5
+    "@tsconfig/strictest": ^1.0.2
+    "@vitejs/plugin-react": ^3.1.0
+    eslint: ^8.33.0
+    eslint-config-ixn: ^1.3.1
+    prettier: ^2.8.3
+    rimraf: ^3.0.2
+    typescript: ^4.9.5
+    vite: ^4.1.1
+    vitest: ^0.28.5
+  languageName: unknown
+  linkType: soft
 
 "vitest-mock-extended@npm:^1.0.9":
   version: 1.0.9

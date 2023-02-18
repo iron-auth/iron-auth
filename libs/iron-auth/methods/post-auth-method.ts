@@ -66,7 +66,8 @@ export const postAuthMethod = async <
   )
     .then((respData) => respData)
     .catch((err) => {
-      if (rejects) throw new Error(err);
-      return null;
+      if (!rejects) return null;
+
+      throw new Error(err);
     });
 };

@@ -3,6 +3,8 @@ import { EventChannel } from './event-channel';
 import type { GetAuthMethod } from './get-auth-method';
 import { getAuthMethod } from './get-auth-method';
 
+type ExtraOpts = { notifyOnSuccess?: boolean };
+
 /**
  * Fetch a user's session.
  *
@@ -12,10 +14,8 @@ import { getAuthMethod } from './get-auth-method';
  * @param opts.basePath Base path for the API. Defaults to '/api/auth'.
  * @returns The user's session, or null if no response was received.
  */
-export const getSession: GetAuthMethod<ValidSession, { notifyOnSuccess?: boolean }> = async (
-  opts,
-) => {
-  const resp = await getAuthMethod<ValidSession>('session', opts);
+export const getSession: GetAuthMethod<ValidSession, ExtraOpts> = async (opts) => {
+  const resp = await getAuthMethod<ValidSession, ExtraOpts>('session', opts);
 
   if (opts?.notifyOnSuccess && resp) {
     EventChannel.notify({ event: 'session-updated', userId: resp.user.id });

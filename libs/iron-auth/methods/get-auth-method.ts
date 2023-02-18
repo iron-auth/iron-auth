@@ -2,10 +2,11 @@ import type { ApiResponseDataType } from '../types';
 import type { SharedFetchOptions } from './fetch-api-data';
 import { fetchApiData, refineDefaultOpts } from './fetch-api-data';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type GetAuthMethod<T extends ApiResponseDataType, ExtraOpts extends object = {}> = (
-  opts?: SharedFetchOptions & ExtraOpts,
-) => Promise<T | null>;
+export type GetAuthMethod<
+  T extends ApiResponseDataType,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  ExtraOpts extends object = {},
+> = (opts?: SharedFetchOptions & ExtraOpts) => Promise<T | null>;
 
 /**
  * Make a `GET` request to the auth API endpoint.
@@ -17,16 +18,21 @@ export type GetAuthMethod<T extends ApiResponseDataType, ExtraOpts extends objec
  * @param opts.basePath Base path for the API. Defaults to '/api/auth'.
  * @returns The response from the API, or null if no response was received.
  */
-export const getAuthMethod = <ResponseType extends ApiResponseDataType>(
+export const getAuthMethod = <
+  ResponseType extends ApiResponseDataType,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  ExtraOpts extends object = {},
+>(
   path: string,
-  opts = {},
+  opts?: SharedFetchOptions & ExtraOpts,
 ): Promise<ResponseType | null> => {
-  const { rejects, basePath } = refineDefaultOpts(opts);
+  const { rejects, basePath } = refineDefaultOpts(opts ?? {});
 
   return fetchApiData<ResponseType>(`/${path}`, { method: 'GET' }, { basePath, name: path })
     .then((data) => data)
     .catch((err) => {
-      if (rejects) throw new Error(err);
-      return null;
+      if (!rejects) return null;
+
+      throw new Error(err);
     });
 };

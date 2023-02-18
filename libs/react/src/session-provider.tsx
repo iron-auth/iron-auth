@@ -16,10 +16,12 @@ import type { EventShape } from 'iron-auth/methods/event-channel';
 import { EventChannel } from 'iron-auth/methods/event-channel';
 
 export type ISessionContext<HasSession extends boolean = false> = {
+  loadingInitialSession: boolean;
   session: HasSession extends true ? ValidSession : ValidSession | undefined | null;
 };
 
 const SessionContext = createContext<ISessionContext<boolean>>({
+  loadingInitialSession: false,
   session: undefined,
 });
 
@@ -31,6 +33,7 @@ type Props = {
   children: React.ReactNode;
   session?: ValidSession | undefined | null;
   fetchOnLoad?: boolean;
+  crossTabCommunication?: boolean;
 };
 
 /**
@@ -39,14 +42,17 @@ type Props = {
  * @param props.basePath The base path of the API. Defaults to '/api/auth'.
  * @param props.children React children.
  * @param props.fetchOnLoad Whether to fetch the session on load - does not try fetching if a session is passed through. Defaults to false.
+ * @param props.crossTabCommunication Whether to listen to cross-tab communication session updates. Defaults to true.
  * @param props.session The session data to use. If not provided, the session will be fetched from the API. Useful for passing in a session retrieved in server side rendering.
  */
 export const SessionProvider = ({
   basePath = fetchDefaults.basePath,
   children,
   fetchOnLoad = false,
+  crossTabCommunication = true,
   session: pageSession,
 }: Props): JSX.Element => {
+  const [loadingInitialSession, setLoadingInitialSession] = useState<boolean>(fetchOnLoad);
   const [session, setSession] = useState<ValidSession | undefined | null>(pageSession);
 
   const basePathRef = useRef<string>(basePath);
@@ -84,7 +90,13 @@ export const SessionProvider = ({
    */
   useEffect(() => {
     if (fetchOnLoad && pageSession === undefined) {
-      fetchSession();
+      setLoadingInitialSession(true);
+      fetchSession().then(() => {
+        setLoadingInitialSession(false);
+        if (!tabState.current.lastSession) {
+          setSession(null);
+        }
+      });
     }
   }, [fetchOnLoad, fetchSession, pageSession]);
 
@@ -92,6 +104,11 @@ export const SessionProvider = ({
    * Listens for events from the update channel (through local storage) and handle them.
    */
   useEffect(() => {
+    if (!crossTabCommunication) {
+      console.debug('Cross-tab communication for session updates is disabled.');
+      return;
+    }
+
     const chan = channel.current;
 
     const handleEvent = ({ event, userId }: EventShape) => {
@@ -141,13 +158,17 @@ export const SessionProvider = ({
     chan.subscribe('session-provider', handleEvent);
     chan.open();
 
+    // eslint-disable-next-line consistent-return
     return () => {
       chan.unsubscribe('session-provider');
       chan.close();
     };
-  }, [fetchSession]);
+  }, [crossTabCommunication, fetchSession]);
 
-  const value = useMemo(() => ({ session }), [session]);
+  const value = useMemo(
+    () => ({ loadingInitialSession, session }),
+    [loadingInitialSession, session],
+  );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 };

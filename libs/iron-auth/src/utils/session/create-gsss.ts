@@ -1,5 +1,5 @@
 import type { getIronSession } from 'iron-session/edge';
-import type { IncomingRequest, IronAuthConfig, LayoutRequest, Session } from '../../../types';
+import type { IncomingRequest, IronAuthConfig, LayoutRequest, ValidSession } from '../../../types';
 import { parseConfig } from '../config';
 import { isValidSession } from './is-valid';
 
@@ -16,7 +16,7 @@ export const createGsss = <Req extends IncomingRequest | LayoutRequest = Incomin
     req: Req,
     config: IronAuthConfig,
     env?: Record<string, string | undefined>,
-  ): Promise<Session> => {
+  ): Promise<ValidSession> => {
     const parsedConfig = parseConfig(config, env);
 
     const session = await _getIronSession(

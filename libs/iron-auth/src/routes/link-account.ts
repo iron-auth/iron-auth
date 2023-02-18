@@ -1,5 +1,5 @@
 import type { IronSession } from 'iron-session';
-import type { InternalRequest, ParsedIronAuthConfig } from '../../types';
+import type { InternalRequest, ParsedIronAuthConfig, ValidSession } from '../../types';
 import type { CredentialsPreCheckResponse } from '../providers';
 import { assertProvider, assertSecret, encrypt, IronAuthError, isValidSession } from '../utils';
 
@@ -78,7 +78,7 @@ export type LinkAccountResponse = {
   /**
    * The user's unique ID in the database.
    */
-  id: string;
+  id: ValidSession['user']['id'];
   /**
    * The user's username.
    */

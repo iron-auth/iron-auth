@@ -1,5 +1,5 @@
 import type { IronSession } from 'iron-session';
-import type { InternalRequest, ParsedIronAuthConfig } from '../../types';
+import type { InternalRequest, ParsedIronAuthConfig, ValidSession } from '../../types';
 import { assertProvider, assertSecret, encrypt, IronAuthError } from '../utils';
 
 export const signupRoute = async (
@@ -85,11 +85,11 @@ export const signupRoute = async (
   });
 };
 
-export type SignupResponse = {
+export type SignUpResponse = {
   /**
    * The user's unique ID in the database.
    */
-  id: string;
+  id: ValidSession['user']['id'];
   /**
    * The user's username.
    */

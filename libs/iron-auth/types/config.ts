@@ -1,5 +1,5 @@
 import type { CookieSerializeOptions } from 'cookie';
-import type { IronAuthError, SigninResponse, SignoutResponse, SignupResponse } from '../src';
+import type { IronAuthError, SignInResponse, SignOutResponse, SignUpResponse } from '../src';
 import type { InternalRequest } from './http';
 import type { Session } from './session';
 
@@ -295,7 +295,7 @@ export type IronAuthConfig = {
      * @note It is NOT possible to set or modify cookies/headers when redirecting.
      *
      */
-    signIn?: string | ((data: SigninResponse) => string);
+    signIn?: string | ((data: SignInResponse) => string);
     /**
      * Redirect URL for when the sign up route succeeds.
      *
@@ -304,7 +304,7 @@ export type IronAuthConfig = {
      * @note It is NOT possible to set or modify cookies/headers when redirecting.
      *
      */
-    signUp?: string | ((data: SignupResponse) => string);
+    signUp?: string | ((data: SignUpResponse) => string);
     /**
      * Redirect URL for when the sign out route succeeds.
      *
@@ -313,7 +313,7 @@ export type IronAuthConfig = {
      * @note It is NOT possible to set or modify cookies/headers when redirecting.
      *
      */
-    signOut?: string | ((data: SignoutResponse) => string);
+    signOut?: string | ((data: SignOutResponse) => string);
     /**
      * Redirect URL for when the link account route succeeds.
      *
@@ -321,7 +321,7 @@ export type IronAuthConfig = {
      *
      * @note It is NOT possible to set or modify cookies/headers when redirecting.
      */
-    linkAccount?: string | ((data: SignoutResponse) => string);
+    linkAccount?: string | ((data: SignOutResponse) => string);
     /**
      * Redirect for when an error occurs during the authentication flow.
      *

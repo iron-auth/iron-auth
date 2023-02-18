@@ -10,4 +10,4 @@ export const signoutRoute = async (session: IronSession) => {
   throw new IronAuthError({ code: 'NO_SESSION', message: 'Session not found' });
 };
 
-export type SignoutResponse = boolean;
+export type SignOutResponse = boolean;

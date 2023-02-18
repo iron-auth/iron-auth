@@ -9,7 +9,7 @@ import {
 import { suite, test, expect, vi, beforeAll } from 'vitest';
 import { AccountBasket } from '@libs/test-utils';
 import type { SignUpResponse } from 'iron-auth';
-import { basePath, resetPrisma } from './helpers';
+import { basePath, resetPrisma } from '../helpers';
 import { ProviderComponent } from './test-components';
 
 suite('React Session Provider', () => {

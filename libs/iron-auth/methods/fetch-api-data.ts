@@ -32,13 +32,7 @@ export const fetchApiData = <Data extends ApiResponseDataType = null>(
 ) => {
   return new Promise<Data>((res, rej) => {
     fetch(`${basePath}${path}`, options)
-      .then((resp) => {
-        if (resp.ok) {
-          return resp.json() as Promise<IronAuthApiResponse<'unknown', Data> | JSON>;
-        }
-
-        throw new Error('Request failed');
-      })
+      .then((resp) => resp.json() as Promise<IronAuthApiResponse<'unknown', Data> | JSON>)
       .then((resp) => {
         if ('success' in resp) {
           if (resp.success && resp.data !== undefined) {

@@ -2,10 +2,10 @@ import type { ApiResponseDataType } from '../types';
 import type { SharedFetchOptions } from './fetch-api-data';
 import { fetchApiData, refineDefaultOpts } from './fetch-api-data';
 
-export type GetAuthMethod<
-  T extends ApiResponseDataType,
-  ExtraOpts extends object = Record<string, never>,
-> = (opts?: SharedFetchOptions & ExtraOpts) => Promise<T | null>;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type GetAuthMethod<T extends ApiResponseDataType, ExtraOpts extends object = {}> = (
+  opts?: SharedFetchOptions & ExtraOpts,
+) => Promise<T | null>;
 
 /**
  * Make a `GET` request to the auth API endpoint.

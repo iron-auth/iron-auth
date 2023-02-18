@@ -22,11 +22,17 @@ export class EventChannel {
 
   public open() {
     window.addEventListener('storage', this.handleStorageEvent);
+    document.addEventListener('notify-event-channel-local', this.handleCustomEvent, false);
   }
 
   public close() {
     window.removeEventListener('storage', this.handleStorageEvent);
+    document.removeEventListener('notify-event-channel-local', this.handleCustomEvent, false);
   }
+
+  private handleCustomEvent = (event: Event) => {
+    this.handleStorageEvent((event as CustomEvent).detail);
+  };
 
   private handleStorageEvent = (event: StorageEvent) => {
     if (event.key === this.name && typeof event.newValue === 'string') {
@@ -44,9 +50,21 @@ export class EventChannel {
 
   public notify = (event: EventShape) => {
     localStorage.setItem(this.name, JSON.stringify(event));
+
+    // the storage event is only handled in other tabs, not in the current tab, so we need to manually trigger it.
+    this.handleStorageEvent(
+      new StorageEvent('storage', { key: this.name, newValue: JSON.stringify(event) }),
+    );
   };
 
   public static notify = (event: EventShape, name = defaultChannelName) => {
     localStorage.setItem(name, JSON.stringify(event));
+
+    // the storage event is only handled in other tabs, not in the current tab, so we need to manually trigger it.
+    document.dispatchEvent(
+      new CustomEvent('notify-event-channel-local', {
+        detail: new StorageEvent('storage', { key: name, newValue: JSON.stringify(event) }),
+      }),
+    );
   };
 }

@@ -32,7 +32,7 @@ export const getCsrfToken = async () => {
     }),
   );
 
-  const resp = await ironAuthHandler(await getIronAuthOptions(), req, undefined);
+  const resp = await ironAuthHandler(await getIronAuthOptions(), req);
 
   return getCsrfTokenOriginal(resp);
 };

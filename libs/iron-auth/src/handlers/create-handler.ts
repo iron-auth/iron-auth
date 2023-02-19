@@ -1,4 +1,4 @@
-import { IncomingMessage, ServerResponse } from 'http';
+// import { IncomingMessage, ServerResponse } from 'http';
 import type { getIronSession } from 'iron-session/edge';
 import type {
   EdgeRequest,
@@ -22,7 +22,7 @@ import { requestHandler } from './request-handler';
 export type Handler = (...args: Parameters<typeof createHandler>) => unknown;
 
 type ResolveResType<Req extends IncomingRequest> = Req extends EdgeRequest
-  ? EdgeResponse | undefined
+  ? undefined
   : NonEdgeResponse;
 
 type ResolveReturnType<Req extends IncomingRequest> = Req extends EdgeRequest
@@ -36,7 +36,7 @@ const handleRedirect = <Req extends IncomingRequest, Res extends ResolveResType<
   res: Res,
   { url, status }: { url: string; status: number },
 ): ResolveReturnType<Req> => {
-  if (res instanceof ServerResponse) {
+  if (res) {
     res.redirect(status, url);
     return undefined as never;
   }
@@ -49,7 +49,7 @@ const handleResponse = <Req extends IncomingRequest, Res extends ResolveResType<
   res: Res,
   { status, body, headers }: { status: number; body: unknown; headers?: HeadersInit },
 ): ResolveReturnType<Req> => {
-  if (res instanceof ServerResponse) {
+  if (res) {
     res.status(status).json(body);
     return undefined as never;
   }
@@ -71,6 +71,12 @@ const checkErrorType = (err: unknown): IronAuthError =>
         message: 'An unexpected error occurred',
       });
 
+export type EdgeHandler = (
+  config: IronAuthConfig,
+  req: EdgeRequest,
+  env?: Record<string, string | undefined>,
+) => Promise<HandlerReturnType<EdgeRequest>>;
+
 export const createHandler = (_getIronSession: typeof getIronSession) => {
   return async <Req extends IncomingRequest, Res extends ResolveResType<Req>>(
     config: IronAuthConfig,
@@ -83,7 +89,7 @@ export const createHandler = (_getIronSession: typeof getIronSession) => {
     try {
       let path = 'query' in req ? req.query?.['ironauth'] : '';
       let queryParams = 'query' in req && req.query;
-      let cookies = 'cookies' in req && req.cookies;
+      let cookies = 'cookies' in req && req.cookies && !('getAll' in req.cookies) && req.cookies;
 
       if (req.url) {
         path = new URL(req.url).pathname.split('/').pop();
@@ -114,12 +120,12 @@ export const createHandler = (_getIronSession: typeof getIronSession) => {
         body: await jsonFromReq(req),
         cookies: cookies || {},
 
-        ...(req instanceof IncomingMessage
-          ? { headers: req.headers }
-          : { headers: req.headers, credentials: 'same-origin' }),
+        ...('credentials' in req
+          ? { headers: req.headers, credentials: req.credentials }
+          : { headers: req.headers }),
       };
 
-      if (req instanceof IncomingMessage && !res) {
+      if (!('credentials' in req) && !res) {
         throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Missing response object' });
       }
 

@@ -12,7 +12,7 @@ To use Iron Auth, you need to call the `ironAuthHandler` function from your API 
 
 - `config`: An object containing the configuration options for Iron Auth.
 - `req`: The request object from your API route. This is used to get the request method, path, and headers.
-- `res`: The response object from your API route. This is used to set the `Set-Cookie` header. On the Edge runtime, you can pass `undefined` instead.
+- `res`: The response object from your API route. This is used to set the `Set-Cookie` header. This parameter is not present on the Edge runtime handler.
 - `env`: An object containing the environment variables for your application. This is used to get the `IRON_AUTH_IRON_PASSWORD`, `IRON_AUTH_ENCRYPTION_SECRET`, and `IRON_AUTH_CSRF_SECRET` environment variables. If they are not set, it falls back to the config to check for them.
 
 ### Node.js
@@ -50,6 +50,6 @@ export default function handler(req) {
     /* ... */
   };
 
-  return ironAuthHandler(config, req, undefined, env);
+  return ironAuthHandler(config, req, env);
 }
 ```

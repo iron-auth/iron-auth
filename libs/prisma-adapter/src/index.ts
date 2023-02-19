@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
+import type { PrismaClient as PrismaClientEdge } from '@prisma/client/edge';
 import type { GenericAdapterConfig } from 'iron-auth/types';
 
 /**
@@ -9,7 +10,7 @@ import type { GenericAdapterConfig } from 'iron-auth/types';
  * @param prisma - The prisma client instance.
  * @returns The adapter.
  */
-export const prismaAdapter = (prisma: PrismaClient): GenericAdapterConfig => ({
+export const prismaAdapter = (prisma: PrismaClient | PrismaClientEdge): GenericAdapterConfig => ({
   create: ({
     userId,
     type,

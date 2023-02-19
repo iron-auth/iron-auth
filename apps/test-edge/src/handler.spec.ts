@@ -41,7 +41,7 @@ suite('edge runtime', () => {
         body: null,
       });
 
-      const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
+      const res = await ironAuthHandler(ironAuthOptions, req, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'error', ValidSession>>(res);
 
@@ -66,7 +66,7 @@ suite('edge runtime', () => {
         },
       );
 
-      const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
+      const res = await ironAuthHandler(ironAuthOptions, req, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'error', SignInResponse>>(res);
 
@@ -92,7 +92,7 @@ suite('edge runtime', () => {
         },
       );
 
-      const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
+      const res = await ironAuthHandler(ironAuthOptions, req, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
@@ -126,7 +126,7 @@ suite('edge runtime', () => {
         },
       );
 
-      const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
+      const res = await ironAuthHandler(ironAuthOptions, req, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
@@ -159,7 +159,6 @@ suite('edge runtime', () => {
       const res = await ironAuthHandler(
         { ...ironAuthOptions, redirects: { signIn: undefined } },
         req,
-        undefined,
         {},
       );
 
@@ -190,7 +189,7 @@ suite('edge runtime', () => {
         },
       });
 
-      const res = await ironAuthHandler(ironAuthOptions, req, undefined, {});
+      const res = await ironAuthHandler(ironAuthOptions, req, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'success', ValidSession>>(res);
 

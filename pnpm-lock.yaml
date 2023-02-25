@@ -115,6 +115,7 @@ importers:
       typescript: ^4.9.5
       vite: ^4.1.1
       vitest: ^0.28.5
+      vitest-environment-edge: workspace:^0.0.0
       vitest-mock-extended: ^1.0.9
     dependencies:
       '@iron-auth/kysely-adapter': link:../../libs/kysely-adapter
@@ -149,6 +150,7 @@ importers:
       typescript: 4.9.5
       vite: 4.1.4
       vitest: 0.28.5_bl7zc3jvdodmltbpzbq4ot5bmy
+      vitest-environment-edge: link:../../libs/vitest-environment-edge
 
   libs/iron-auth:
     specifiers:

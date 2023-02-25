@@ -1,8 +1,8 @@
 tasks:
   - name: Install Dependencies
     init: |
-      yarn install --immutable
-      yarn workspace @apps/test prisma:generate
+      pnpm install --frozen-lockfile
+      pnpm --filter @apps/test prisma:generate
     command: |
       gp sync-done setup
 

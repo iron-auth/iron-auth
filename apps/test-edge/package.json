@@ -35,7 +35,8 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.9.5",
     "vite": "^4.1.1",
-    "vitest": "^0.28.5"
+    "vitest": "^0.28.5",
+    "vitest-environment-edge": "workspace:^0.0.0"
   },
   "dependencies": {
     "@iron-auth/kysely-adapter": "workspace:^",

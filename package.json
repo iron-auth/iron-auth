@@ -27,9 +27,7 @@
     "turbo": "latest"
   },
   "engines": {
-    "npm": ">=8.0.0",
-    "yarn": ">=3.0.0",
+    "pnpm": ">=6",
     "node": ">=16.0.0"
-  },
-  "packageManager": "yarn@3.2.1"
+  }
 }

@@ -12,6 +12,8 @@ Otherwise, feel free to open a pull request with your changes.
 
 ### Guidelines
 
+Please use pnpm to install dependencies and run scripts.
+
 - Fork the repository.
 - Make your changes in a new git branch:
   - We use `eslint` for linting and `prettier` for formatting. Please resolve any errors or warnings before submitting a pull request.
@@ -37,7 +39,7 @@ You can clone the repository to your hard drive and run the following commands:
 git clone https://github.com/iron-auth/iron-auth
 cd iron-auth
 
-yarn install
+pnpm i
 ```
 
 ## Reporting Issues

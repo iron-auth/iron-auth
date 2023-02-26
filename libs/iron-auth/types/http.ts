@@ -73,13 +73,14 @@ export type EdgeResponse = Response;
 
 export type NonEdgeRequest = IncomingMessage & {
   query: Partial<{ [key: string]: string | string[] }>;
+  params?: Partial<{ [key: string]: string | string[] }>;
   cookies?: Partial<{ [key: string]: string }>;
   body?: unknown;
 };
 export type NonEdgeResponse = ServerResponse & {
   json: (body: unknown) => void;
   status: (statusCode: number) => NonEdgeResponse;
-  redirect(statusCode: number, url: string): NonEdgeResponse;
+  redirect(statusCode: number, url: string): void | NonEdgeResponse;
 };
 
 export type IncomingRequest = EdgeRequest | IncomingMessage | NonEdgeRequest;

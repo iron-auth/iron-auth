@@ -47,14 +47,18 @@ const handleRedirect = <Req extends IncomingRequest, Res extends ResolveResType<
 const handleResponse = <Req extends IncomingRequest, Res extends ResolveResType<Req>>(
   _req: Req,
   res: Res,
-  { status, body, headers }: { status: number; body: unknown; headers?: HeadersInit },
+  {
+    status,
+    body,
+    headers,
+  }: { status: number; body: unknown; headers?: () => HeadersInit | undefined },
 ): ResolveReturnType<Req> => {
   if (res) {
     res.status(status).json(body);
     return undefined as never;
   }
 
-  const respHeaders = new Headers(headers);
+  const respHeaders = new Headers(headers?.());
   respHeaders.set('Content-Type', 'application/json;charset=UTF-8');
 
   return new Response(JSON.stringify(body), {
@@ -87,17 +91,19 @@ export const createHandler = (_getIronSession: typeof getIronSession) => {
     const parsedConfig = parseConfig(config, env);
 
     try {
-      let path = 'query' in req ? req.query?.['ironauth'] : '';
-      let queryParams = 'query' in req && req.query;
+      let path =
+        ('params' in req && req.params?.['ironauth']) ||
+        ('query' in req && req.query?.['ironauth']);
+      let queryParams = ('params' in req && req.params) || ('query' in req && req.query) || {};
       let cookies = 'cookies' in req && req.cookies && !('getAll' in req.cookies) && req.cookies;
 
-      if (req.url) {
-        path = new URL(req.url).pathname.split('/').pop();
+      if (!path) {
+        path = req.url?.split('?')[0]?.split('/').pop() ?? '';
       }
 
-      if (!queryParams) {
+      if (!Object.keys(queryParams ?? {}).length) {
         queryParams = fromEntries([
-          ...(new URL(req.url ?? 'http://localhost:3000').searchParams?.entries() ?? []),
+          ...((req.url?.includes('?') && new URL(req.url).searchParams?.entries()) || []),
           ['ironauth', path],
         ]);
       }
@@ -150,10 +156,34 @@ export const createHandler = (_getIronSession: typeof getIronSession) => {
         throw resp.err;
       }
 
+      const respHeaders: () => Headers | undefined = () => {
+        if (resp.res && 'headers' in resp.res) {
+          return resp.res.headers;
+        }
+        if (resp.res && 'getHeaders' in resp.res) {
+          const tempHeaders = new Headers();
+
+          // eslint-disable-next-line no-restricted-syntax
+          for (const [key, value] of Object.entries(resp.res.getHeaders())) {
+            if (Array.isArray(value) && value.length > 0) {
+              value.forEach((item) => tempHeaders?.append(key, item));
+            } else if (tempHeaders.has(key)) {
+              tempHeaders.append(key, `${value}`);
+            } else {
+              tempHeaders.set(key, `${value}`);
+            }
+          }
+
+          return tempHeaders;
+        }
+
+        return undefined;
+      };
+
       return handleResponse(req, res, {
         status: resp.status,
         body: resp.toJson(),
-        headers: resp.res && 'headers' in resp.res ? resp.res.headers : undefined,
+        headers: respHeaders,
       });
     } catch (err) {
       const resp = processCallback({ config: parsedConfig, err: checkErrorType(err) });

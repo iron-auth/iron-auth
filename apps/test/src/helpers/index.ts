@@ -1,2 +1,2 @@
-export * from './mock-server';
+export * from './setup';
 export * from './request-utils';

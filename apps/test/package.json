@@ -45,7 +45,6 @@
     "iron-auth": "workspace:^",
     "iron-session": "^6.3.1",
     "kysely": "^0.23.4",
-    "msw": "^1.1.0",
     "pg-mem": "^2.6.4",
     "prisma-mock-vitest": "^0.1.4",
     "react": "^18.2.0"

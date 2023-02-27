@@ -12,10 +12,7 @@ import type { SignUpResponse } from 'iron-auth';
 import { basePath, resetPrisma } from '../helpers';
 import { ProviderComponent } from './test-components';
 
-// NOTE: msw is being a little cry baby and not working, it throws `TypeError: Invalid URL` when trying to fetch.
-// I'm not sure why, but I'm not going to spend time on it right now.
-// TODO: Use alternative to msw.
-suite.skip('React Session Provider', () => {
+suite('React Session Provider', () => {
   const accounts = new AccountBasket();
 
   beforeAll(async () => {
@@ -228,8 +225,9 @@ suite.skip('React Session Provider', () => {
     expect(screen.queryByTestId('session')).toBeNull();
 
     await waitForElementToBeRemoved(() => screen.getByText(/Loading/));
+    console.log(screen.getByTestId('sign-in_error').textContent);
 
-    expect(screen.getByTestId('sign-in_error').textContent?.includes('/account failed')).toEqual(
+    expect(screen.getByTestId('sign-in_error').textContent?.includes('Invalid response')).toEqual(
       true,
     );
   });

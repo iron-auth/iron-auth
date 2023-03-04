@@ -10,7 +10,7 @@ import { assertProvider, assertSecret, compare, IronAuthError } from '../../util
 
 export const signinRoute = async (
   req: InternalRequest,
-  res: IncomingResponse,
+  _res: IncomingResponse,
   config: ParsedIronAuthConfig,
   session: IronSession,
 ) => {

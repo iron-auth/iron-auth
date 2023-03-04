@@ -1,0 +1,1 @@
+export { credentialsProvider } from './credentials';

@@ -1,7 +1,11 @@
 import { IronAuthError } from 'iron-auth';
-import { parseConfig } from 'iron-auth/src/utils';
-import { verifyCsrfToken, verifyCsrfTokenForReq } from 'iron-auth/src/utils/verify-csrf-token';
-import type { IronAuthApiResponse, InternalRequest, ParsedIronAuthConfig } from 'iron-auth/types';
+import { parseConfig, verifyCsrfToken, verifyCsrfTokenForReq } from 'iron-auth/src/utils';
+import type {
+  IronAuthApiResponse,
+  InternalRequest,
+  ParsedIronAuthConfig,
+  IronAuthConfig,
+} from 'iron-auth/types';
 import { ironAuthHandler } from 'iron-auth/node';
 import { suite, test, expect, beforeAll } from 'vitest';
 import { getHttpMock, getJsonResp } from '@libs/test-utils';
@@ -9,31 +13,37 @@ import { getIronAuthOptions, resetPrisma } from './helpers';
 
 suite('CSRF Token', () => {
   let csrfCookie: string;
-  let ironAuthOptions: ParsedIronAuthConfig;
+  let ironAuthOptions: IronAuthConfig;
+  let parsedIronAuthOptions: ParsedIronAuthConfig;
 
   beforeAll(async () => {
     await resetPrisma();
-    ironAuthOptions = parseConfig(await getIronAuthOptions());
+    ironAuthOptions = await getIronAuthOptions();
+    parsedIronAuthOptions = parseConfig(ironAuthOptions);
   });
 
   test('CSRF route returns a token', async () => {
-    const { req, res } = getHttpMock({
+    const { req } = getHttpMock({
       method: 'GET',
       query: {
         ironauth: ['csrf'],
       },
     });
 
-    await ironAuthHandler(ironAuthOptions, req, res);
+    console.log(req.query);
+
+    const res = await ironAuthHandler(req, ironAuthOptions);
 
     const data = await getJsonResp<IronAuthApiResponse<'success', string>>(res);
 
-    const rawToken = (res.getHeader('set-cookie') as string[])
+    const rawToken = res.headers
+      .get('Set-Cookie')
+      ?.split(',')
       .find((cookie) => cookie.includes('iron-auth.csrf'))
       ?.split(';')[0]
       ?.split('=')[1] as string;
 
-    expect(res.statusCode).toEqual(200);
+    expect(res.status).toEqual(200);
     expect(data.code).toEqual('OK');
     expect(data.success).toEqual(true);
     expect(data.data.length).toBeGreaterThan(0);
@@ -50,7 +60,7 @@ suite('CSRF Token', () => {
       body: {},
     } as Partial<InternalRequest> as InternalRequest;
 
-    await expect(verifyCsrfTokenForReq(internalReq, ironAuthOptions)).rejects.toThrowError(
+    await expect(verifyCsrfTokenForReq(internalReq, parsedIronAuthOptions)).rejects.toThrowError(
       new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' }),
     );
   });
@@ -64,7 +74,7 @@ suite('CSRF Token', () => {
       body: {},
     } as Partial<InternalRequest> as InternalRequest;
 
-    await expect(verifyCsrfTokenForReq(internalReq, ironAuthOptions)).rejects.toThrowError(
+    await expect(verifyCsrfTokenForReq(internalReq, parsedIronAuthOptions)).rejects.toThrowError(
       new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' }),
     );
   });
@@ -80,7 +90,7 @@ suite('CSRF Token', () => {
       },
     } as Partial<InternalRequest> as InternalRequest;
 
-    await expect(verifyCsrfTokenForReq(internalReq, ironAuthOptions)).rejects.toThrowError(
+    await expect(verifyCsrfTokenForReq(internalReq, parsedIronAuthOptions)).rejects.toThrowError(
       new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' }),
     );
   });
@@ -89,14 +99,14 @@ suite('CSRF Token', () => {
     const internalReq: InternalRequest = {
       method: 'POST',
       cookies: {
-        '__Host-iron-auth.csrf': csrfCookie,
+        'iron-auth.csrf': csrfCookie,
       },
       body: {
         csrfToken: csrfCookie.split('_')[0],
       },
     } as Partial<InternalRequest> as InternalRequest;
 
-    const valid = await verifyCsrfTokenForReq(internalReq, ironAuthOptions);
+    const valid = await verifyCsrfTokenForReq(internalReq, parsedIronAuthOptions);
 
     expect(valid).toEqual(true);
   });
@@ -104,7 +114,7 @@ suite('CSRF Token', () => {
   test('Valid CSRF token matches', async () => {
     const [token] = csrfCookie.split('_');
 
-    const matches = await verifyCsrfToken(csrfCookie, token as string, ironAuthOptions);
+    const matches = await verifyCsrfToken(csrfCookie, token as string, parsedIronAuthOptions);
 
     expect(matches).toEqual(true);
   });
@@ -114,23 +124,20 @@ suite('CSRF Token', () => {
 
     const matches = await verifyCsrfToken(
       `Invalid token_${hash}`,
-
       token as string,
-      ironAuthOptions,
+      parsedIronAuthOptions,
     );
 
     const matchesAlt = await verifyCsrfToken(
       undefined as unknown as string,
-
       token as string,
-      ironAuthOptions,
+      parsedIronAuthOptions,
     );
 
     const matchesAlt2 = await verifyCsrfToken(
       undefined as unknown as string,
-
       undefined as unknown as string,
-      ironAuthOptions,
+      parsedIronAuthOptions,
     );
 
     expect(matches).toEqual(false);
@@ -139,27 +146,28 @@ suite('CSRF Token', () => {
   });
 
   test('Invalid CSRF token does not match', async () => {
-    const matches = await verifyCsrfToken(csrfCookie, 'Invalid token', ironAuthOptions);
-    const matchesAlt = await verifyCsrfToken(csrfCookie, '', ironAuthOptions);
+    const matches = await verifyCsrfToken(csrfCookie, 'Invalid token', parsedIronAuthOptions);
+    const matchesAlt = await verifyCsrfToken(csrfCookie, '', parsedIronAuthOptions);
     const matchesAlt2 = await verifyCsrfToken(
       csrfCookie,
-
       null as unknown as string,
-      ironAuthOptions,
+      parsedIronAuthOptions,
     );
     const matchesAlt3 = await verifyCsrfToken(
       csrfCookie,
-
       undefined as unknown as string,
-      ironAuthOptions,
+      parsedIronAuthOptions,
     );
     const matchesAlt4 = await verifyCsrfToken(
       csrfCookie,
-
       123 as unknown as string,
-      ironAuthOptions,
+      parsedIronAuthOptions,
     );
-    const matchesAlt5 = await verifyCsrfToken(csrfCookie, {} as unknown as string, ironAuthOptions);
+    const matchesAlt5 = await verifyCsrfToken(
+      csrfCookie,
+      {} as unknown as string,
+      parsedIronAuthOptions,
+    );
 
     expect(matches).toEqual(false);
     expect(matchesAlt).toEqual(false);

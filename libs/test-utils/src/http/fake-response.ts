@@ -32,6 +32,27 @@ export class FakeResponse<T = any> extends ServerResponse {
     this.end(JSON.stringify(data));
   }
 
+  public override end(...args: unknown[]): this {
+    if (
+      args.length === 1 &&
+      typeof args[0] === 'string' &&
+      this.getHeader('Content-Type')?.toString().includes('application/json')
+    ) {
+      this._jsonResp = JSON.parse(args[0]) as T;
+    }
+
+    const locationHeader = this.getHeader('Location');
+    if (locationHeader) {
+      this._redirectUrl = locationHeader.toString();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - this.end() is not typed correctly
+    super.end(...args);
+
+    return this;
+  }
+
   _getRedirectUrl() {
     return this._redirectUrl;
   }

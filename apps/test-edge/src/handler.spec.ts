@@ -1,12 +1,11 @@
 import { afterAll, beforeAll, expect, suite, test } from 'vitest';
 import type { IronAuthApiResponse, IronAuthConfig, ValidSession } from 'iron-auth/types';
-import { ironAuthHandler } from 'iron-auth/edge';
+import { ironAuthHandler } from 'iron-auth';
 import type { CsrfInfo, KyselyDb } from '@libs/test-utils';
 import {
   AccountBasket,
   buildUrl,
   countKyselyTable,
-  edgeErrorResponse,
   getCookieFromHeaderAsString,
   getJsonResp,
 } from '@libs/test-utils';
@@ -41,11 +40,12 @@ suite('edge runtime', () => {
         body: null,
       });
 
-      const res = await ironAuthHandler(ironAuthOptions, req, {});
+      const res = await ironAuthHandler(req, ironAuthOptions, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'error', ValidSession>>(res);
 
-      expect(data).toEqual(edgeErrorResponse('NO_SESSION', 'Session not found'));
+      expect(data.code).toEqual('NO_SESSION');
+      expect(data.error).toEqual('Session not found');
     });
 
     test('login fails with invalid account', async () => {
@@ -66,12 +66,14 @@ suite('edge runtime', () => {
         },
       );
 
-      const res = await ironAuthHandler(ironAuthOptions, req, {});
+      const res = await ironAuthHandler(req, ironAuthOptions, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'error', SignInResponse>>(res);
 
       expect(res.status).toEqual(401);
-      expect(data).toEqual(edgeErrorResponse('UNAUTHORIZED', 'Invalid credentials'));
+
+      expect(data.code).toEqual('UNAUTHORIZED');
+      expect(data.error).toEqual('Invalid credentials');
     });
 
     test('signup succeeds', async () => {
@@ -92,7 +94,7 @@ suite('edge runtime', () => {
         },
       );
 
-      const res = await ironAuthHandler(ironAuthOptions, req, {});
+      const res = await ironAuthHandler(req, ironAuthOptions, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
@@ -126,7 +128,7 @@ suite('edge runtime', () => {
         },
       );
 
-      const res = await ironAuthHandler(ironAuthOptions, req, {});
+      const res = await ironAuthHandler(req, ironAuthOptions, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
@@ -157,8 +159,8 @@ suite('edge runtime', () => {
       );
 
       const res = await ironAuthHandler(
-        { ...ironAuthOptions, redirects: { signIn: undefined } },
         req,
+        { ...ironAuthOptions, redirects: { signIn: undefined } },
         {},
       );
 
@@ -189,7 +191,7 @@ suite('edge runtime', () => {
         },
       });
 
-      const res = await ironAuthHandler(ironAuthOptions, req, {});
+      const res = await ironAuthHandler(req, ironAuthOptions, {});
 
       const data = await getJsonResp<IronAuthApiResponse<'success', ValidSession>>(res);
 

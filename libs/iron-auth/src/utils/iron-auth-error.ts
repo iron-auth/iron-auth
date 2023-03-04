@@ -6,9 +6,10 @@ export const codeToStatus = {
   CONFIG_ERROR: 500,
   INVALID_CSRF_TOKEN: 403,
   NOT_FOUND: 404,
-};
+  INVALID_OAUTH_COOKIE: 403,
+} as const;
 
-type Props = {
+type Args = {
   /**
    * The Iron Auth error code.
    */
@@ -36,10 +37,10 @@ export class IronAuthError extends Error {
   /**
    * Construct a new error for the Iron Auth library.
    *
-   * @param props.code - The Iron Auth error code.
-   * @param props.message - The error message.
+   * @param args.code - The Iron Auth error code.
+   * @param args.message - The error message.
    */
-  constructor({ code = 'CONFIG_ERROR', message = 'An error occurred' }: Props = {}) {
+  constructor({ code = 'CONFIG_ERROR', message = 'An error occurred' }: Args = {}) {
     super(message);
 
     this.code = code;
@@ -47,4 +48,4 @@ export class IronAuthError extends Error {
   }
 }
 
-export type { Props as IronAuthErrorProps };
+export type { Args as IronAuthErrorArgs };

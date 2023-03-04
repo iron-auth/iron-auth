@@ -1,5 +1,5 @@
-import { getHttpMock, getJsonResp } from '@libs/test-utils';
 import { ironAuthHandler } from 'iron-auth/node';
+import { getHttpMock, getJsonResp } from '@libs/test-utils';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { afterAll, beforeAll, vi } from 'vitest';
 import { getIronAuthOptions } from './request-utils';
@@ -42,7 +42,7 @@ beforeAll(() => {
 
     // console.log('req', url.toString(), opts?.headers, newParams, gotCookies);
 
-    const { req: reqMock, res: resMock } = getHttpMock({
+    const { req: reqMock } = getHttpMock({
       url: url.href,
       method: opts?.method ?? 'GET',
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -60,31 +60,38 @@ beforeAll(() => {
       }, {} as Record<string, string>),
     });
 
-    await ironAuthHandler(await getIronAuthOptions(), reqMock, resMock);
+    const res = await ironAuthHandler(reqMock, await getIronAuthOptions());
 
-    (resMock.getHeader('set-cookie') as string[])?.forEach((cookie) => {
-      const [name, value] = cookie.split('=');
-      if (name) {
-        const [refinedValue, ...rest] = (value ?? '').split(';');
-        const expires = rest.find((v) => v.includes('expires'));
-        if (expires) {
-          const [, date] = expires.split('=');
-          cookieStore.set(name, { value: refinedValue ?? '', expires: new Date(date ?? '') });
-        } else {
-          cookieStore.set(name, { value: refinedValue ?? '', expires: undefined });
+    res.headers
+      .get('set-cookie')
+      ?.split(',')
+      ?.forEach((cookie) => {
+        const [name, value] = cookie.split('=');
+        if (name) {
+          const [refinedValue, ...rest] = (value ?? '').split(';');
+          const expires = rest.find((v) => v.includes('expires'));
+          if (expires) {
+            const [, date] = expires.split('=');
+            cookieStore.set(name, { value: refinedValue ?? '', expires: new Date(date ?? '') });
+          } else {
+            cookieStore.set(name, { value: refinedValue ?? '', expires: undefined });
+          }
         }
-      }
-    });
+      });
 
-    const newHeaders = resMock.getHeaders();
+    const newHeaders = res.headers;
 
     // eslint-disable-next-line no-underscore-dangle
-    const redirectUrl = resMock._getRedirectUrl();
-    const jsonResp = (await getJsonResp(resMock)) ?? {};
+    const redirectUrl = res.status === 302 ? newHeaders.get('location') : undefined;
+    const jsonResp = (await getJsonResp(res)) ?? {};
+
+    if (redirectUrl) {
+      window.location.replace(redirectUrl);
+    }
 
     return Promise.resolve(
       new Response(JSON.stringify(jsonResp ?? {}), {
-        status: resMock.statusCode,
+        status: res.status,
         headers: redirectUrl
           ? {
               'Content-Type': 'application/json;charset=UTF-8',

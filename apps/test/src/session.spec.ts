@@ -29,18 +29,18 @@ suite('Request handler treats request correctly', () => {
   });
 
   test('No session throws error', async () => {
-    const { req, res } = getHttpMock({
+    const { req } = getHttpMock({
       method: 'GET',
       query: {
         ironauth: ['session'],
       },
     });
 
-    await ironAuthHandler(ironAuthOptions, req, res);
+    const res = await ironAuthHandler(req, ironAuthOptions);
 
     const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-    expect(res.statusCode).toEqual(401);
+    expect(res.status).toEqual(401);
     expect(data.code).toEqual('NO_SESSION');
     expect(data.error).toEqual('Session not found');
   });
@@ -48,7 +48,7 @@ suite('Request handler treats request correctly', () => {
   test('Session exists and returns session data', async () => {
     const { email, password } = accounts.get('primary');
 
-    let { req, res } = getHttpMock({
+    let { req } = getHttpMock({
       method: 'POST',
       query: {
         ironauth: ['signup'],
@@ -59,11 +59,11 @@ suite('Request handler treats request correctly', () => {
       body: { ...csrfInfo.body, email, password },
     });
 
-    await ironAuthHandler(ironAuthOptions, req, res);
+    let res = await ironAuthHandler(req, ironAuthOptions);
 
     const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
-    expect(res.statusCode).toEqual(200);
+    expect(res.status).toEqual(200);
     expect(data.data.email).toEqual(email);
     expect(data.data.id.toString().length).toBeGreaterThan(0);
 
@@ -80,19 +80,18 @@ suite('Request handler treats request correctly', () => {
     });
 
     req = newMocks.req;
-    res = newMocks.res;
 
-    await ironAuthHandler(ironAuthOptions, req, res);
+    res = await ironAuthHandler(req, ironAuthOptions);
 
     const session = await getJsonResp<IronAuthApiResponse<'success', IronSession>>(res);
 
-    expect(res.statusCode).toEqual(200);
+    expect(res.status).toEqual(200);
     expect(session.code).toEqual('OK');
     expect((session.data.user?.id ?? '').toString().length).toBeGreaterThan(0);
   });
 
   test('Modify session throws error with no session', async () => {
-    const { req, res } = getHttpMock({
+    const { req } = getHttpMock({
       method: 'GET',
       query: {
         ironauth: ['session'],
@@ -100,7 +99,7 @@ suite('Request handler treats request correctly', () => {
     });
 
     try {
-      await modifySession(req, res, ironAuthOptions, { email: 'updated email' });
+      await modifySession(req, ironAuthOptions, { email: 'updated email' });
     } catch (e) {
       expect(e).toBeInstanceOf(IronAuthError);
       expect((e as IronAuthError).message).toEqual('Session not found');
@@ -108,7 +107,7 @@ suite('Request handler treats request correctly', () => {
   });
 
   test('Modify session modifies the session data', async () => {
-    let { req, res } = getHttpMock({
+    let { req } = getHttpMock({
       method: 'GET',
       query: {
         ironauth: ['session'],
@@ -118,7 +117,7 @@ suite('Request handler treats request correctly', () => {
       },
     });
 
-    await modifySession(req, res, ironAuthOptions, { email: 'updated email' });
+    let res = await modifySession(req, ironAuthOptions, { email: 'updated email' });
 
     const newMocks = getHttpMock({
       method: 'GET',
@@ -131,13 +130,12 @@ suite('Request handler treats request correctly', () => {
     });
 
     req = newMocks.req;
-    res = newMocks.res;
 
-    await ironAuthHandler(ironAuthOptions, req, res);
+    res = await ironAuthHandler(req, ironAuthOptions);
 
     const resp = await getJsonResp<IronAuthApiResponse<'success', IronSession>>(res);
 
-    expect(res.statusCode).toEqual(200);
+    expect(res.status).toEqual(200);
     expect(resp.code).toEqual('OK');
     expect(resp.data.user?.email).toEqual('updated email');
     expect((resp.data.user?.id ?? '').toString().length).toBeGreaterThan(0);

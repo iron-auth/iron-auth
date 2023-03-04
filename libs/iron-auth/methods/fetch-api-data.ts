@@ -31,8 +31,15 @@ export const fetchApiData = <Data extends ApiResponseDataType = null>(
   { basePath = fetchDefaults.basePath, name = 'method' }: FetchArgs = {},
 ) => {
   return new Promise<Data>((res, rej) => {
-    fetch(`${basePath}${path}`, options)
-      .then((resp) => resp.json() as Promise<IronAuthApiResponse<'unknown', Data> | JSON>)
+    fetch(`${basePath}${path}`, { redirect: 'follow', ...options })
+      .then((resp) => {
+        if (resp.ok && resp.redirected) {
+          window.location.replace(resp.url);
+          res(null as unknown as Data);
+        }
+
+        return resp.json() as Promise<IronAuthApiResponse<'unknown', Data> | JSON>;
+      })
       .then((resp) => {
         if ('success' in resp) {
           if (resp.success && resp.data !== undefined) {

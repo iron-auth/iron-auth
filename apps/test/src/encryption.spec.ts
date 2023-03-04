@@ -1,19 +1,7 @@
-import {
-  compare,
-  compareHash,
-  decrypt,
-  encrypt,
-  hash,
-  getCrypto,
-} from 'iron-auth/src/utils/encryption';
-import { beforeAll, expect, suite, test } from 'vitest';
+import { compare, compareHash, decrypt, encrypt, hash } from 'iron-auth/src/utils/encryption';
+import { expect, suite, test } from 'vitest';
 
 suite('Encryption', () => {
-  beforeAll(() => {
-    // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-    getCrypto(require('crypto').webcrypto);
-  });
-
   test('Encrypt + decrypt work', async () => {
     const password = 'Test string';
     const passwordAlt = 'Alternative test string';

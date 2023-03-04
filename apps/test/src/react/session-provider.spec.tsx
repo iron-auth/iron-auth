@@ -225,11 +225,9 @@ suite('React Session Provider', () => {
     expect(screen.queryByTestId('session')).toBeNull();
 
     await waitForElementToBeRemoved(() => screen.getByText(/Loading/));
-    console.log(screen.getByTestId('sign-in_error').textContent);
+    // console.log(screen.getByTestId('sign-in_error').textContent);
 
-    expect(screen.getByTestId('sign-in_error').textContent?.includes('Invalid response')).toEqual(
-      true,
-    );
+    expect(screen.getByTestId('sign-in_error').textContent).toEqual('Invalid URL');
   });
 
   test('Get session returns current session data', async () => {

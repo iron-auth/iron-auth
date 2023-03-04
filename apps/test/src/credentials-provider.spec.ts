@@ -33,7 +33,7 @@ suite('Credentials Provider', () => {
     });
 
     test('Precheck fails with invalid body', async () => {
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -44,11 +44,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Invalid credentials');
     });
@@ -57,7 +57,7 @@ suite('Credentials Provider', () => {
       const { password } = accounts.get('primary');
       const { email } = accounts.get('invalid');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -68,11 +68,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Invalid email');
     });
@@ -81,7 +81,7 @@ suite('Credentials Provider', () => {
       const { email } = accounts.get('primary');
       const { password } = accounts.get('invalid');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -92,11 +92,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Invalid password');
     });
@@ -104,7 +104,7 @@ suite('Credentials Provider', () => {
     test('Succeeds with valid email and password', async () => {
       const { email, password } = accounts.get('primary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -115,11 +115,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.status).toEqual(200);
       expect(data.code).toEqual('OK');
       expect(data.data.email).toEqual(email);
       expect(data.data.id.toString().length).toBeGreaterThan(0);
@@ -134,7 +134,7 @@ suite('Credentials Provider', () => {
       const { email } = accounts.get('primary');
       const { password: secondaryPassword } = accounts.get('secondary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -145,11 +145,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password: secondaryPassword },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Account already exists');
 
@@ -161,7 +161,7 @@ suite('Credentials Provider', () => {
       const { email: originalEmail, cookie } = accounts.get('primary');
       const { email, password } = accounts.get('secondary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -175,11 +175,11 @@ suite('Credentials Provider', () => {
         },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.status).toEqual(200);
       expect(data.code).toEqual('OK');
       expect(data.data.email).toEqual(originalEmail);
       expect(data.data.id.toString().length).toBeGreaterThan(0);
@@ -192,7 +192,7 @@ suite('Credentials Provider', () => {
       const { cookie } = accounts.get('primary');
       const { email, password } = accounts.get('tertiary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -206,11 +206,11 @@ suite('Credentials Provider', () => {
         },
       });
 
-      await ironAuthHandler({ ...ironAuthOptions, accountLinkingOnSignup: false }, req, res);
+      const res = await ironAuthHandler(req, { ...ironAuthOptions, accountLinkingOnSignup: false });
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.success).toEqual(false);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Already signed in');
@@ -232,7 +232,7 @@ suite('Credentials Provider', () => {
 
       const { email, password } = accounts.get('primary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signup',
@@ -243,11 +243,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.status).toEqual(200);
       expect(data.data.email).toEqual(email);
 
       const cookie = getCookieFromHeaderAsString(res);
@@ -261,7 +261,7 @@ suite('Credentials Provider', () => {
     });
 
     test('Precheck fails with invalid body', async () => {
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signin',
@@ -272,11 +272,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Invalid credentials');
     });
@@ -285,7 +285,7 @@ suite('Credentials Provider', () => {
       const { cookie } = accounts.get('primary');
       const { email, password } = accounts.get('secondary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signin',
@@ -299,11 +299,11 @@ suite('Credentials Provider', () => {
         },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.error).toEqual('Already signed in');
     });
@@ -311,7 +311,7 @@ suite('Credentials Provider', () => {
     test('Fails when using a valid email with invalid password', async () => {
       const { email, password } = accounts.get('secondary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signin',
@@ -322,11 +322,11 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-      expect(res.statusCode).toEqual(401);
+      expect(res.status).toEqual(401);
       expect(data.code).toEqual('UNAUTHORIZED');
       expect(data.error).toEqual('Invalid credentials');
     });
@@ -334,7 +334,7 @@ suite('Credentials Provider', () => {
     test('Succeeds with valid credentials', async () => {
       const { email, password } = accounts.get('primary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'signin',
@@ -345,13 +345,16 @@ suite('Credentials Provider', () => {
         body: { ...csrfInfo.body, email, password },
       });
 
-      await ironAuthHandler({ ...ironAuthOptions, redirects: { signIn: undefined } }, req, res);
+      const res = await ironAuthHandler(req, {
+        ...ironAuthOptions,
+        redirects: { signIn: undefined },
+      });
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.status).toEqual(200);
       expect(data.code).toEqual('OK');
       expect(data.success).toEqual(true);
       expect(data.data.email).toEqual(email);
@@ -368,7 +371,7 @@ suite('Credentials Provider', () => {
       const { cookie: primaryCookie } = accounts.get('primary');
       const { email, password } = accounts.get('secondary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'linkaccount',
@@ -380,13 +383,13 @@ suite('Credentials Provider', () => {
         headers: { cookie: primaryCookie },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.status).toEqual(400);
       expect(data.code).toEqual('BAD_REQUEST');
       expect(data.success).toEqual(false);
 
@@ -400,7 +403,7 @@ suite('Credentials Provider', () => {
       const { cookie: primaryCookie, email: primaryEmail } = accounts.get('primary');
       const { email, password } = accounts.get('secondary');
 
-      const { req, res } = getHttpMock({
+      const { req } = getHttpMock({
         method: 'POST',
         query: {
           ironauth: 'linkaccount',
@@ -412,13 +415,13 @@ suite('Credentials Provider', () => {
         headers: { cookie: primaryCookie },
       });
 
-      await ironAuthHandler(ironAuthOptions, req, res);
+      const res = await ironAuthHandler(req, ironAuthOptions);
 
       const data = await getJsonResp<IronAuthApiResponse<'success', SignUpResponse>>(res);
 
       const cookie = getCookieFromHeaderAsString(res);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.status).toEqual(200);
       expect(data.code).toEqual('OK');
       expect(data.success).toEqual(true);
       expect(data.data.email).toEqual(primaryEmail);

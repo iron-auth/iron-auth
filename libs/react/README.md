@@ -22,7 +22,7 @@ const root = createRoot(document.getElementById('app') as HTMLElement);
 
 root.render(
   <React.StrictMode>
-    <SessionProvider>{/* Your app */}</SessionProvider>
+    <SessionProvider fetchOnLoad>{/* Your app */}</SessionProvider>
   </React.StrictMode>,
 );
 ```

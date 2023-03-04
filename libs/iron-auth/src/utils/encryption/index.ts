@@ -1,2 +1,2 @@
 export * from './encryption';
-export * from './webcrypto';
+export * from './get-iron-options';

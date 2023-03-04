@@ -31,14 +31,14 @@ export const resetPrisma = async () => {
 };
 
 export const getCsrfToken = async () => {
-  const { req, res } = getHttpMock({
+  const { req } = getHttpMock({
     method: 'GET',
     query: {
       ironauth: 'csrf',
     },
   });
 
-  await ironAuthHandler(await getIronAuthOptions(), req, res);
+  const res = await ironAuthHandler(req, await getIronAuthOptions());
 
   return getCsrfTokenOriginal(res);
 };

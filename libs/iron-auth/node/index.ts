@@ -1,3 +1,6 @@
-export { getServerSideSession } from './get-server-side-session';
-export { modifySession } from './modify-session';
-export { ironAuthHandler } from './iron-auth-handler';
+import { Crypto } from '@peculiar/webcrypto';
+import { getCrypto } from './webcrypto';
+
+getCrypto(new Crypto());
+
+export * from '../src';

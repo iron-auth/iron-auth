@@ -1,5 +1,4 @@
-import { mock } from 'vitest-mock-extended';
-import { ironAuthHandler } from 'iron-auth/edge';
+import { ironAuthHandler } from 'iron-auth';
 import type { Database } from '@iron-auth/kysely-adapter/types';
 import {
   ironAuthOptions,
@@ -23,16 +22,14 @@ export const getIronAuthOptions = async (debug = false) => {
 export const getKysely = () => kysely;
 
 export const getCsrfToken = async () => {
-  const req = mock<Request>(
-    new Request('https://localhost:3000/api/auth/csrf', {
-      method: 'GET',
-      headers: {},
-      body: null,
-      credentials: 'same-origin',
-    }),
-  );
+  const req = new Request('https://localhost:3000/api/auth/csrf', {
+    method: 'GET',
+    headers: {},
+    body: null,
+    credentials: 'same-origin',
+  });
 
-  const resp = await ironAuthHandler(await getIronAuthOptions(), req);
+  const res = await ironAuthHandler(req, await getIronAuthOptions());
 
-  return getCsrfTokenOriginal(resp);
+  return getCsrfTokenOriginal(res);
 };

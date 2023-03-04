@@ -2,7 +2,7 @@ import type { InternalRequest, ParsedIronAuthConfig } from '../../../types';
 import { IronAuthError } from '../iron-auth-error';
 
 export const assertSecret = (config: ParsedIronAuthConfig) => {
-  if (!config.encryptionSecret) {
+  if (!config.secrets.encryption) {
     console.error('Iron Auth: No encryption secret provided');
     throw new IronAuthError({
       code: 'CONFIG_ERROR',
@@ -10,7 +10,7 @@ export const assertSecret = (config: ParsedIronAuthConfig) => {
     });
   }
 
-  return config.encryptionSecret;
+  return config.secrets.encryption;
 };
 
 export const assertProvider = (
@@ -29,8 +29,9 @@ export const assertProvider = (
     });
   }
 
+  // check provider is allowed for route
   if (route) {
-    // Disallow using disabled methods.
+    // disallow using disabled methods
     if (config.disabledMethods[route] === true) {
       throw new IronAuthError({
         code: 'BAD_REQUEST',
@@ -38,7 +39,7 @@ export const assertProvider = (
       });
     }
 
-    // Disallow using providers that are not enabled for the route
+    // disallow using providers that are not enabled for the route
     if (
       Array.isArray(config.restrictedMethods[route]) &&
       !config.restrictedMethods[route]?.find((p) => p.type === type && p.id === providerId)
@@ -47,6 +48,90 @@ export const assertProvider = (
         code: 'BAD_REQUEST',
         message: 'Provider not allowed for this method',
       });
+    }
+
+    // validate base provider config
+    if (!provider.id || !provider.type || !provider.name) {
+      console.error('Iron Auth: Provider config is missing required info');
+      throw new IronAuthError({
+        code: 'CONFIG_ERROR',
+        message: 'Invaild config',
+      });
+    }
+
+    // validate credentials config
+    if (provider.type === 'credentials') {
+      if (!provider.precheck) {
+        console.error('Iron Auth: Provider config is missing `precheck` function');
+        throw new IronAuthError({
+          code: 'CONFIG_ERROR',
+          message: 'Invaild config',
+        });
+      }
+    }
+
+    // validate shared oauth / oidc config options
+    if (provider.type === 'oauth' || provider.type === 'oidc') {
+      if (!provider.options?.clientId || !provider.options?.clientSecret) {
+        console.error('Iron Auth: Provider config is missing client options');
+        throw new IronAuthError({
+          code: 'CONFIG_ERROR',
+          message: 'Invaild config',
+        });
+      }
+
+      // validate oauth config
+      if (provider.type === 'oauth') {
+        if (!provider.authorization?.url || !provider.authorization?.scope) {
+          console.error('Iron Auth: Provider config is missing `authorization` info');
+          throw new IronAuthError({
+            code: 'CONFIG_ERROR',
+            message: 'Invaild config',
+          });
+        }
+
+        if (!provider.token?.url) {
+          console.error('Iron Auth: Provider config is missing `token` info');
+          throw new IronAuthError({
+            code: 'CONFIG_ERROR',
+            message: 'Invaild config',
+          });
+        }
+
+        if (!provider.userInfo?.url || !provider.userInfo?.parse) {
+          console.error('Iron Auth: Provider config is missing `userInfo` info');
+          throw new IronAuthError({
+            code: 'CONFIG_ERROR',
+            message: 'Invaild config',
+          });
+        }
+
+        // validate oidc config
+      } else if (provider.type === 'oidc') {
+        if (!provider.discovery?.url) {
+          console.error('Iron Auth: Provider config is missing `discovery` info');
+          throw new IronAuthError({
+            code: 'CONFIG_ERROR',
+            message: 'Invaild config',
+          });
+        }
+
+        if (!provider.authorization?.scope) {
+          console.error('Iron Auth: Provider config is missing `authorization` info');
+          throw new IronAuthError({
+            code: 'CONFIG_ERROR',
+            message: 'Invaild config',
+          });
+        }
+
+        if (!provider.userInfo?.parse) {
+          console.error('Iron Auth: Provider config is missing `userInfo` info');
+          throw new IronAuthError({
+            code: 'CONFIG_ERROR',
+            message: 'Invaild config',
+          });
+        }
+      }
     }
   }
 

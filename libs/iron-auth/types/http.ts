@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-import type { JointStatusCodes, ErrorStatusCodes } from '../src/utils/iron-auth-response';
+import type { JointStatusCodes, ErrorStatusCodes } from '../src/utils';
 
 // https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties
 type CloudflareEdgeProperties = {

@@ -52,7 +52,9 @@ export const SessionProvider = ({
   crossTabCommunication = true,
   session: pageSession,
 }: Props): JSX.Element => {
-  const [loadingInitialSession, setLoadingInitialSession] = useState<boolean>(fetchOnLoad);
+  const [loadingInitialSession, setLoadingInitialSession] = useState<boolean>(
+    pageSession === undefined && fetchOnLoad,
+  );
   const [session, setSession] = useState<ValidSession | undefined | null>(pageSession);
 
   const basePathRef = useRef<string>(basePath);
@@ -89,9 +91,10 @@ export const SessionProvider = ({
    * Fetch session initially if no page session is provided.
    */
   useEffect(() => {
-    if (fetchOnLoad && pageSession === undefined) {
+    if (fetchOnLoad && pageSession === undefined && tabState.current.lastSession === undefined) {
       setLoadingInitialSession(true);
-      fetchSession().then(() => {
+      // act as if this is being notified from an event so that we don't accidentally trigger a refetch on first page load.
+      fetchSession(true).then(() => {
         setLoadingInitialSession(false);
         if (!tabState.current.lastSession) {
           setSession(null);

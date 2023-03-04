@@ -1,11 +1,10 @@
-import { ServerResponse } from 'http';
 import type { IronAuthApiResponse } from 'iron-auth/types';
 import type { RequestOptions } from './fake-request';
 import { FakeRequest } from './fake-request';
-import { FakeResponse } from './fake-response';
+// import { FakeResponse } from './fake-response';
 
 export * from './fake-request';
-export * from './fake-response';
+// export * from './fake-response';
 
 export const buildUrl = (route: string, params?: Record<string, string>) =>
   `https://localhost:3000/api/auth/${route}${
@@ -21,19 +20,16 @@ export const getHttpMock = (reqOptions: RequestOptions = {}) => {
     body: reqOptions.body,
     cookies: reqOptions.cookies ?? {},
   });
-  const res = new FakeResponse(req);
+  // const res = new FakeResponse(req);
 
-  return { req, res };
+  return { req };
 };
 
-const getHeader = (res: FakeResponse | Response, key: string) =>
-  res instanceof ServerResponse ? res.getHeader(key) : res.headers.get(key);
+const getHeader = (res: Response, key: string) => res.headers.get(key);
 
-export const getJsonResp = async <T extends object>(res: FakeResponse | Response) =>
-  // eslint-disable-next-line no-underscore-dangle
-  (res instanceof ServerResponse ? res._getJSONData() : await res.json()) as T;
+export const getJsonResp = async <T extends object>(res: Response) => (await res.json()) as T;
 
-export const cookieFromHeader = (res: FakeResponse | Response) => {
+export const cookieFromHeader = (res: Response) => {
   let cookie: Record<string, string> | null = null;
 
   const rawCookie = getHeader(res, 'Set-Cookie');
@@ -52,7 +48,7 @@ export const cookieFromHeader = (res: FakeResponse | Response) => {
   return cookie;
 };
 
-export const getCookieFromHeaderAsString = (res: FakeResponse | Response) => {
+export const getCookieFromHeaderAsString = (res: Response) => {
   const cookie = cookieFromHeader(res);
 
   return cookie
@@ -62,24 +58,26 @@ export const getCookieFromHeaderAsString = (res: FakeResponse | Response) => {
     : '';
 };
 
-export const getCsrfToken = async (res: FakeResponse | Response): Promise<CsrfInfo> => {
+export const getCsrfToken = async (res: Response): Promise<CsrfInfo> => {
   const resp = await getJsonResp<IronAuthApiResponse<'success', string>>(res);
 
-  const rawToken = Array.isArray(getHeader(res, 'set-cookie'))
-    ? ((getHeader(res, 'set-cookie') as string[])
-        .find((cookie) => cookie.includes('iron-auth.csrf'))
-        ?.split(';')[0]
-        ?.split('=')[1] as string)
-    : (getHeader(res, 'set-cookie') as string);
+  const rawToken = Array.isArray(getHeader(res, 'Set-Cookie'))
+    ? (getHeader(res, 'Set-Cookie')
+        ?.split(',')
+        ?.find((cookie) => cookie.includes('iron-auth.csrf'))
+        ?.split(';')[0] as string)
+    : (getHeader(res, 'Set-Cookie')?.split(';')[0] as string);
 
-  const [token, hash] = rawToken.split('_');
+  const [token, hash] = rawToken.split('=')[1]?.split('_') as [string, string];
+
+  const [cookieName, cookieValue] = rawToken.split('=') as [string, string];
 
   return {
-    cookies: { '__Host-iron-auth.csrf': rawToken },
+    cookies: { [cookieName]: cookieValue },
     body: { csrfToken: resp.data },
     cookie: rawToken,
-    token: token as string,
-    hash: hash as string,
+    token,
+    hash,
   };
 };
 

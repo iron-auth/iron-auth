@@ -1,5 +1,5 @@
-import type { CredentialsPreCheckResponse } from '../src';
-import type { ApiResponseDataType, ProviderType } from '../types';
+import type { ApiResponseDataType } from '../types';
+import type { CredentialsPreCheckResponse, ProviderType } from '../types/config';
 import { getCsrfToken } from './csrf';
 import { type WithFetchOptions, refineDefaultOpts, fetchApiData } from './fetch-api-data';
 
@@ -66,6 +66,7 @@ export const postAuthMethod = async <
   )
     .then((respData) => respData)
     .catch((err) => {
+      console.log(err);
       if (!rejects) return null;
 
       throw new Error(err);

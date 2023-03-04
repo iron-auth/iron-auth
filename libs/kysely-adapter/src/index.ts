@@ -1,4 +1,4 @@
-import type { GenericAdapterConfig } from 'iron-auth/types';
+import type { AdapterConfig } from 'iron-auth/types';
 import type { Kysely } from 'kysely';
 import type { Database } from '../types';
 
@@ -10,7 +10,7 @@ import type { Database } from '../types';
  * @param db - The Kysely db instance.
  * @returns The adapter.
  */
-export const kyselyAdapter = (db: Kysely<Database>): GenericAdapterConfig => ({
+export const kyselyAdapter = (db: Kysely<Database>): AdapterConfig => ({
   create: async ({
     userId,
     type,

@@ -1,6 +1,6 @@
 // import type { PrismaClient } from '@prisma/client';
 // import type { PrismaClient as PrismaClientEdge } from '@prisma/client/edge';
-import type { GenericAdapterConfig } from 'iron-auth/types';
+import type { AdapterConfig } from 'iron-auth/types';
 
 /**
  * A prisma adapter for Iron Auth.
@@ -10,8 +10,9 @@ import type { GenericAdapterConfig } from 'iron-auth/types';
  * @param prisma - The prisma client instance.
  * @returns The adapter.
  */
+// TODO: Can we better type this?
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const prismaAdapter = (prisma: any): GenericAdapterConfig => ({
+export const prismaAdapter = (prisma: any): AdapterConfig => ({
   create: ({
     userId,
     type,

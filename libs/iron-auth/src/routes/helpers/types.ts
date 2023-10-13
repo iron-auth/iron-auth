@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import type { ApiResponseDataType, InternalRequest, ParsedIronAuthConfig } from '../../../types';
 
 export type RouteResponse = { data: ApiResponseDataType; isRedirectUrl?: boolean };

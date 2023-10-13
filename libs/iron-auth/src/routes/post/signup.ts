@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import type {
 	CredentialsProviderConfig,
 	InternalRequest,
@@ -61,6 +62,7 @@ export const signupRoute = async (
 					}
 				} catch (error) {
 					if (config.debug) {
+						// eslint-disable-next-line no-console
 						console.error('Error creating user:', error instanceof Error ? error.message : error);
 					}
 

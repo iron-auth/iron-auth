@@ -1,7 +1,7 @@
 import type { ApiResponseDataType } from '../types';
 import type { CredentialsPreCheckResponse, ProviderType } from '../types/config';
 import { getCsrfToken } from './csrf';
-import { type WithFetchOptions, refineDefaultOpts, fetchApiData } from './fetch-api-data';
+import { fetchApiData, refineDefaultOpts, type WithFetchOptions } from './fetch-api-data';
 
 type Args<T extends ProviderType, Trimmed extends boolean = false> = Trimmed extends true
 	? [opts?: WithFetchOptions<{ data?: never }>]
@@ -66,6 +66,7 @@ export const postAuthMethod = async <
 	)
 		.then((respData) => respData)
 		.catch((err) => {
+			// eslint-disable-next-line no-console
 			console.log(err);
 			if (!rejects) return null;
 

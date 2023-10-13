@@ -1,5 +1,6 @@
-import { useSession } from '@iron-auth/react';
 import Link from 'next/link';
+
+import { useSession } from '@iron-auth/react';
 
 export const Topbar = () => {
 	const { loadingInitialSession, session } = useSession();

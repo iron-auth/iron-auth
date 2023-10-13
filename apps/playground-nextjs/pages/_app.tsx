@@ -1,8 +1,10 @@
-import { SessionProvider } from '@iron-auth/react';
-import type { AppProps } from 'next/app';
-import { Topbar } from '../components';
-
 import './global.css';
+
+import type { AppProps } from 'next/app';
+
+import { SessionProvider } from '@iron-auth/react';
+
+import { Topbar } from '../components';
 
 const App = ({ Component, pageProps }: AppProps) => (
 	<SessionProvider fetchOnLoad session={pageProps.session}>

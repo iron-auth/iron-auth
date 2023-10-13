@@ -20,7 +20,7 @@
 		"@tsconfig/strictest": "^2.0.2",
 		"@vitejs/plugin-react": "^4.1.0",
 		"eslint": "^8.51.0",
-		"eslint-config-ixn-react": "^1.4.5",
+		"eslint-config-ixn-react": "^1.5.3",
 		"happy-dom": "^12.9.1",
 		"node-mocks-http": "^1.11.0",
 		"prettier": "^3.0.3",

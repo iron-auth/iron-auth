@@ -9,11 +9,12 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import type { ValidSession } from 'iron-auth/types';
-import { fetchDefaults } from 'iron-auth/methods/fetch-api-data';
+
 import { getSession } from 'iron-auth/methods';
 import type { EventShape } from 'iron-auth/methods/event-channel';
 import { EventChannel } from 'iron-auth/methods/event-channel';
+import { fetchDefaults } from 'iron-auth/methods/fetch-api-data';
+import type { ValidSession } from 'iron-auth/types';
 
 export type ISessionContext<HasSession extends boolean = false> = {
 	loadingInitialSession: boolean;
@@ -108,6 +109,7 @@ export const SessionProvider = ({
 	 */
 	useEffect(() => {
 		if (!crossTabCommunication) {
+			// eslint-disable-next-line no-console
 			console.debug('Cross-tab communication for session updates is disabled.');
 			return;
 		}
@@ -115,6 +117,7 @@ export const SessionProvider = ({
 		const chan = channel.current;
 
 		const handleEvent = ({ event, userId }: EventShape) => {
+			// eslint-disable-next-line no-console
 			console.debug('Received cross-tab event:', { event, userId });
 			switch (event) {
 				case 'session-updated': {
@@ -153,6 +156,7 @@ export const SessionProvider = ({
 				}
 				default: {
 					// do nothing as it is not a valid event.
+					// eslint-disable-next-line no-console
 					console.debug('Invalid cross-tab event:', event);
 				}
 			}

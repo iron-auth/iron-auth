@@ -1,5 +1,6 @@
 import { getServerSideSession } from 'iron-auth/node';
 import type { GetServerSideProps } from 'next';
+
 import { getIronAuthOptions } from '../api/auth/[...ironauth]';
 
 const Page = () => (

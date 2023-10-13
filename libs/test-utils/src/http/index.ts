@@ -1,4 +1,5 @@
 import type { IronAuthApiResponse } from 'iron-auth/types';
+
 import type { RequestOptions } from './fake-request';
 import { FakeRequest } from './fake-request';
 // import { FakeResponse } from './fake-response';

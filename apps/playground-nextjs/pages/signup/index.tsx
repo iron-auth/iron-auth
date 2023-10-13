@@ -1,5 +1,6 @@
-import { signOut, signUp } from 'iron-auth/methods';
 import { useCallback, useState } from 'react';
+
+import { signOut, signUp } from 'iron-auth/methods';
 
 const Page = () => {
 	const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ const Page = () => {
 		try {
 			await signUp('credentials', 'email-pass-provider', { data: credentials, rejects: true });
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.error(err);
 			setError(err instanceof Error ? err.message : 'An error occurred');
 		} finally {

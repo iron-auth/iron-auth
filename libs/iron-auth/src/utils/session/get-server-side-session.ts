@@ -1,4 +1,5 @@
 import { getIronSession } from 'iron-session/edge';
+
 import type { IncomingRequest, IronAuthConfig, LayoutRequest, ValidSession } from '../../../types';
 import { parseConfig } from '../config';
 import { getIronOptions } from '../encryption';

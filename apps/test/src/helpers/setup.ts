@@ -1,7 +1,8 @@
-import { ironAuthHandler } from 'iron-auth/node';
 import { getHttpMock, getJsonResp } from '@libs/test-utils';
+import { ironAuthHandler } from 'iron-auth/node';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { afterAll, beforeAll, vi } from 'vitest';
+
 import { getIronAuthOptions } from './request-utils';
 
 const basePath = 'http://app.localhost';

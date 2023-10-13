@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as IronSession from 'iron-session';
+
 import type { ReplaceObjectValues } from './util';
 
 declare module 'iron-session' {

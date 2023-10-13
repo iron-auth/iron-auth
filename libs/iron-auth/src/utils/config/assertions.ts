@@ -3,6 +3,7 @@ import { IronAuthError } from '../iron-auth-error';
 
 export const assertSecret = (config: ParsedIronAuthConfig) => {
 	if (!config.secrets.encryption) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No encryption secret provided');
 		throw new IronAuthError({
 			code: 'CONFIG_ERROR',
@@ -52,6 +53,7 @@ export const assertProvider = (
 
 		// validate base provider config
 		if (!provider.id || !provider.type || !provider.name) {
+			// eslint-disable-next-line no-console
 			console.error('Iron Auth: Provider config is missing required info');
 			throw new IronAuthError({
 				code: 'CONFIG_ERROR',
@@ -62,6 +64,7 @@ export const assertProvider = (
 		// validate credentials config
 		if (provider.type === 'credentials') {
 			if (!provider.precheck) {
+				// eslint-disable-next-line no-console
 				console.error('Iron Auth: Provider config is missing `precheck` function');
 				throw new IronAuthError({
 					code: 'CONFIG_ERROR',
@@ -73,6 +76,7 @@ export const assertProvider = (
 		// validate shared oauth / oidc config options
 		if (provider.type === 'oauth' || provider.type === 'oidc') {
 			if (!provider.options?.clientId || !provider.options?.clientSecret) {
+				// eslint-disable-next-line no-console
 				console.error('Iron Auth: Provider config is missing client options');
 				throw new IronAuthError({
 					code: 'CONFIG_ERROR',
@@ -83,6 +87,7 @@ export const assertProvider = (
 			// validate oauth config
 			if (provider.type === 'oauth') {
 				if (!provider.authorization?.url || !provider.authorization?.scope) {
+					// eslint-disable-next-line no-console
 					console.error('Iron Auth: Provider config is missing `authorization` info');
 					throw new IronAuthError({
 						code: 'CONFIG_ERROR',
@@ -91,6 +96,7 @@ export const assertProvider = (
 				}
 
 				if (!provider.token?.url) {
+					// eslint-disable-next-line no-console
 					console.error('Iron Auth: Provider config is missing `token` info');
 					throw new IronAuthError({
 						code: 'CONFIG_ERROR',
@@ -99,6 +105,7 @@ export const assertProvider = (
 				}
 
 				if (!provider.userInfo?.url || !provider.userInfo?.parse) {
+					// eslint-disable-next-line no-console
 					console.error('Iron Auth: Provider config is missing `userInfo` info');
 					throw new IronAuthError({
 						code: 'CONFIG_ERROR',
@@ -109,6 +116,7 @@ export const assertProvider = (
 				// validate oidc config
 			} else if (provider.type === 'oidc') {
 				if (!provider.discovery?.url) {
+					// eslint-disable-next-line no-console
 					console.error('Iron Auth: Provider config is missing `discovery` info');
 					throw new IronAuthError({
 						code: 'CONFIG_ERROR',
@@ -117,6 +125,7 @@ export const assertProvider = (
 				}
 
 				if (!provider.authorization?.scope) {
+					// eslint-disable-next-line no-console
 					console.error('Iron Auth: Provider config is missing `authorization` info');
 					throw new IronAuthError({
 						code: 'CONFIG_ERROR',
@@ -125,6 +134,7 @@ export const assertProvider = (
 				}
 
 				if (!provider.userInfo?.parse) {
+					// eslint-disable-next-line no-console
 					console.error('Iron Auth: Provider config is missing `userInfo` info');
 					throw new IronAuthError({
 						code: 'CONFIG_ERROR',

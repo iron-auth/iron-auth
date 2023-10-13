@@ -29,8 +29,8 @@ export const fetchApiData = <Data extends ApiResponseDataType = null>(
 	path: string,
 	options?: RequestInit,
 	{ basePath = fetchDefaults.basePath, name = 'method' }: FetchArgs = {},
-) => {
-	return new Promise<Data>((res, rej) => {
+) =>
+	new Promise<Data>((res, rej) => {
 		fetch(`${basePath}${path}`, { redirect: 'follow', ...options })
 			.then((resp) => {
 				if (resp.ok && resp.redirected) {
@@ -43,6 +43,7 @@ export const fetchApiData = <Data extends ApiResponseDataType = null>(
 			.then((resp) => {
 				if ('success' in resp) {
 					if (resp.success && resp.data !== undefined) {
+						// eslint-disable-next-line no-console
 						console.debug('Fetched data:', resp.data);
 
 						res(resp.data);
@@ -57,9 +58,9 @@ export const fetchApiData = <Data extends ApiResponseDataType = null>(
 				const message =
 					(err instanceof Error && err.message) || `Unexpected error fetching ${name}`;
 
+				// eslint-disable-next-line no-console
 				console.error(`Error fetching ${name}`, message);
 
 				rej(message);
 			});
 	});
-};

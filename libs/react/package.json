@@ -19,7 +19,7 @@
 		"@types/react": "^18.2.28",
 		"@vitejs/plugin-react": "^4.1.0",
 		"eslint": "^8.51.0",
-		"eslint-config-ixn-react": "^1.4.5",
+		"eslint-config-ixn-react": "^1.5.3",
 		"prettier": "^3.0.3",
 		"rimraf": "^5.0.5",
 		"typescript": "^5.2.2",

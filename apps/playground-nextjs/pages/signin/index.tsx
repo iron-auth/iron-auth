@@ -1,7 +1,9 @@
+import { useCallback, useState } from 'react';
+
 import { signIn, signOut } from 'iron-auth/methods';
 import { getServerSideSession } from 'iron-auth/node';
 import type { GetServerSideProps } from 'next';
-import { useCallback, useState } from 'react';
+
 import { getIronAuthOptions } from '../api/auth/[...ironauth]';
 
 const Page = () => {
@@ -19,6 +21,7 @@ const Page = () => {
 		try {
 			await signIn('credentials', 'email-pass-provider', { data: credentials, rejects: true });
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.error(err);
 			setError(err instanceof Error ? err.message : 'An error occurred');
 		} finally {
@@ -33,6 +36,7 @@ const Page = () => {
 		try {
 			await signOut({ rejects: true });
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.error(err);
 			setError(err instanceof Error ? err.message : 'An error occurred');
 		} finally {

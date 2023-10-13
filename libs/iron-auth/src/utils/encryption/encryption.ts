@@ -1,4 +1,4 @@
-import { encode, decode } from 'base64-arraybuffer';
+import { decode, encode } from 'base64-arraybuffer';
 
 // Many thanks to the SubtleCrypto MDN docs for parts of this code.
 // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto

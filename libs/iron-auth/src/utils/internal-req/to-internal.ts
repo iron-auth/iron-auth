@@ -1,5 +1,5 @@
 import type { IncomingRequest, InternalRequest } from '../../../types';
-import { refinePath, refineQueryParams, refineBody, refineCookies } from '../http-helpers';
+import { refineBody, refineCookies, refinePath, refineQueryParams } from '../http-helpers';
 
 export const toInternalRequest = async (req: IncomingRequest): Promise<InternalRequest> => {
 	const path = refinePath(req);

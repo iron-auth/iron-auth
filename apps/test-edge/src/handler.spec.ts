@@ -1,6 +1,3 @@
-import { afterAll, beforeAll, expect, suite, test } from 'vitest';
-import type { IronAuthApiResponse, IronAuthConfig, ValidSession } from 'iron-auth/types';
-import { ironAuthHandler } from 'iron-auth';
 import type { CsrfInfo, KyselyDb } from '@libs/test-utils';
 import {
 	AccountBasket,
@@ -10,6 +7,10 @@ import {
 	getJsonResp,
 } from '@libs/test-utils';
 import type { SignInResponse, SignUpResponse } from 'iron-auth';
+import { ironAuthHandler } from 'iron-auth';
+import type { IronAuthApiResponse, IronAuthConfig, ValidSession } from 'iron-auth/types';
+import { afterAll, beforeAll, expect, suite, test } from 'vitest';
+
 import { getCsrfToken, getIronAuthOptions, getKysely } from './helpers';
 
 let db: KyselyDb;

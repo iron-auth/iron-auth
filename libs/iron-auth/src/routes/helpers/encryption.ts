@@ -1,4 +1,5 @@
 import { sealData, unsealData } from 'iron-session/edge';
+
 import type { IncomingResponse, InternalRequest, ParsedIronAuthConfig } from '../../../types';
 import type { InternalCookieOptions } from '../../../types/config';
 import { getCookie, hasSecurePrefix, IronAuthError, setCookie } from '../../utils';

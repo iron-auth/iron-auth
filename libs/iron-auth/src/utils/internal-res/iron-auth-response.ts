@@ -34,13 +34,11 @@ export type IronAuthResponse<TData extends ApiResponseDataType = ApiResponseData
 	redirect?: string;
 };
 
-export const formatError = (err: unknown): IronAuthApiResponse<'error'> => {
-	return {
-		success: false,
-		code: err instanceof IronAuthError ? err.code : 'INTERNAL_SERVER_ERROR',
-		error: err instanceof IronAuthError ? err.message : 'An unexpected error occurred',
-	};
-};
+export const formatError = (err: unknown): IronAuthApiResponse<'error'> => ({
+	success: false,
+	code: err instanceof IronAuthError ? err.code : 'INTERNAL_SERVER_ERROR',
+	error: err instanceof IronAuthError ? err.message : 'An unexpected error occurred',
+});
 
 export const formatResponse = <TData extends ApiResponseDataType>(
 	resp: IronAuthResponse<TData>,

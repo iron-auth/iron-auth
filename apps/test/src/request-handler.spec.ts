@@ -1,9 +1,10 @@
-import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
-import { ironAuthHandler } from 'iron-auth/node';
-import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from '@libs/test-utils';
 import { getHttpMock, getJsonResp } from '@libs/test-utils';
-import { resetPrisma, getCsrfToken, getIronAuthOptions } from './helpers';
+import { ironAuthHandler } from 'iron-auth/node';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
+import { beforeAll, expect, suite, test, vi } from 'vitest';
+
+import { getCsrfToken, getIronAuthOptions, resetPrisma } from './helpers';
 
 suite('Request handler treats request correctly', () => {
 	let ironAuthOptions: IronAuthConfig;

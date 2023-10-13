@@ -1,5 +1,3 @@
-export * from './http';
-export * from './session.d';
 export type {
 	AdapterConfig,
 	CredentialsProviderConfig,
@@ -11,3 +9,5 @@ export type {
 	ParsedIronAuthConfig,
 	ProviderType,
 } from './config';
+export * from './http';
+export * from './session.d';

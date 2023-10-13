@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import type { ValidSession } from '../../../types';
 import { IronAuthError } from '../iron-auth-error';
 

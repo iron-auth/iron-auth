@@ -19,9 +19,11 @@ export const parseConfig = (
 	env?: Record<string, string | undefined>,
 ): ParsedIronAuthConfig => {
 	if (!config.adapter) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No adapter was provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (!Array.isArray(config.providers) || config.providers.length === 0) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No providers were provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	}
@@ -34,21 +36,27 @@ export const parseConfig = (
 	let ironUrl = (env && env['IRON_AUTH_URL']) || config.url;
 
 	if (!ironPassword) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No iron password was provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (!encryptionSecret) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No encryption secret was provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (!csrfSecret) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No csrf secret was provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (!oauthSecret) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No oauth secret was provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (!ironUrl) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: No URL was provided.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (!ironUrl.startsWith('http')) {
+		// eslint-disable-next-line no-console
 		console.error('Iron Auth: The URL must start with http or https.');
 		throw new IronAuthError({ code: 'CONFIG_ERROR', message: 'Invalid config' });
 	} else if (ironUrl.endsWith('/')) {

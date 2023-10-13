@@ -36,6 +36,7 @@ export const verifyCsrfTokenForReq = async (req: InternalRequest, config: Parsed
 	const cookie = getCookie(req, config.cookies.csrf.name, hasSecurePrefix(config.cookies.csrf));
 
 	if (!cookie || typeof csrfToken !== 'string') {
+		// eslint-disable-next-line no-console
 		console.log('no cookie or no csrfToken', cookie, csrfToken);
 		throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
 	}
@@ -43,6 +44,7 @@ export const verifyCsrfTokenForReq = async (req: InternalRequest, config: Parsed
 	const valid = await verifyCsrfToken(cookie, csrfToken, config);
 
 	if (!valid) {
+		// eslint-disable-next-line no-console
 		console.log('not valid', cookie, csrfToken);
 		throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
 	}

@@ -16,6 +16,5 @@ import { postAuthMethod } from './post-auth-method';
  * @param opts.basePath Base path for the API. Defaults to '/api/auth'.
  * @returns The link account response from the provider, or null if no response was received.
  */
-export const linkAccount: PostAuthMethod<LinkAccountResponse> = async (...args) => {
-	return postAuthMethod<LinkAccountResponse>('linkaccount', args);
-};
+export const linkAccount: PostAuthMethod<LinkAccountResponse> = async (...args) =>
+	postAuthMethod<LinkAccountResponse>('linkaccount', args);

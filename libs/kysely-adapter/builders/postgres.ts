@@ -1,5 +1,6 @@
 import type { Kysely } from 'kysely';
 import { sql } from 'kysely';
+
 import type { Database } from '../types';
 
 export const buildPostgresTables = async (db: Kysely<Database>) => {

@@ -1,8 +1,3 @@
-import type { SignUpResponse } from 'iron-auth';
-import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
-import { ironAuthHandler } from 'iron-auth/node';
-import type { PrismaClient } from '@prisma/client';
-import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from '@libs/test-utils';
 import {
 	AccountBasket,
@@ -10,7 +5,13 @@ import {
 	getHttpMock,
 	getJsonResp,
 } from '@libs/test-utils';
-import { getPrisma, getCsrfToken, getIronAuthOptions, resetPrisma } from './helpers';
+import type { PrismaClient } from '@prisma/client';
+import type { SignUpResponse } from 'iron-auth';
+import { ironAuthHandler } from 'iron-auth/node';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
+import { beforeAll, expect, suite, test, vi } from 'vitest';
+
+import { getCsrfToken, getIronAuthOptions, getPrisma, resetPrisma } from './helpers';
 
 suite('Credentials Provider', () => {
 	let ironAuthOptions: IronAuthConfig;

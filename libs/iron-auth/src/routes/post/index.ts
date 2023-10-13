@@ -14,5 +14,5 @@ export const routes = {
 
 export type { LinkAccountResponse } from './link-account';
 export type { SignInResponse } from './signin';
-export type { SignUpResponse } from './signup';
 export type { SignOutResponse } from './signout';
+export type { SignUpResponse } from './signup';

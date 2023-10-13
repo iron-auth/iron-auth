@@ -1,13 +1,13 @@
-import { ironAuthHandler } from 'iron-auth';
+import { kyselyAdapter } from '@iron-auth/kysely-adapter';
 import type { Database } from '@iron-auth/kysely-adapter/types';
 import {
-	ironAuthOptions,
 	getCsrfToken as getCsrfTokenOriginal,
+	ironAuthOptions,
 	setupKysely,
 } from '@libs/test-utils';
-import { kyselyAdapter } from '@iron-auth/kysely-adapter';
-import type { Kysely } from 'kysely';
+import { ironAuthHandler } from 'iron-auth';
 import type { IronAuthConfig } from 'iron-auth/types';
+import type { Kysely } from 'kysely';
 
 let opts: IronAuthConfig | undefined;
 let kysely: Kysely<Database>;

@@ -6,6 +6,7 @@ export const getRouteName = (query: InternalRequest['query']) => {
 
 	const routes = Array.isArray(ironauth) ? ironauth : [ironauth];
 
+	// eslint-disable-next-line no-console
 	console.log(query, routes);
 
 	if (!routes[0]) {

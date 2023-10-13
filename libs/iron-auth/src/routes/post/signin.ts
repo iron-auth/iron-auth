@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import type {
 	CredentialsProviderConfig,
 	IncomingResponse,
@@ -73,6 +74,7 @@ export const signinRoute = async (
 		}
 	} catch (error) {
 		if (config.debug) {
+			// eslint-disable-next-line no-console
 			console.error('Error signing in:', error instanceof Error ? error.message : error);
 		}
 

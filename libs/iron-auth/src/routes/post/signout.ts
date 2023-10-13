@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import { IronAuthError } from '../../utils';
 
 export const signoutRoute = async (session: IronSession) => {

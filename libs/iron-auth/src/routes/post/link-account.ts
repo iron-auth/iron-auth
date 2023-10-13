@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import type {
 	CredentialsProviderConfig,
 	InternalRequest,
@@ -63,6 +64,7 @@ export const linkAccountRoute = async (
 		}
 	} catch (error) {
 		if (config.debug) {
+			// eslint-disable-next-line no-console
 			console.error('Error linking account:', error instanceof Error ? error.message : error);
 		}
 

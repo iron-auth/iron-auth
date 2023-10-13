@@ -2,9 +2,8 @@ import type { IncomingRequest } from '../../../types';
 
 export const fromEntries = (
 	entries: [string, string | string[] | undefined][],
-): Record<string, string | string[]> => {
-	return entries.reduce((acc, [key, value]) => (value ? { ...acc, [key]: value } : acc), {});
-};
+): Record<string, string | string[]> =>
+	entries.reduce((acc, [key, value]) => (value ? { ...acc, [key]: value } : acc), {});
 
 export const refineQueryParams = (
 	req: IncomingRequest,

@@ -1,9 +1,3 @@
-import type { SignUpResponse } from 'iron-auth';
-import { IronAuthError } from 'iron-auth';
-import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
-import { ironAuthHandler, modifySession } from 'iron-auth/node';
-import type { IronSession } from 'iron-session';
-import { suite, test, expect, vi, beforeAll } from 'vitest';
 import type { CsrfInfo } from '@libs/test-utils';
 import {
 	AccountBasket,
@@ -11,7 +5,14 @@ import {
 	getHttpMock,
 	getJsonResp,
 } from '@libs/test-utils';
-import { resetPrisma, getCsrfToken, getIronAuthOptions } from './helpers';
+import type { SignUpResponse } from 'iron-auth';
+import { IronAuthError } from 'iron-auth';
+import { ironAuthHandler, modifySession } from 'iron-auth/node';
+import type { IronAuthApiResponse, IronAuthConfig } from 'iron-auth/types';
+import type { IronSession } from 'iron-session';
+import { beforeAll, expect, suite, test, vi } from 'vitest';
+
+import { getCsrfToken, getIronAuthOptions, resetPrisma } from './helpers';
 
 suite('Request handler treats request correctly', () => {
 	let ironAuthOptions: IronAuthConfig;

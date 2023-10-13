@@ -1,4 +1,3 @@
-import type { ValidSession } from 'iron-auth/types';
 import {
 	fireEvent,
 	render,
@@ -6,9 +5,12 @@ import {
 	waitFor,
 	waitForElementToBeRemoved,
 } from '@testing-library/react';
-import { suite, test, expect, vi, beforeAll } from 'vitest';
+
 import { AccountBasket } from '@libs/test-utils';
 import type { SignUpResponse } from 'iron-auth';
+import type { ValidSession } from 'iron-auth/types';
+import { beforeAll, expect, suite, test, vi } from 'vitest';
+
 import { basePath, resetPrisma } from '../helpers';
 import { ProviderComponent } from './test-components';
 

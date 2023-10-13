@@ -1,2 +1,2 @@
-export * from './setup';
 export * from './request-utils';
+export * from './setup';

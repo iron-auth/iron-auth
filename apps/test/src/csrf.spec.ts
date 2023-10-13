@@ -1,14 +1,15 @@
+import { getHttpMock, getJsonResp } from '@libs/test-utils';
 import { IronAuthError } from 'iron-auth';
+import { ironAuthHandler } from 'iron-auth/node';
 import { parseConfig, verifyCsrfToken, verifyCsrfTokenForReq } from 'iron-auth/src/utils';
 import type {
-	IronAuthApiResponse,
 	InternalRequest,
-	ParsedIronAuthConfig,
+	IronAuthApiResponse,
 	IronAuthConfig,
+	ParsedIronAuthConfig,
 } from 'iron-auth/types';
-import { ironAuthHandler } from 'iron-auth/node';
-import { suite, test, expect, beforeAll } from 'vitest';
-import { getHttpMock, getJsonResp } from '@libs/test-utils';
+import { beforeAll, expect, suite, test } from 'vitest';
+
 import { getIronAuthOptions, resetPrisma } from './helpers';
 
 suite('CSRF Token', () => {
@@ -29,8 +30,6 @@ suite('CSRF Token', () => {
 				ironauth: ['csrf'],
 			},
 		});
-
-		console.log(req.query);
 
 		const res = await ironAuthHandler(req, ironAuthOptions);
 

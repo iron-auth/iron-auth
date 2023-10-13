@@ -3,6 +3,5 @@
 	"parserOptions": {
 		"project": "./tsconfig.json"
 	},
-	"extends": ["ixn"],
-	"plugins": ["import", "@typescript-eslint", "prettier"]
+	"extends": ["ixn"]
 }

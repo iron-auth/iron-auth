@@ -10,6 +10,5 @@ import { getAuthMethod } from './get-auth-method';
  * @param opts.basePath Base path for the API. Defaults to '/api/auth'.
  * @returns A new CSRF token.
  */
-export const getCsrfToken: GetAuthMethod<string> = async (opts) => {
-	return getAuthMethod<string>('csrf', opts);
-};
+export const getCsrfToken: GetAuthMethod<string> = async (opts) =>
+	getAuthMethod<string>('csrf', opts);

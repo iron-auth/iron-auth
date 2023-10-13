@@ -1,5 +1,6 @@
 import type { AdapterConfig } from 'iron-auth/types';
 import type { Kysely } from 'kysely';
+
 import type { Database } from '../types';
 
 /**

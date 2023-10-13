@@ -1,4 +1,5 @@
 import type { IronSession } from 'iron-session';
+
 import type { InternalRequest, ParsedIronAuthConfig } from '../../types';
 import type { RouteHandler } from '../routes';
 import { constructRouteResponse, routesGET, routesPOST } from '../routes';

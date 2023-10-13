@@ -1,4 +1,5 @@
 import { getIronSession } from 'iron-session/edge';
+
 import type { IncomingRequest, IronAuthConfig } from '../../types';
 import {
 	getIronOptions,
@@ -43,6 +44,7 @@ export const ironAuthHandler = async (
 
 		return toActualResponse(internalRes, resp);
 	} catch (err) {
+		// eslint-disable-next-line no-console
 		if (err instanceof IronAuthError && err.status === 500) console.log(err);
 		const respErr =
 			err instanceof IronAuthError

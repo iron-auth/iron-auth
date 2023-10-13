@@ -11,5 +11,5 @@ import { getAuthMethod } from './get-auth-method';
  * @returns A new CSRF token.
  */
 export const getCsrfToken: GetAuthMethod<string> = async (opts) => {
-  return getAuthMethod<string>('csrf', opts);
+	return getAuthMethod<string>('csrf', opts);
 };

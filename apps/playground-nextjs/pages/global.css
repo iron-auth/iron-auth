@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  #__next {
-    @apply min-h-screen min-w-full flex flex-col items-center;
-  }
+	#__next {
+		@apply min-h-screen min-w-full flex flex-col items-center;
+	}
 }

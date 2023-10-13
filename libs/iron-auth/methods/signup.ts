@@ -18,11 +18,11 @@ import { postAuthMethod } from './post-auth-method';
  * @returns The sign up response from the provider, or null if no response was received.
  */
 export const signUp: PostAuthMethod<SignUpResponse> = async (...args) => {
-  const resp = await postAuthMethod<SignUpResponse>('signup', args);
+	const resp = await postAuthMethod<SignUpResponse>('signup', args);
 
-  if (resp) {
-    EventChannel.notify({ event: 'sign-up', userId: resp.id });
-  }
+	if (resp) {
+		EventChannel.notify({ event: 'sign-up', userId: resp.id });
+	}
 
-  return resp;
+	return resp;
 };

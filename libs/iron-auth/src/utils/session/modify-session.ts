@@ -5,7 +5,7 @@ import { getIronOptions } from '../encryption';
 import { IronAuthError } from '../iron-auth-error';
 
 type Args<Override extends boolean> = {
-  override?: Override;
+	override?: Override;
 };
 
 // TODO: Need edge runtime tests to check that this actually modifies the session cookie or not.
@@ -25,26 +25,26 @@ type Args<Override extends boolean> = {
  * @returns The updated session data.
  */
 export const modifySession = async <Override extends boolean = false>(
-  req: IncomingRequest,
-  config: IronAuthConfig,
-  data: Override extends true ? Session['user'] : Partial<Session['user']>,
-  { env, override }: Args<Override> & { env?: Record<string, string | undefined> } = {},
+	req: IncomingRequest,
+	config: IronAuthConfig,
+	data: Override extends true ? Session['user'] : Partial<Session['user']>,
+	{ env, override }: Args<Override> & { env?: Record<string, string | undefined> } = {},
 ): Promise<Response> => {
-  const parsedConfig = parseConfig(config, env);
+	const parsedConfig = parseConfig(config, env);
 
-  const internalResponse = new Response();
+	const internalResponse = new Response();
 
-  const session = await getIronSession(req, internalResponse, getIronOptions(parsedConfig));
+	const session = await getIronSession(req, internalResponse, getIronOptions(parsedConfig));
 
-  if (session && session.user) {
-    // eslint-disable-next-line no-param-reassign
-    session.user = override ? (data as Session['user']) : { ...session.user, ...data };
-    await session.save();
+	if (session && session.user) {
+		// eslint-disable-next-line no-param-reassign
+		session.user = override ? (data as Session['user']) : { ...session.user, ...data };
+		await session.save();
 
-    return internalResponse;
-  }
+		return internalResponse;
+	}
 
-  throw new IronAuthError({ code: 'NO_SESSION', message: 'Session not found' });
+	throw new IronAuthError({ code: 'NO_SESSION', message: 'Session not found' });
 };
 
 export type { Args as ModifySessionArgs };

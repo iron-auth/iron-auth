@@ -1,37 +1,34 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
-  "pipeline": {
-    "build": {
-      "outputs": ["dist/**"],
-      "dependsOn": ["^build"]
-    },
-    "dev": {
-      "cache": false
-    },
-    "start": {
-      "dependsOn": ["^build"]
-    },
-    "test": {
-      "outputs": ["coverage/**"],
-      "dependsOn": ["^test"]
-    },
-    "lint": {
-      "outputs": []
-    },
-    "format": {
-      "outputs": [],
-      "inputs": ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.md"]
-    },
-    "tsc": {
-      "outputs": [],
-      "inputs": ["**/*.ts", "**/*.tsx", "**/tsconfig/*.json", "**/tsconfig.json"]
-    },
-    "release": {
-      "outputs": [],
-      "dependsOn": ["^build"]
-    },
-    "clean": {
-      "cache": false
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"pipeline": {
+		"build": {
+			"outputs": ["dist/**"],
+			"dependsOn": ["^build"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"test": {
+			"outputs": ["coverage/**"],
+			"dependsOn": ["^test"]
+		},
+		"lint": {
+			"outputs": []
+		},
+		"prettier": {
+			"outputs": []
+		},
+		"tsc": {
+			"outputs": [],
+			"inputs": ["**/*.ts", "**/*.tsx", "**/tsconfig.json"]
+		},
+		"release": {
+			"outputs": [],
+			"dependsOn": ["^build"]
+		},
+		"clean": {
+			"cache": false
+		}
+	}
 }

@@ -1,29 +1,29 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/strictest/tsconfig.json",
-  "compilerOptions": {
-    "composite": false,
-    "declaration": true,
-    "declarationMap": true,
-    "inlineSources": false,
-    "isolatedModules": true,
-    "moduleResolution": "node",
-    "preserveWatchOutput": true,
-    "lib": ["ES2015", "dom"],
-    "module": "ESNext",
-    "target": "ES6",
-    "jsx": "preserve",
-    "exactOptionalPropertyTypes": false,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "allowJs": true,
-    "noEmit": true,
-    "incremental": true,
-    "resolveJsonModule": true
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "@tsconfig/strictest/tsconfig.json",
+	"compilerOptions": {
+		"composite": false,
+		"declaration": true,
+		"declarationMap": true,
+		"inlineSources": false,
+		"isolatedModules": true,
+		"moduleResolution": "node",
+		"preserveWatchOutput": true,
+		"lib": ["ES2015", "dom"],
+		"module": "ESNext",
+		"target": "ES6",
+		"jsx": "preserve",
+		"exactOptionalPropertyTypes": false,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"allowJs": true,
+		"noEmit": true,
+		"incremental": true,
+		"resolveJsonModule": true
+	},
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+	"exclude": ["node_modules"]
 }

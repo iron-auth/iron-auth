@@ -17,5 +17,5 @@ import { postAuthMethod } from './post-auth-method';
  * @returns The link account response from the provider, or null if no response was received.
  */
 export const linkAccount: PostAuthMethod<LinkAccountResponse> = async (...args) => {
-  return postAuthMethod<LinkAccountResponse>('linkaccount', args);
+	return postAuthMethod<LinkAccountResponse>('linkaccount', args);
 };

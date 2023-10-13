@@ -13,17 +13,17 @@ import { getCookie, hasSecurePrefix, IronAuthError, setCookie } from '../../util
  * @returns Cookie value
  */
 export const sealOAuthCookie = async (
-  res: IncomingResponse,
-  config: ParsedIronAuthConfig,
-  cookieOptions: InternalCookieOptions,
-  value: string,
+	res: IncomingResponse,
+	config: ParsedIronAuthConfig,
+	cookieOptions: InternalCookieOptions,
+	value: string,
 ) => {
-  const sealed = await sealData(value, {
-    password: config.secrets.oauth,
-    ttl: cookieOptions.maxAge,
-  });
+	const sealed = await sealData(value, {
+		password: config.secrets.oauth,
+		ttl: cookieOptions.maxAge,
+	});
 
-  return setCookie(res, { name: cookieOptions.name, value: sealed }, cookieOptions);
+	return setCookie(res, { name: cookieOptions.name, value: sealed }, cookieOptions);
 };
 
 /**
@@ -35,22 +35,22 @@ export const sealOAuthCookie = async (
  * @returns Cookie value
  */
 export const unsealOAuthCookie = async (
-  req: InternalRequest,
-  config: ParsedIronAuthConfig,
-  cookieOptions: InternalCookieOptions,
+	req: InternalRequest,
+	config: ParsedIronAuthConfig,
+	cookieOptions: InternalCookieOptions,
 ) => {
-  const cookie = getCookie(req, cookieOptions.name, hasSecurePrefix(cookieOptions));
-  if (!cookie) {
-    throw new IronAuthError({
-      code: 'INVALID_OAUTH_COOKIE',
-      message: `Could not find the ${cookieOptions.name} cookie`,
-    });
-  }
+	const cookie = getCookie(req, cookieOptions.name, hasSecurePrefix(cookieOptions));
+	if (!cookie) {
+		throw new IronAuthError({
+			code: 'INVALID_OAUTH_COOKIE',
+			message: `Could not find the ${cookieOptions.name} cookie`,
+		});
+	}
 
-  const unsealed = await unsealData<string>(cookie, {
-    password: config.secrets.oauth,
-    ttl: cookieOptions.maxAge,
-  });
+	const unsealed = await unsealData<string>(cookie, {
+		password: config.secrets.oauth,
+		ttl: cookieOptions.maxAge,
+	});
 
-  return unsealed;
+	return unsealed;
 };

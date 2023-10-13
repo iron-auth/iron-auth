@@ -13,89 +13,77 @@ import type { AdapterConfig } from 'iron-auth/types';
 // TODO: Can we better type this?
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const prismaAdapter = (prisma: any): AdapterConfig => ({
-  create: ({
-    userId,
-    type,
-    providerId,
-    accountId,
-    username = null,
-    name = null,
-    image = null,
-    email = null,
-    accountData = null,
-  }) =>
-    prisma.account.create({
-      data: {
-        type,
-        provider: providerId,
-        providerAccountId: accountId,
-        providerAccountData: accountData,
-        user: userId
-          ? {
-              connectOrCreate: {
-                where: {
-                  id: userId,
-                },
-                create: {
-                  username,
-                  name,
-                  image,
-                  email,
-                },
-              },
-            }
-          : {
-              create: {
-                username,
-                name,
-                image,
-                email,
-              },
-            },
-      },
-      select: {
-        id: true,
-        userId: true,
-        type: true,
-        provider: true,
-        providerAccountId: true,
-        providerAccountData: true,
-        user: {
-          select: {
-            id: true,
-            username: true,
-            name: true,
-            email: true,
-            image: true,
-          },
-        },
-      },
-    }),
+	create: ({
+		userId,
+		type,
+		providerId,
+		accountId,
+		username = null,
+		name = null,
+		image = null,
+		email = null,
+		accountData = null,
+	}) =>
+		prisma.account.create({
+			data: {
+				type,
+				provider: providerId,
+				providerAccountId: accountId,
+				providerAccountData: accountData,
+				user: userId
+					? {
+							connectOrCreate: {
+								where: { id: userId },
+								create: { username, name, image, email },
+							},
+					  }
+					: {
+							create: { username, name, image, email },
+					  },
+			},
+			select: {
+				id: true,
+				userId: true,
+				type: true,
+				provider: true,
+				providerAccountId: true,
+				providerAccountData: true,
+				user: {
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						email: true,
+						image: true,
+					},
+				},
+			},
+		}),
 
-  findAccount: ({ type, providerId, accountId, accountData }) =>
-    prisma.account.findFirst({
-      where: {
-        type,
-        provider: providerId,
-        providerAccountId: accountId,
-        providerAccountData: accountData,
-      },
-      select: {
-        id: true,
-        userId: true,
-        type: true,
-        provider: true,
-        providerAccountId: true,
-        providerAccountData: true,
-        user: {
-          select: {
-            id: true,
-            username: true,
-            name: true,
-            email: true,
-            image: true,
-          },
-        },
-      },
-    }),
+	findAccount: ({ type, providerId, accountId, accountData }) =>
+		prisma.account.findFirst({
+			where: {
+				type,
+				provider: providerId,
+				providerAccountId: accountId,
+				providerAccountData: accountData,
+			},
+			select: {
+				id: true,
+				userId: true,
+				type: true,
+				provider: true,
+				providerAccountId: true,
+				providerAccountData: true,
+				user: {
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						email: true,
+						image: true,
+					},
+				},
+			},
+		}),
 });

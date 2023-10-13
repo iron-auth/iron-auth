@@ -1,10 +1,10 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "pattern": "libs/*"
-    },
-    {
-      "pattern": "apps/*"
-    }
-  ]
+	"eslint.workingDirectories": [
+		{
+			"pattern": "libs/*"
+		},
+		{
+			"pattern": "apps/*"
+		}
+	]
 }

@@ -1,8 +1,8 @@
 export type {
-  SignInResponse,
-  SignUpResponse,
-  SignOutResponse,
-  LinkAccountResponse,
+	SignInResponse,
+	SignUpResponse,
+	SignOutResponse,
+	LinkAccountResponse,
 } from './routes';
 export type { IronAuthConfig } from '../types';
 

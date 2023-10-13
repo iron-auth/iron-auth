@@ -6,104 +6,104 @@ import { getHttpMock, getJsonResp } from '@libs/test-utils';
 import { resetPrisma, getCsrfToken, getIronAuthOptions } from './helpers';
 
 suite('Request handler treats request correctly', () => {
-  let ironAuthOptions: IronAuthConfig;
-  let csrfInfo: CsrfInfo;
+	let ironAuthOptions: IronAuthConfig;
+	let csrfInfo: CsrfInfo;
 
-  beforeAll(async () => {
-    vi.clearAllMocks();
-    await resetPrisma();
+	beforeAll(async () => {
+		vi.clearAllMocks();
+		await resetPrisma();
 
-    ironAuthOptions = await getIronAuthOptions();
-    csrfInfo = await getCsrfToken();
-  });
+		ironAuthOptions = await getIronAuthOptions();
+		csrfInfo = await getCsrfToken();
+	});
 
-  test('No `ironauth` is handled', async () => {
-    const { req } = getHttpMock();
+	test('No `ironauth` is handled', async () => {
+		const { req } = getHttpMock();
 
-    const res = await ironAuthHandler(req, ironAuthOptions);
+		const res = await ironAuthHandler(req, ironAuthOptions);
 
-    const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
+		const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-    expect(res.status).toEqual(500);
-    expect(data.code).toEqual('CONFIG_ERROR');
-    expect(data.error).toEqual('`ironauth` not found');
-  });
+		expect(res.status).toEqual(500);
+		expect(data.code).toEqual('CONFIG_ERROR');
+		expect(data.error).toEqual('`ironauth` not found');
+	});
 
-  test('No path is handled', async () => {
-    const { req } = getHttpMock({
-      method: 'POST',
-      query: {
-        ironauth: 'ironauth',
-      },
-      cookies: { ...csrfInfo.cookies },
-      body: { ...csrfInfo.body },
-    });
+	test('No path is handled', async () => {
+		const { req } = getHttpMock({
+			method: 'POST',
+			query: {
+				ironauth: 'ironauth',
+			},
+			cookies: { ...csrfInfo.cookies },
+			body: { ...csrfInfo.body },
+		});
 
-    const res = await ironAuthHandler(req, ironAuthOptions);
+		const res = await ironAuthHandler(req, ironAuthOptions);
 
-    const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
+		const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-    expect(res.status).toEqual(404);
-    expect(data.code).toEqual('NOT_FOUND');
-    expect(data.error).toEqual('Invalid path');
-  });
+		expect(res.status).toEqual(404);
+		expect(data.code).toEqual('NOT_FOUND');
+		expect(data.error).toEqual('Invalid path');
+	});
 
-  test('Invalid path is handled', async () => {
-    const { req } = getHttpMock({
-      method: 'POST',
-      query: {
-        ironauth: 'invalidpath',
-      },
-      cookies: { ...csrfInfo.cookies },
-      body: { ...csrfInfo.body },
-    });
+	test('Invalid path is handled', async () => {
+		const { req } = getHttpMock({
+			method: 'POST',
+			query: {
+				ironauth: 'invalidpath',
+			},
+			cookies: { ...csrfInfo.cookies },
+			body: { ...csrfInfo.body },
+		});
 
-    const res = await ironAuthHandler(req, ironAuthOptions);
+		const res = await ironAuthHandler(req, ironAuthOptions);
 
-    const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
+		const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-    expect(res.status).toEqual(404);
-    expect(data.code).toEqual('NOT_FOUND');
-    expect(data.error).toEqual('Invalid path');
-  });
+		expect(res.status).toEqual(404);
+		expect(data.code).toEqual('NOT_FOUND');
+		expect(data.error).toEqual('Invalid path');
+	});
 
-  test('Valid path with invalid additional query returns bad request', async () => {
-    const { req } = getHttpMock({
-      method: 'POST',
-      query: {
-        ironauth: 'signup',
-      },
-      cookies: { ...csrfInfo.cookies },
-      body: { ...csrfInfo.body },
-    });
+	test('Valid path with invalid additional query returns bad request', async () => {
+		const { req } = getHttpMock({
+			method: 'POST',
+			query: {
+				ironauth: 'signup',
+			},
+			cookies: { ...csrfInfo.cookies },
+			body: { ...csrfInfo.body },
+		});
 
-    const res = await ironAuthHandler(req, ironAuthOptions);
+		const res = await ironAuthHandler(req, ironAuthOptions);
 
-    const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
+		const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-    expect(res.status).toEqual(400);
-    expect(data.code).toEqual('BAD_REQUEST');
-    expect(data.error).toEqual('Invalid provider');
-  });
+		expect(res.status).toEqual(400);
+		expect(data.code).toEqual('BAD_REQUEST');
+		expect(data.error).toEqual('Invalid provider');
+	});
 
-  test('Valid path with provider not in config return bad request', async () => {
-    const { req } = getHttpMock({
-      method: 'POST',
-      query: {
-        ironauth: 'signup',
-        type: 'credentials',
-        providerId: 'invalid-provider-id',
-      },
-      cookies: { ...csrfInfo.cookies },
-      body: { ...csrfInfo.body },
-    });
+	test('Valid path with provider not in config return bad request', async () => {
+		const { req } = getHttpMock({
+			method: 'POST',
+			query: {
+				ironauth: 'signup',
+				type: 'credentials',
+				providerId: 'invalid-provider-id',
+			},
+			cookies: { ...csrfInfo.cookies },
+			body: { ...csrfInfo.body },
+		});
 
-    const res = await ironAuthHandler(req, ironAuthOptions);
+		const res = await ironAuthHandler(req, ironAuthOptions);
 
-    const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
+		const data = await getJsonResp<IronAuthApiResponse<'error'>>(res);
 
-    expect(res.status).toEqual(400);
-    expect(data.code).toEqual('BAD_REQUEST');
-    expect(data.error).toEqual('Invalid provider');
-  });
+		expect(res.status).toEqual(400);
+		expect(data.code).toEqual('BAD_REQUEST');
+		expect(data.error).toEqual('Invalid provider');
+	});
 });

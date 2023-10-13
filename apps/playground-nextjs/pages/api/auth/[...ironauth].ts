@@ -11,16 +11,16 @@ import type { NextApiRequest } from 'next';
 let opts: IronAuthConfig | undefined;
 let kysely: Kysely<Database>;
 export const getIronAuthOptions = async (debug = false) => {
-  if (!opts || !kysely) {
-    kysely = await setupKysely();
-    opts = { ...ironAuthOptions(kyselyAdapter(kysely), debug), accountLinkingOnSignup: false };
-  }
+	if (!opts || !kysely) {
+		kysely = await setupKysely();
+		opts = { ...ironAuthOptions(kyselyAdapter(kysely), debug), accountLinkingOnSignup: false };
+	}
 
-  return opts;
+	return opts;
 };
 export const getKysely = () => kysely;
 
 const handler = async (req: NextApiRequest) =>
-  ironAuthHandler(req, await getIronAuthOptions(true), {});
+	ironAuthHandler(req, await getIronAuthOptions(true), {});
 
 export default handler;

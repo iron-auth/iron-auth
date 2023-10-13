@@ -3,9 +3,9 @@ import type { SharedFetchOptions } from './fetch-api-data';
 import { fetchApiData, refineDefaultOpts } from './fetch-api-data';
 
 export type GetAuthMethod<
-  T extends ApiResponseDataType,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  ExtraOpts extends object = {},
+	T extends ApiResponseDataType,
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	ExtraOpts extends object = {},
 > = (opts?: SharedFetchOptions & ExtraOpts) => Promise<T | null>;
 
 /**
@@ -19,20 +19,20 @@ export type GetAuthMethod<
  * @returns The response from the API, or null if no response was received.
  */
 export const getAuthMethod = <
-  ResponseType extends ApiResponseDataType,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  ExtraOpts extends object = {},
+	ResponseType extends ApiResponseDataType,
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	ExtraOpts extends object = {},
 >(
-  path: string,
-  opts?: SharedFetchOptions & ExtraOpts,
+	path: string,
+	opts?: SharedFetchOptions & ExtraOpts,
 ): Promise<ResponseType | null> => {
-  const { rejects, basePath } = refineDefaultOpts(opts ?? {});
+	const { rejects, basePath } = refineDefaultOpts(opts ?? {});
 
-  return fetchApiData<ResponseType>(`/${path}`, { method: 'GET' }, { basePath, name: path })
-    .then((data) => data)
-    .catch((err) => {
-      if (!rejects) return null;
+	return fetchApiData<ResponseType>(`/${path}`, { method: 'GET' }, { basePath, name: path })
+		.then((data) => data)
+		.catch((err) => {
+			if (!rejects) return null;
 
-      throw new Error(err);
-    });
+			throw new Error(err);
+		});
 };

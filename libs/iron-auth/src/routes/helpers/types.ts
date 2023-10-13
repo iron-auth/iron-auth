@@ -3,10 +3,10 @@ import type { ApiResponseDataType, InternalRequest, ParsedIronAuthConfig } from 
 
 export type RouteResponse = { data: ApiResponseDataType; isRedirectUrl?: boolean };
 export type RouteHandlerArgs = {
-  req: InternalRequest;
-  res: Response;
-  config: ParsedIronAuthConfig;
-  session: IronSession;
+	req: InternalRequest;
+	res: Response;
+	config: ParsedIronAuthConfig;
+	session: IronSession;
 };
 
 export type RouteHandler = (args: RouteHandlerArgs) => Promise<RouteResponse>;

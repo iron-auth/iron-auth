@@ -15,11 +15,11 @@ type ExtraOpts = { notifyOnSuccess?: boolean };
  * @returns The user's session, or null if no response was received.
  */
 export const getSession: GetAuthMethod<ValidSession, ExtraOpts> = async (opts) => {
-  const resp = await getAuthMethod<ValidSession, ExtraOpts>('session', opts);
+	const resp = await getAuthMethod<ValidSession, ExtraOpts>('session', opts);
 
-  if (opts?.notifyOnSuccess && resp) {
-    EventChannel.notify({ event: 'session-updated', userId: resp.user.id });
-  }
+	if (opts?.notifyOnSuccess && resp) {
+		EventChannel.notify({ event: 'session-updated', userId: resp.user.id });
+	}
 
-  return resp;
+	return resp;
 };

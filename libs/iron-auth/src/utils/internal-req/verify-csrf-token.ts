@@ -12,46 +12,46 @@ import { IronAuthError } from '../iron-auth-error';
  * @returns Whether the CSRF token is valid.
  */
 export const verifyCsrfToken = async (
-  cookie: string | undefined,
-  rawToken: string,
-  config: ParsedIronAuthConfig,
+	cookie: string | undefined,
+	rawToken: string,
+	config: ParsedIronAuthConfig,
 ) => {
-  const [token, tokenHash] = cookie?.split('_') ?? '';
+	const [token, tokenHash] = cookie?.split('_') ?? '';
 
-  if (!token || !tokenHash) {
-    return false;
-  }
+	if (!token || !tokenHash) {
+		return false;
+	}
 
-  const expected = await hash(`${token}${config.secrets.csrf}`);
+	const expected = await hash(`${token}${config.secrets.csrf}`);
 
-  const hashesMatch = tokenHash === expected;
-  const tokensMatch = token === rawToken;
+	const hashesMatch = tokenHash === expected;
+	const tokensMatch = token === rawToken;
 
-  return hashesMatch && tokensMatch;
+	return hashesMatch && tokensMatch;
 };
 
 export const verifyCsrfTokenForReq = async (req: InternalRequest, config: ParsedIronAuthConfig) => {
-  const { csrfToken } = req.body;
+	const { csrfToken } = req.body;
 
-  const cookie = getCookie(req, config.cookies.csrf.name, hasSecurePrefix(config.cookies.csrf));
+	const cookie = getCookie(req, config.cookies.csrf.name, hasSecurePrefix(config.cookies.csrf));
 
-  if (!cookie || typeof csrfToken !== 'string') {
-    console.log('no cookie or no csrfToken', cookie, csrfToken);
-    throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
-  }
+	if (!cookie || typeof csrfToken !== 'string') {
+		console.log('no cookie or no csrfToken', cookie, csrfToken);
+		throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
+	}
 
-  const valid = await verifyCsrfToken(cookie, csrfToken, config);
+	const valid = await verifyCsrfToken(cookie, csrfToken, config);
 
-  if (!valid) {
-    console.log('not valid', cookie, csrfToken);
-    throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
-  }
+	if (!valid) {
+		console.log('not valid', cookie, csrfToken);
+		throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
+	}
 
-  return valid;
+	return valid;
 };
 
 export const validateCsrfToken = async (config: ParsedIronAuthConfig, req: InternalRequest) => {
-  if (!(await verifyCsrfTokenForReq(req, config))) {
-    throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
-  }
+	if (!(await verifyCsrfTokenForReq(req, config))) {
+		throw new IronAuthError({ code: 'INVALID_CSRF_TOKEN', message: 'Invalid CSRF token' });
+	}
 };

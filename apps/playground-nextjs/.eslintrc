@@ -1,6 +1,6 @@
 {
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "extends": "ixn-next"
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"extends": "ixn-next"
 }

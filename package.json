@@ -1,33 +1,30 @@
 {
-  "name": "root",
-  "version": "0.0.0",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "libs/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "start": "turbo run start",
-    "lint": "turbo run lint",
-    "tsc": "turbo run tsc",
-    "test": "turbo run test",
-    "format": "prettier --write \"**/*.{js,ts,tsx,md}\"",
-    "release": "turbo run release",
-    "clean": "turbo run clean && rimraf node_modules",
-    "postinstall": "husky install"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "husky": "^8.0.1",
-    "prettier": "^2.8.4",
-    "rimraf": "^3.0.2",
-    "turbo": "latest"
-  },
-  "engines": {
-    "pnpm": ">=6",
-    "node": ">=16.0.0"
-  }
+	"name": "root",
+	"version": "0.0.0",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"libs/*"
+	],
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev --parallel",
+		"lint": "turbo run lint",
+		"tsc": "turbo run tsc",
+		"test": "turbo run test",
+		"prettier": "prettier --check . --ignore-path .gitignore",
+		"prettier:fix": "prettier --write . --ignore-path .gitignore",
+		"release": "turbo run release",
+		"clean": "turbo run clean && rimraf node_modules"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.26.2",
+		"prettier": "^3.0.3",
+		"rimraf": "^5.0.5",
+		"turbo": "^1.10.15"
+	},
+	"engines": {
+		"pnpm": ">=8",
+		"node": ">=18.0.0"
+	}
 }

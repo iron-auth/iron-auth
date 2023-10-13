@@ -14,9 +14,9 @@ npm install @iron-auth/kysely-adapter
 import { kyselyAdapter } from '@iron-auth/kysely-adapter';
 
 const config: IronAuthConfig = {
-  // ...
-  adapter: kyselyAdapter(db),
-  // ...
+	// ...
+	adapter: kyselyAdapter(db),
+	// ...
 };
 ```
 
@@ -42,10 +42,10 @@ The [types](https://github.com/iron-auth/iron-auth/blob/main/libs/kysely-adapter
 import type { AccountTable, UserTable, VerificationToken } from '@iron-auth/kysely-adapter/types';
 
 export interface Database {
-  accounts: AccountTable;
-  users: UserTable;
-  verification_tokens: VerificationToken;
+	accounts: AccountTable;
+	users: UserTable;
+	verification_tokens: VerificationToken;
 
-  // ...
+	// ...
 }
 ```

@@ -1,32 +1,23 @@
-name: Checks
+name: PR Checks
 
 on:
-  push:
-    branches: [main, dev]
-    paths:
-      - '**.js'
-      - '**.jsx'
-      - '**.ts'
-      - '**.tsx'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/ci.yml'
   pull_request:
-    branches: [main, dev]
-    paths:
-      - '**.js'
-      - '**.jsx'
-      - '**.ts'
-      - '**.tsx'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/ci.yml'
+    branches: [main]
+  merge_group:
+    types: [checks_requested]
+
+concurrency:
+  cancel-in-progress: true
+  group: '${{ github.workflow }}-${{ github.ref }}'
 
 jobs:
-  checks:
+  code-quality:
+    name: ${{ matrix.script }}
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        script: [lint, tsc, test]
+        script: [lint, prettier, tsc]
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -38,7 +29,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -47,4 +38,29 @@ jobs:
           pnpm --filter @apps/test prisma:generate
 
       - name: ${{ matrix.script }}
-        run: pnpm ${{ matrix.script }}
+        run: pnpm run ${{ matrix.script }}
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @apps/test prisma:generate
+
+      - name: Run unit tests
+        run: pnpm run test

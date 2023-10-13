@@ -29,20 +29,20 @@ import type { IronAuthConfig } from 'iron-auth';
 import { ironAuthHandler } from 'iron-auth';
 
 export const ironAuthConfig: IronAuthConfig = {
-  // ...
+	// ...
 };
 
 export default function handler(req) {
-  /*
-   * Depending on which runtime, cloud provider, or build steps you are using, you may need to
-   * retrieve the environment variables from `req`, or they might be available in `process.env`, or
-   * they could be passed as an argument to the handler function.
-   */
-  const env = {
-    /* ... */
-  };
+	/*
+	 * Depending on which runtime, cloud provider, or build steps you are using, you may need to
+	 * retrieve the environment variables from `req`, or they might be available in `process.env`, or
+	 * they could be passed as an argument to the handler function.
+	 */
+	const env = {
+		/* ... */
+	};
 
-  return ironAuthHandler(req, ironAuthConfig, env);
+	return ironAuthHandler(req, ironAuthConfig, env);
 }
 ```
 
@@ -54,15 +54,15 @@ import { getServerSideSession } from 'iron-auth';
 import { ironAuthConfig } from '...';
 
 const getSession = async (req) => {
-  let session;
-  try {
-    // Make sure to pass in your environment variables.
-    session = await getServerSideSession(req, ironAuthConfig, env);
-  } catch (error) {
-    // Handle error when there is no session.
-    session = null;
-  }
+	let session;
+	try {
+		// Make sure to pass in your environment variables.
+		session = await getServerSideSession(req, ironAuthConfig, env);
+	} catch (error) {
+		// Handle error when there is no session.
+		session = null;
+	}
 
-  return session;
+	return session;
 };
 ```

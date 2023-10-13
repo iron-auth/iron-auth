@@ -1,8 +1,8 @@
 {
-  "root": true,
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "extends": ["ixn"],
-  "plugins": ["import", "@typescript-eslint", "prettier"]
+	"root": true,
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"extends": ["ixn"],
+	"plugins": ["import", "@typescript-eslint", "prettier"]
 }

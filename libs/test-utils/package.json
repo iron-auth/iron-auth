@@ -1,45 +1,45 @@
 {
-  "name": "@libs/test-utils",
-  "version": "0.0.0",
-  "license": "MIT",
-  "type": "module",
-  "main": "./src/index.ts",
-  "files": [
-    "./src/index.ts"
-  ],
-  "scripts": {
-    "lint": "eslint \"./**/*.{cjs,js,jsx,ts,tsx}\"",
-    "tsc": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests --silent",
-    "test:noisy": "vitest run --passWithNoTests",
-    "clean": "rimraf .turbo && rimraf node_modules && rimraf dist"
-  },
-  "devDependencies": {
-    "@edge-runtime/vm": "^2.0.5",
-    "@testing-library/react": "^13.4.0",
-    "@tsconfig/strictest": "^1.0.2",
-    "@vitejs/plugin-react": "^3.1.0",
-    "eslint": "^8.33.0",
-    "eslint-config-ixn-react": "^1.3.1",
-    "happy-dom": "^7.0.0",
-    "node-mocks-http": "^1.11.0",
-    "prettier": "^2.8.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.1",
-    "vitest": "^0.28.5",
-    "vitest-mock-extended": "^1.0.9"
-  },
-  "dependencies": {
-    "@iron-auth/kysely-adapter": "workspace:^",
-    "@iron-auth/prisma-adapter": "workspace:^",
-    "@iron-auth/react": "workspace:^",
-    "@prisma/client": "^4.5.0",
-    "iron-auth": "workspace:^",
-    "iron-session": "^6.3.1",
-    "kysely": "^0.23.4",
-    "pg-mem": "^2.6.4"
-  }
+	"name": "@libs/test-utils",
+	"version": "0.0.0",
+	"license": "MIT",
+	"type": "module",
+	"main": "./src/index.ts",
+	"files": [
+		"./src/index.ts"
+	],
+	"scripts": {
+		"lint": "eslint \"./**/*.{cjs,js,jsx,ts,tsx}\"",
+		"tsc": "tsc --noEmit",
+		"test": "vitest run --passWithNoTests --silent",
+		"test:noisy": "vitest run --passWithNoTests",
+		"clean": "rimraf .turbo && rimraf node_modules && rimraf dist"
+	},
+	"devDependencies": {
+		"@edge-runtime/vm": "^2.0.5",
+		"@testing-library/react": "^13.4.0",
+		"@tsconfig/strictest": "^2.0.2",
+		"@vitejs/plugin-react": "^4.1.0",
+		"eslint": "^8.51.0",
+		"eslint-config-ixn-react": "^1.4.5",
+		"happy-dom": "^12.9.1",
+		"node-mocks-http": "^1.11.0",
+		"prettier": "^3.0.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"rimraf": "^5.0.5",
+		"typescript": "^5.2.2",
+		"vite": "^4.4.11",
+		"vitest": "^0.34.6",
+		"vitest-mock-extended": "^1.3.1"
+	},
+	"dependencies": {
+		"@iron-auth/kysely-adapter": "workspace:^",
+		"@iron-auth/prisma-adapter": "workspace:^",
+		"@iron-auth/react": "workspace:^",
+		"@prisma/client": "^4.5.0",
+		"iron-auth": "workspace:^",
+		"iron-session": "^6.3.1",
+		"kysely": "^0.26.3",
+		"pg-mem": "^2.6.4"
+	}
 }

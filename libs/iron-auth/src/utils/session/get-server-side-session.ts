@@ -13,17 +13,17 @@ import { isValidSession } from './is-valid';
  * @returns The session data.
  */
 export const getServerSideSession = async (
-  req: IncomingRequest | LayoutRequest,
-  config: IronAuthConfig,
-  env?: Record<string, string | undefined>,
+	req: IncomingRequest | LayoutRequest,
+	config: IronAuthConfig,
+	env?: Record<string, string | undefined>,
 ): Promise<ValidSession> => {
-  const parsedConfig = parseConfig(config, env);
+	const parsedConfig = parseConfig(config, env);
 
-  const session = await getIronSession(
-    req as IncomingRequest,
-    new Response(),
-    getIronOptions(parsedConfig),
-  );
+	const session = await getIronSession(
+		req as IncomingRequest,
+		new Response(),
+		getIronOptions(parsedConfig),
+	);
 
-  return isValidSession(session);
+	return isValidSession(session);
 };

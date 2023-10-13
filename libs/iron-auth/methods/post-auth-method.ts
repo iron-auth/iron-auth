@@ -4,14 +4,14 @@ import { getCsrfToken } from './csrf';
 import { type WithFetchOptions, refineDefaultOpts, fetchApiData } from './fetch-api-data';
 
 type Args<T extends ProviderType, Trimmed extends boolean = false> = Trimmed extends true
-  ? [opts?: WithFetchOptions<{ data?: never }>]
-  : T extends 'credentials'
-  ? [type: T, providerId: string, opts: WithFetchOptions<{ data: CredentialsPreCheckResponse }>]
-  : [type: T, providerId: string, opts?: WithFetchOptions<{ data?: never }>];
+	? [opts?: WithFetchOptions<{ data?: never }>]
+	: T extends 'credentials'
+	? [type: T, providerId: string, opts: WithFetchOptions<{ data: CredentialsPreCheckResponse }>]
+	: [type: T, providerId: string, opts?: WithFetchOptions<{ data?: never }>];
 
 export type PostAuthMethod<
-  ResponseType extends ApiResponseDataType,
-  Trimmed extends boolean = false,
+	ResponseType extends ApiResponseDataType,
+	Trimmed extends boolean = false,
 > = <T extends ProviderType>(...args: Args<T, Trimmed>) => Promise<ResponseType | null>;
 
 /**
@@ -30,45 +30,45 @@ export type PostAuthMethod<
  * @returns The response from the API, or null if no response was received.
  */
 export const postAuthMethod = async <
-  ResponseType extends ApiResponseDataType,
-  Trimmed extends boolean = false,
+	ResponseType extends ApiResponseDataType,
+	Trimmed extends boolean = false,
 >(
-  path: string,
-  args: Parameters<PostAuthMethod<ResponseType, Trimmed>>,
+	path: string,
+	args: Parameters<PostAuthMethod<ResponseType, Trimmed>>,
 ): Promise<ResponseType | null> => {
-  const [type, providerId, opts] =
-    args.length === 1
-      ? [undefined, undefined, (args as Parameters<PostAuthMethod<ResponseType, true>>)[0]]
-      : (args as Parameters<PostAuthMethod<ResponseType, false>>);
-  const { basePath, rejects } = refineDefaultOpts(opts);
+	const [type, providerId, opts] =
+		args.length === 1
+			? [undefined, undefined, (args as Parameters<PostAuthMethod<ResponseType, true>>)[0]]
+			: (args as Parameters<PostAuthMethod<ResponseType, false>>);
+	const { basePath, rejects } = refineDefaultOpts(opts);
 
-  let csrfToken: string | undefined;
+	let csrfToken: string | undefined;
 
-  try {
-    csrfToken = (await getCsrfToken({ basePath, rejects: true })) ?? undefined;
-    if (!csrfToken) throw new Error('Failed to fetch CSRF token');
-  } catch (err) {
-    if (rejects) throw new Error(err as string);
-    return null;
-  }
+	try {
+		csrfToken = (await getCsrfToken({ basePath, rejects: true })) ?? undefined;
+		if (!csrfToken) throw new Error('Failed to fetch CSRF token');
+	} catch (err) {
+		if (rejects) throw new Error(err as string);
+		return null;
+	}
 
-  const queryParams =
-    type && providerId ? `?${new URLSearchParams({ type, providerId }).toString()}` : '';
+	const queryParams =
+		type && providerId ? `?${new URLSearchParams({ type, providerId }).toString()}` : '';
 
-  return fetchApiData<ResponseType>(
-    `/${path}${queryParams}`,
-    {
-      method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ ...opts?.data, csrfToken }),
-    },
-    { basePath, name: path },
-  )
-    .then((respData) => respData)
-    .catch((err) => {
-      console.log(err);
-      if (!rejects) return null;
+	return fetchApiData<ResponseType>(
+		`/${path}${queryParams}`,
+		{
+			method: 'POST',
+			headers: new Headers({ 'Content-Type': 'application/json' }),
+			body: JSON.stringify({ ...opts?.data, csrfToken }),
+		},
+		{ basePath, name: path },
+	)
+		.then((respData) => respData)
+		.catch((err) => {
+			console.log(err);
+			if (!rejects) return null;
 
-      throw new Error(err);
-    });
+			throw new Error(err);
+		});
 };

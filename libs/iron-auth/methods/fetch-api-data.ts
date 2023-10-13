@@ -6,14 +6,14 @@ export type WithFetchOptions<T extends object = {}> = T & SharedFetchOptions;
 export const fetchDefaults = { rejects: false, basePath: '/api/auth' };
 
 export const refineDefaultOpts = <T extends WithFetchOptions | undefined>(
-  opts: T,
+	opts: T,
 ): Required<SharedFetchOptions> => ({
-  basePath: opts?.basePath ?? fetchDefaults.basePath,
-  rejects: opts?.rejects ?? fetchDefaults.rejects,
+	basePath: opts?.basePath ?? fetchDefaults.basePath,
+	rejects: opts?.rejects ?? fetchDefaults.rejects,
 });
 
 type FetchArgs = Pick<SharedFetchOptions, 'basePath'> & {
-  name?: string;
+	name?: string;
 };
 
 /**
@@ -26,40 +26,40 @@ type FetchArgs = Pick<SharedFetchOptions, 'basePath'> & {
  * @returns Promise resolving to the data returned by the API.
  */
 export const fetchApiData = <Data extends ApiResponseDataType = null>(
-  path: string,
-  options?: RequestInit,
-  { basePath = fetchDefaults.basePath, name = 'method' }: FetchArgs = {},
+	path: string,
+	options?: RequestInit,
+	{ basePath = fetchDefaults.basePath, name = 'method' }: FetchArgs = {},
 ) => {
-  return new Promise<Data>((res, rej) => {
-    fetch(`${basePath}${path}`, { redirect: 'follow', ...options })
-      .then((resp) => {
-        if (resp.ok && resp.redirected) {
-          window.location.replace(resp.url);
-          res(null as unknown as Data);
-        }
+	return new Promise<Data>((res, rej) => {
+		fetch(`${basePath}${path}`, { redirect: 'follow', ...options })
+			.then((resp) => {
+				if (resp.ok && resp.redirected) {
+					window.location.replace(resp.url);
+					res(null as unknown as Data);
+				}
 
-        return resp.json() as Promise<IronAuthApiResponse<'unknown', Data> | JSON>;
-      })
-      .then((resp) => {
-        if ('success' in resp) {
-          if (resp.success && resp.data !== undefined) {
-            console.debug('Fetched data:', resp.data);
+				return resp.json() as Promise<IronAuthApiResponse<'unknown', Data> | JSON>;
+			})
+			.then((resp) => {
+				if ('success' in resp) {
+					if (resp.success && resp.data !== undefined) {
+						console.debug('Fetched data:', resp.data);
 
-            res(resp.data);
-          } else {
-            throw new Error(resp.error ?? `${name} response data not found`);
-          }
-        } else {
-          throw new Error('Invalid response');
-        }
-      })
-      .catch((err) => {
-        const message =
-          (err instanceof Error && err.message) || `Unexpected error fetching ${name}`;
+						res(resp.data);
+					} else {
+						throw new Error(resp.error ?? `${name} response data not found`);
+					}
+				} else {
+					throw new Error('Invalid response');
+				}
+			})
+			.catch((err) => {
+				const message =
+					(err instanceof Error && err.message) || `Unexpected error fetching ${name}`;
 
-        console.error(`Error fetching ${name}`, message);
+				console.error(`Error fetching ${name}`, message);
 
-        rej(message);
-      });
-  });
+				rej(message);
+			});
+	});
 };

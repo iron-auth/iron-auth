@@ -25,12 +25,6 @@ Please use pnpm to install dependencies and run scripts.
 
 You can either use a cloud development environment or clone the repository to your hard drive.
 
-#### Gitpod
-
-We include a configuration file for [Gitpod](https://www.gitpod.io) in the repository. To use Gitpod, simply click the button below:
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/iron-auth/iron-auth)
-
 #### Cloning the Repository
 
 You can clone the repository to your hard drive and run the following commands:

@@ -13,11 +13,11 @@ import { postAuthMethod } from './post-auth-method';
  * @returns A boolean indicating whether the session was destroyed and the user was signed out.
  */
 export const signOut: PostAuthMethod<SignOutResponse, true> = async (...args) => {
-  const resp = await postAuthMethod<SignOutResponse, true>('signout', args);
+	const resp = await postAuthMethod<SignOutResponse, true>('signout', args);
 
-  if (resp) {
-    EventChannel.notify({ event: 'sign-out' });
-  }
+	if (resp) {
+		EventChannel.notify({ event: 'sign-out' });
+	}
 
-  return resp;
+	return resp;
 };

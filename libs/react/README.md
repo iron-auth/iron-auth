@@ -21,9 +21,9 @@ import { SessionProvider } from '@iron-auth/react';
 const root = createRoot(document.getElementById('app') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <SessionProvider fetchOnLoad>{/* Your app */}</SessionProvider>
-  </React.StrictMode>,
+	<React.StrictMode>
+		<SessionProvider fetchOnLoad>{/* Your app */}</SessionProvider>
+	</React.StrictMode>,
 );
 ```
 
@@ -33,8 +33,8 @@ Then, use the `useSession` hook to get the session and sign in/out, etc.
 import { useSession } from '@iron-auth/react';
 
 export const SignInComponent = () => {
-  const { session } = useSession();
+	const { session } = useSession();
 
-  return <div>{session?.user?.email}</div>;
+	return <div>{session?.user?.email}</div>;
 };
 ```

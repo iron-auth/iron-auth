@@ -33,9 +33,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm --filter @apps/test prisma:generate
+        run: pnpm install --frozen-lockfile
 
       - name: ${{ matrix.script }}
         run: pnpm run ${{ matrix.script }}
@@ -64,3 +62,60 @@ jobs:
 
       - name: Run unit tests
         run: pnpm run test
+
+  build-libraries:
+    name: Build Libraries
+    runs-on: ubuntu-latest
+    needs: [code-quality, unit-tests]
+    strategy:
+      fail-fast: false
+      matrix:
+        lib: [iron-auth, kysely-adapter, react] # TODO: Add step to output correct names - these needs @iron-auth/react etc., then output formatted version
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Update the libraries to have the PR number in the version
+      - name: Set outputs
+        id: hash
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Alter package.json versions
+        run: bash ./scripts/alter-version libs/${{ matrix.lib }} ${{ steps.hash.outputs.sha_short }} PR=${{ github.event.number }}
+
+      - name: Build
+        run: pnpm run build --filter=@libs/${{ matrix.lib }}
+
+      - name: Package for release
+        if: ${{ github.repository_owner == 'iron-auth' && github.event_name == 'pull_request' }}
+        run: |
+          cd libs/${{ matrix.lib }}/dist
+          pnpm pack
+          cd ../../..
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ github.repository_owner == 'iron-auth' && github.event_name == 'pull_request' }}
+        with:
+          name: npm-package-${{ matrix.lib }}-${{ github.event.number }}
+          path: libs/${{ matrix.lib }}/dist/${{ matrix.lib }}-*.tgz
+
+  publish-prerelease:
+    name: Publish Pre-Release to Internal Registry
+    if: ${{ github.repository_owner == 'iron-auth' && github.event_name == 'pull_request' }} # TODO: If triggered by PR
+    runs-on: ubuntu-latest
+    needs: [code-quality, unit-tests]
+    # TODO: Use workflow file

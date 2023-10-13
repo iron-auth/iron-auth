@@ -14,7 +14,7 @@
 		"test": "turbo run test",
 		"prettier": "prettier --check . --ignore-path .gitignore",
 		"prettier:fix": "prettier --write . --ignore-path .gitignore",
-		"release": "turbo run release",
+		"release": "changeset publish",
 		"clean": "turbo run clean && rimraf node_modules"
 	},
 	"devDependencies": {

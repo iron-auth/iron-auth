@@ -1,4 +1,3 @@
-// import crypto from 'crypto';
 import { Kysely, PostgresDialect } from 'kysely';
 import { DataType, newDb } from 'pg-mem';
 import { afterAll, beforeAll, expect, suite, test } from 'vitest';
@@ -119,6 +118,20 @@ suite('kysely-adapter', () => {
 		});
 	});
 
+	test('cant create account for same provider and account id', async () => {
+		const adapter = kyselyAdapter(db);
+
+		await expect(
+			adapter.create({
+				type: 'credentials',
+				providerId: 'email-pass-provider',
+				accountId: 'test',
+				accountData: null,
+				name: 'test',
+			}),
+		).rejects.toThrow('duplicate key value violates unique constraint');
+	});
+
 	test('finds account and returns it', async () => {
 		const adapter = kyselyAdapter(db);
 
@@ -167,20 +180,6 @@ suite('kysely-adapter', () => {
 		});
 	});
 
-	test('cant create account for same provider and account id', async () => {
-		const adapter = kyselyAdapter(db);
-
-		await expect(
-			adapter.create({
-				type: 'credentials',
-				providerId: 'email-pass-provider',
-				accountId: 'test',
-				accountData: null,
-				name: 'test',
-			}),
-		).rejects.toThrow('duplicate key value violates unique constraint');
-	});
-
 	test('returns null when finding account that doesnt exist', async () => {
 		const adapter = kyselyAdapter(db);
 
@@ -192,5 +191,12 @@ suite('kysely-adapter', () => {
 		});
 
 		expect(account).toEqual(null);
+	});
+
+	test('cant delete users because of foreign key constraint with accounts table', async () => {
+		// This test is for my sanity, to make sure the database is set up correctly.
+		await expect(db.deleteFrom('users').where('id', '=', 1).execute()).rejects.toThrow(
+			'violates foreign key constraint',
+		);
 	});
 });

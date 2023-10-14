@@ -21,9 +21,7 @@ type AccountWithUserResponse = {
 	};
 };
 
-/**
- * A generic configuration implemented by all adapters.
- */
+/** A generic configuration implemented by all adapters. */
 export type AdapterConfig = {
 	/**
 	 * The function called to create a new user and account in the database.

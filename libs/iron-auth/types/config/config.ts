@@ -4,9 +4,7 @@ import type { ProviderConfig, ProviderIdentifier } from './provider';
 
 type IronPassword = string | { [id: string]: string };
 
-/**
- * Configuration options for Iron Auth.
- */
+/** Configuration options for Iron Auth. */
 export type IronAuthConfig = {
 	/**
 	 * Whether debug mode is enabled or not. When enabled, errors will be logged to the console.

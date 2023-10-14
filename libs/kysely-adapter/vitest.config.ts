@@ -1,12 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [react()],
 	test: {
 		globals: true,
-		environment: 'happy-dom',
+		environment: 'miniflare',
 		coverage: { provider: 'istanbul', reporter: ['text', 'json'] },
 	},
 });

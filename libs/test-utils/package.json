@@ -10,19 +10,16 @@
 	"scripts": {
 		"lint": "eslint \"./**/*.{cjs,js,jsx,ts,tsx}\"",
 		"tsc": "tsc --noEmit",
-		"test": "vitest run --passWithNoTests --silent",
-		"test:noisy": "vitest run --passWithNoTests",
-		"clean": "rimraf .turbo && rimraf node_modules && rimraf dist"
+		"test": "vitest run --passWithNoTests --coverage",
+		"clean": "rimraf .turbo && rimraf node_modules && rimraf dist && rimraf coverage"
 	},
 	"devDependencies": {
-		"@edge-runtime/vm": "^2.0.5",
 		"@testing-library/react": "^13.4.0",
 		"@tsconfig/strictest": "^2.0.2",
 		"@vitejs/plugin-react": "^4.1.0",
 		"eslint": "^8.51.0",
 		"eslint-config-ixn-react": "^1.5.3",
 		"happy-dom": "^12.9.1",
-		"node-mocks-http": "^1.11.0",
 		"prettier": "^3.0.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",

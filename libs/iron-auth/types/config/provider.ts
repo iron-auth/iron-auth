@@ -7,32 +7,20 @@ export type ProviderType = 'credentials' | 'oauth' | 'oidc';
 
 export type ProviderIdentifier = { type: string; id: string };
 
-/**
- * A base configuration implemented by all providers.
- */
+/** A base configuration implemented by all providers. */
 type BaseProviderConfig = {
-	/**
-	 * The unique ID for the provider.
-	 */
+	/** The unique ID for the provider. */
 	id: string;
-	/**
-	 * The name of the provider.
-	 */
+	/** The name of the provider. */
 	name: string;
-	/**
-	 * The type of the provider.
-	 */
+	/** The type of the provider. */
 	type: ProviderType;
 };
 
 export type CredentialsPreCheckResponse = {
-	/**
-	 * The user's email address.
-	 */
+	/** The user's email address. */
 	email: string;
-	/**
-	 * The user's raw password.
-	 */
+	/** The user's raw password. */
 	password: string;
 };
 
@@ -43,17 +31,13 @@ export type CredentialsProviderConfig = BaseProviderConfig & {
 	 *
 	 * For example, checking that a user's credentials fit the required format.
 	 */
-	precheck: <T = CredentialsPreCheckResponse>(req: InternalRequest) => T;
+	precheck: (req: InternalRequest) => CredentialsPreCheckResponse;
 };
 
 export type OAuthProviderOptions = {
-	/**
-	 * Client ID for the provider.
-	 */
+	/** Client ID for the provider. */
 	clientId: string;
-	/**
-	 * Client secret for the provider.
-	 */
+	/** Client secret for the provider. */
 	clientSecret: string;
 };
 
@@ -184,34 +168,22 @@ type OAuthSpecific<TProfile extends Record<string, unknown>> = {
 
 type OIDCSpecific<TProfile extends Record<string, unknown>> = {
 	type: Extract<ProviderType, 'oidc'>;
-	/**
-	 * The provider's discovery URL.
-	 */
+	/** The provider's discovery URL. */
 	discovery: {
-		/**
-		 * Discovery URL.
-		 */
+		/** Discovery URL. */
 		url: string;
 	};
-	/**
-	 * The provider's authorization scope.
-	 */
+	/** The provider's authorization scope. */
 	authorization: Pick<OAuthSpecific<TProfile>['authorization'], 'scope' | 'supportsPKCE'>;
-	/**
-	 * The provider's user information response transformer.
-	 */
+	/** The provider's user information response transformer. */
 	userInfo: Pick<OAuthSpecific<TProfile>['userInfo'], 'customRequest' | 'parse'>;
 };
 
-/**
- * A base configuration implemented by all OAuth / OIDC providers.
- */
+/** A base configuration implemented by all OAuth / OIDC providers. */
 export type OAuthProviderConfig<
 	TProfile extends Record<string, unknown> = Record<string, unknown>,
 > = BaseProviderConfig & {
-	/**
-	 * Client ID and Client Secret for the provider.
-	 */
+	/** Client ID and Client Secret for the provider. */
 	options: OAuthProviderOptions;
 } & (OAuthSpecific<TProfile> | OIDCSpecific<TProfile>);
 

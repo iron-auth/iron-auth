@@ -10,13 +10,11 @@
 	"scripts": {
 		"lint": "eslint \"./**/*.{cjs,js,jsx,ts,tsx}\"",
 		"tsc": "tsc --noEmit",
-		"test": "vitest run --passWithNoTests",
-		"test:noisy": "vitest run --passWithNoTests",
-		"clean": "rimraf .turbo && rimraf node_modules && rimraf dist"
+		"test": "vitest run --passWithNoTests --coverage",
+		"clean": "rimraf .turbo && rimraf node_modules && rimraf dist && rimraf coverage"
 	},
 	"devDependencies": {
 		"@tsconfig/strictest": "^2.0.2",
-		"@vitejs/plugin-react": "^4.1.0",
 		"@vitest/coverage-istanbul": "^0.34.6",
 		"eslint": "^8.51.0",
 		"eslint-config-ixn": "^1.5.3",
@@ -27,7 +25,8 @@
 		"rimraf": "^5.0.5",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.11",
-		"vitest": "^0.34.6"
+		"vitest": "^0.34.6",
+		"vitest-environment-miniflare": "^2.14.1"
 	},
 	"peerDependencies": {
 		"kysely": "^0.23.4"

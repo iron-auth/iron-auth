@@ -1,7 +1,6 @@
 import { emailRegex, passwordRegex } from '../constants';
 import { IronAuthError } from '../src';
-import type { CredentialsProviderConfig, InternalRequest } from '../types';
-import type { CredentialsPreCheckResponse } from '../types/config';
+import type { CredentialsProviderConfig } from '../types';
 
 /**
  * A credentials provider for Iron Auth.
@@ -16,7 +15,7 @@ export const credentialsProvider: CredentialsProviderConfig = {
 	id: 'email-pass-provider',
 	name: 'Credentials',
 	type: 'credentials',
-	precheck: <T = CredentialsPreCheckResponse>(req: InternalRequest) => {
+	precheck: (req) => {
 		const { email, password } = req.body;
 
 		if (typeof email !== 'string' || typeof password !== 'string') {
@@ -34,6 +33,6 @@ export const credentialsProvider: CredentialsProviderConfig = {
 			});
 		}
 
-		return { email, password } as T;
+		return { email, password };
 	},
 };

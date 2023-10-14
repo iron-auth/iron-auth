@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import { Kysely, PostgresDialect } from 'kysely';
 import { DataType, newDb } from 'pg-mem';
 import { afterAll, beforeAll, expect, suite, test } from 'vitest';
@@ -6,8 +6,6 @@ import { afterAll, beforeAll, expect, suite, test } from 'vitest';
 import { buildPostgresTables } from '../builders/postgres';
 import type { Database } from '../types';
 import { kyselyAdapter } from '.';
-
-let db: Kysely<Database>;
 
 const setupKysely = async () => {
 	const memDb = newDb();
@@ -30,50 +28,98 @@ const setupKysely = async () => {
 	return kysely;
 };
 
-beforeAll(async () => {
-	db = await setupKysely();
-});
-
-afterAll(async () => {
-	await db.destroy();
-});
+const basicUuidRegexp = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 
 suite('kysely-adapter', () => {
-	test('no result when account doesnt exist', async () => {
-		const adapter = kyselyAdapter(db as Kysely<Database>);
+	let db: Kysely<Database>;
 
-		const account = await adapter.findAccount({
-			type: 'credentials',
-			providerId: 'email-pass-provider',
-			accountId: '',
-			accountData: null,
-		});
-
-		expect(account).toEqual(null);
+	beforeAll(async () => {
+		db = await setupKysely();
 	});
 
-	test('creates account', async () => {
+	afterAll(async () => {
+		await db.destroy();
+	});
+
+	test('creates new account and returns it, with no provided user data', async () => {
 		const adapter = kyselyAdapter(db);
 
 		const account = await adapter.create({
 			type: 'credentials',
 			providerId: 'email-pass-provider',
 			accountId: 'test',
-			accountData: null,
+		});
+
+		expect(account).toEqual({
+			id: expect.stringMatching(basicUuidRegexp),
+			userId: 1,
+			type: 'credentials',
+			provider: 'email-pass-provider',
+			providerAccountId: 'test',
+			providerAccountData: null,
+			user: { id: 1, name: null, username: null, email: null, image: null },
+		});
+	});
+
+	test('creates new account and returns it, with the provided user data', async () => {
+		const adapter = kyselyAdapter(db);
+
+		const account = await adapter.create({
+			type: 'credentials',
+			providerId: 'email-pass-provider',
+			accountId: 'test2',
+			accountData: JSON.stringify({ password: 'random' }),
 			name: 'test',
+			username: 'test_username',
+			email: 'test@test.local',
+			image: 'test_image.png',
 		});
 
-		expect(account.id).toEqual(expect.any(String));
-		expect(account.userId).toEqual(1);
-		expect(account.type).toEqual('credentials');
-		expect(account.provider).toEqual('email-pass-provider');
-		expect(account.providerAccountId).toEqual('test');
-		expect(account.providerAccountData).toEqual(null);
-		expect(account.user.id).toEqual(account.userId);
-		expect(account.user.name).toEqual('test');
+		expect(account).toEqual({
+			id: expect.stringMatching(basicUuidRegexp),
+			userId: 2,
+			type: 'credentials',
+			provider: 'email-pass-provider',
+			providerAccountId: 'test2',
+			providerAccountData: JSON.stringify({ password: 'random' }),
+			user: {
+				id: 2,
+				name: 'test',
+				username: 'test_username',
+				email: 'test@test.local',
+				image: 'test_image.png',
+			},
+		});
 	});
 
-	test('finds account', async () => {
+	test('creates new account and returns it for existing user', async () => {
+		const adapter = kyselyAdapter(db);
+
+		const account = await adapter.create({
+			type: 'credentials',
+			providerId: 'email-pass-provider',
+			accountId: 'test3',
+			userId: 2,
+		});
+
+		expect(account).toEqual({
+			id: expect.stringMatching(basicUuidRegexp),
+			userId: 2,
+			type: 'credentials',
+			provider: 'email-pass-provider',
+			providerAccountId: 'test3',
+			providerAccountData: null,
+			user: {
+				id: 2,
+				name: 'test',
+				username: 'test_username',
+				email: 'test@test.local',
+				image: 'test_image.png',
+			},
+		});
+	});
+
+	test('finds account and returns it', async () => {
 		const adapter = kyselyAdapter(db);
 
 		const account = await adapter.findAccount({
@@ -83,38 +129,18 @@ suite('kysely-adapter', () => {
 			accountData: null,
 		});
 
-		expect(account?.id).toEqual(expect.any(String));
-		expect(account?.userId).toEqual(1);
-		expect(account?.type).toEqual('credentials');
-		expect(account?.provider).toEqual('email-pass-provider');
-		expect(account?.providerAccountId).toEqual('test');
-		expect(account?.providerAccountData).toEqual(null);
-		expect(account?.user.id).toEqual(account && account.userId);
-		expect(account?.user.name).toEqual('test');
-	});
-
-	test('created account with data', async () => {
-		const adapter = kyselyAdapter(db);
-
-		const account = await adapter.create({
+		expect(account).toEqual({
+			id: expect.stringMatching(basicUuidRegexp),
+			userId: 1,
 			type: 'credentials',
-			providerId: 'email-pass-provider',
-			accountId: 'test2',
-			accountData: JSON.stringify({ password: 'random' }),
-			name: 'test2',
+			provider: 'email-pass-provider',
+			providerAccountId: 'test',
+			providerAccountData: null,
+			user: { id: 1, name: null, username: null, email: null, image: null },
 		});
-
-		expect(account.id).toEqual(expect.any(String));
-		expect(account.userId).toEqual(2);
-		expect(account.type).toEqual('credentials');
-		expect(account.provider).toEqual('email-pass-provider');
-		expect(account.providerAccountId).toEqual('test2');
-		expect(account.providerAccountData).toEqual(JSON.stringify({ password: 'random' }));
-		expect(account.user.id).toEqual(account.userId);
-		expect(account.user.name).toEqual('test2');
 	});
 
-	test('finds account with data', async () => {
+	test('finds account with user data and returns it', async () => {
 		const adapter = kyselyAdapter(db);
 
 		const account = await adapter.findAccount({
@@ -124,14 +150,21 @@ suite('kysely-adapter', () => {
 			accountData: JSON.stringify({ password: 'random' }),
 		});
 
-		expect(account?.id).toEqual(expect.any(String));
-		expect(account?.userId).toEqual(2);
-		expect(account?.type).toEqual('credentials');
-		expect(account?.provider).toEqual('email-pass-provider');
-		expect(account?.providerAccountId).toEqual('test2');
-		expect(account?.providerAccountData).toEqual(JSON.stringify({ password: 'random' }));
-		expect(account?.user.id).toEqual(account && account.userId);
-		expect(account?.user.name).toEqual('test2');
+		expect(account).toEqual({
+			id: expect.stringMatching(basicUuidRegexp),
+			userId: 2,
+			type: 'credentials',
+			provider: 'email-pass-provider',
+			providerAccountId: 'test2',
+			providerAccountData: JSON.stringify({ password: 'random' }),
+			user: {
+				id: 2,
+				name: 'test',
+				username: 'test_username',
+				email: 'test@test.local',
+				image: 'test_image.png',
+			},
+		});
 	});
 
 	test('cant create account for same provider and account id', async () => {
@@ -146,5 +179,18 @@ suite('kysely-adapter', () => {
 				name: 'test',
 			}),
 		).rejects.toThrow('duplicate key value violates unique constraint');
+	});
+
+	test('returns null when finding account that doesnt exist', async () => {
+		const adapter = kyselyAdapter(db);
+
+		const account = await adapter.findAccount({
+			type: 'credentials',
+			providerId: 'email-pass-provider',
+			accountId: 'invalid-account',
+			accountData: null,
+		});
+
+		expect(account).toEqual(null);
 	});
 });

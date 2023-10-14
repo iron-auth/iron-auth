@@ -10,13 +10,14 @@
 	"scripts": {
 		"lint": "eslint \"./**/*.{cjs,js,jsx,ts,tsx}\"",
 		"tsc": "tsc --noEmit",
-		"test": "vitest run --passWithNoTests --silent",
+		"test": "vitest run --passWithNoTests",
 		"test:noisy": "vitest run --passWithNoTests",
 		"clean": "rimraf .turbo && rimraf node_modules && rimraf dist"
 	},
 	"devDependencies": {
 		"@tsconfig/strictest": "^2.0.2",
 		"@vitejs/plugin-react": "^4.1.0",
+		"@vitest/coverage-istanbul": "^0.34.6",
 		"eslint": "^8.51.0",
 		"eslint-config-ixn": "^1.5.3",
 		"iron-auth": "workspace:^",

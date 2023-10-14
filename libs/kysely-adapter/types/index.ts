@@ -1,12 +1,12 @@
 import type { ColumnType, Generated } from 'kysely';
 
-export interface VerificationToken {
+export interface VerificationTokensTable {
 	identifier: ColumnType<string, string, never>;
 	token: ColumnType<string, string, never>;
 	expires: ColumnType<Date, Date, never>;
 }
 
-export interface AccountTable {
+export interface AccountsTable {
 	id: Generated<string>;
 	user_id: ColumnType<number, number, never>;
 	type: ColumnType<string, string, never>;
@@ -23,7 +23,7 @@ export interface AccountTable {
 	session_state: string | null;
 }
 
-export interface UserTable {
+export interface UsersTable {
 	id: Generated<number>;
 	name: string | null;
 	username: string | null;
@@ -34,7 +34,7 @@ export interface UserTable {
 }
 
 export interface Database {
-	verification_tokens: VerificationToken;
-	accounts: AccountTable;
-	users: UserTable;
+	verification_tokens: VerificationTokensTable;
+	accounts: AccountsTable;
+	users: UsersTable;
 }

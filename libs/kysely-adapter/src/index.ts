@@ -3,6 +3,23 @@ import type { Kysely } from 'kysely';
 
 import type { Database } from '../types';
 
+const accountSelect = [
+	'id',
+	'user_id',
+	'type',
+	'provider',
+	'provider_account_id',
+	'provider_account_data',
+] satisfies (keyof Database['accounts'])[];
+
+const userSelect = [
+	'id',
+	'name',
+	'username',
+	'email',
+	'image',
+] satisfies (keyof Database['users'])[];
+
 /**
  * A Kysely adapter for Iron Auth.
  *
@@ -17,22 +34,22 @@ export const kyselyAdapter = (db: Kysely<Database>): AdapterConfig => ({
 		type,
 		providerId,
 		accountId,
+		accountData = null,
 		username = null,
 		name = null,
 		image = null,
 		email = null,
-		accountData = null,
 	}) => {
 		const user = userId
 			? await db
 					.selectFrom('users')
-					.select(['id', 'name', 'username', 'email', 'image'])
+					.select(userSelect)
 					.where('id', '=', userId)
 					.executeTakeFirstOrThrow()
 			: await db
 					.insertInto('users')
 					.values({ created_at: new Date(), name, username, email, image })
-					.returning(['id', 'name', 'username', 'email', 'image'])
+					.returning(userSelect)
 					.executeTakeFirstOrThrow();
 
 		const account = await db
@@ -45,14 +62,7 @@ export const kyselyAdapter = (db: Kysely<Database>): AdapterConfig => ({
 				provider_account_id: accountId,
 				provider_account_data: accountData,
 			})
-			.returning([
-				'id',
-				'user_id',
-				'type',
-				'provider',
-				'provider_account_id',
-				'provider_account_data',
-			])
+			.returning(accountSelect)
 			.executeTakeFirstOrThrow();
 
 		return {
@@ -77,7 +87,7 @@ export const kyselyAdapter = (db: Kysely<Database>): AdapterConfig => ({
 	findAccount: async ({ type, providerId, accountId, accountData }) => {
 		const account = await db
 			.selectFrom('accounts')
-			.select(['id', 'user_id', 'type', 'provider', 'provider_account_id', 'provider_account_data'])
+			.select(accountSelect)
 			.where((eb) =>
 				eb.and([
 					eb('type', '=', type),
@@ -89,12 +99,13 @@ export const kyselyAdapter = (db: Kysely<Database>): AdapterConfig => ({
 			.executeTakeFirst();
 		if (!account) return null;
 
-		const user = await db
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const user = (await db
 			.selectFrom('users')
-			.select(['id', 'name', 'username', 'email', 'image'])
+			.select(userSelect)
 			.where('id', '=', account.user_id)
-			.executeTakeFirst();
-		if (!user) return null;
+			// NOTE: Foreign key constraint ensures that this is never null.
+			.executeTakeFirst())!;
 
 		return {
 			id: account.id,

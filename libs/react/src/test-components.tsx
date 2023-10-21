@@ -1,13 +1,16 @@
+/* istanbul ignore file -- @preserve */
+
 import { useState } from 'react';
 
-import type { SessionProviderProps } from '@iron-auth/react';
-import { SessionProvider, useSession } from '@iron-auth/react';
 import type { SignInResponse, SignOutResponse, SignUpResponse } from 'iron-auth';
 import { getSession, signIn, signOut, signUp } from 'iron-auth/methods';
 import type { WithFetchOptions } from 'iron-auth/methods/fetch-api-data';
 import type { GetAuthMethod } from 'iron-auth/methods/get-auth-method';
 import type { PostAuthMethod } from 'iron-auth/methods/post-auth-method';
 import type { ProviderType, ValidSession } from 'iron-auth/types';
+
+import type { SessionProviderProps } from './session-provider';
+import { SessionProvider, useSession } from './session-provider';
 
 export const SessionComponent = () => {
 	const { loadingInitialSession, session } = useSession();

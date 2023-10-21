@@ -6,21 +6,22 @@ import {
 	waitForElementToBeRemoved,
 } from '@testing-library/react';
 
-import { AccountBasket } from '@libs/test-utils';
+import { AccountBasket, apiUrl, mockApi } from '@libs/test-utils';
 import type { SignUpResponse } from 'iron-auth';
+import { EventChannel } from 'iron-auth/methods/event-channel';
 import type { ValidSession } from 'iron-auth/types';
-import { beforeAll, expect, suite, test, vi } from 'vitest';
+import { afterAll, beforeAll, expect, suite, test, vi } from 'vitest';
 
-import { basePath, resetPrisma } from '../helpers';
 import { ProviderComponent } from './test-components';
 
-suite('React Session Provider', () => {
+suite('React Session Provider', async () => {
+	const basePath = apiUrl;
 	const accounts = new AccountBasket();
 
-	beforeAll(async () => {
-		vi.clearAllMocks();
-		await resetPrisma();
-	});
+	const server = await mockApi();
+
+	beforeAll(() => server.start());
+	afterAll(() => server.stop());
 
 	test('No session passed or loaded returns nothing for session', async () => {
 		const { email, password } = accounts.get('primary');
@@ -220,6 +221,8 @@ suite('React Session Provider', () => {
 
 		expect(screen.queryByTestId('session')).toBeNull();
 
+		const locationReplaceMock = vi.spyOn(window.location, 'replace').mockImplementation(() => null);
+
 		fireEvent.click(screen.getByTestId('sign-in_btn'));
 
 		expect(await screen.findByTestId('sign-in_loading')).toBeDefined();
@@ -227,9 +230,9 @@ suite('React Session Provider', () => {
 		expect(screen.queryByTestId('session')).toBeNull();
 
 		await waitForElementToBeRemoved(() => screen.getByText(/Loading/));
-		// console.log(screen.getByTestId('sign-in_error').textContent);
 
-		expect(screen.getByTestId('sign-in_error').textContent).toEqual('Invalid URL');
+		expect(locationReplaceMock).toHaveBeenCalled();
+		locationReplaceMock.mockRestore();
 	});
 
 	test('Get session returns current session data', async () => {
@@ -261,6 +264,10 @@ suite('React Session Provider', () => {
 
 		expect(screen.queryByTestId('session')).not.toBeNull();
 		expect(screen.getByTestId('session').textContent?.includes(email)).toEqual(true);
+
+		EventChannel.notify({ event: 'sign-out' });
+
+		expect(screen.queryByTestId('session')).toBeNull();
 	});
 
 	test('Sign in with wrong password returns error', async () => {

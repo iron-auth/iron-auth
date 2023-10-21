@@ -1,9 +1,11 @@
 import { credentialsProvider } from 'iron-auth/providers';
 import type { AdapterConfig, IronAuthConfig } from 'iron-auth/types';
 
+import { apiUrl } from './constants';
+
 export const ironAuthOptions = (adapter: AdapterConfig, debug = false): IronAuthConfig => ({
 	debug,
-	url: 'http://localhost:3000',
+	url: apiUrl,
 
 	adapter,
 	providers: [credentialsProvider, { ...credentialsProvider, id: 'email-pass-provider-alt' }],

@@ -31,11 +31,11 @@
 	},
 	"dependencies": {
 		"@iron-auth/kysely-adapter": "workspace:^",
-		"@iron-auth/react": "workspace:^",
 		"@prisma/client": "^4.5.0",
 		"iron-auth": "workspace:^",
 		"iron-session": "^6.3.1",
 		"kysely": "^0.26.3",
+		"msw": "0.0.0-fetch.rc-20",
 		"pg-mem": "^2.6.4"
 	}
 }

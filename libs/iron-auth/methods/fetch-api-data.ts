@@ -33,8 +33,15 @@ export const fetchApiData = <Data extends ApiResponseDataType = null>(
 	new Promise<Data>((res, rej) => {
 		fetch(`${basePath}${path}`, { redirect: 'follow', ...options })
 			.then((resp) => {
-				if (resp.ok && resp.redirected) {
-					window.location.replace(resp.url);
+				const locationHeader = resp.headers.get('location');
+				if ((resp.ok && resp.redirected) || locationHeader) {
+					if (resp.redirected) {
+						window.location.replace(resp.url);
+					} else if (locationHeader) {
+						const newUrl = new URL(locationHeader, resp.url);
+						window.location.replace(newUrl.toString());
+					}
+
 					res(null as unknown as Data);
 				}
 

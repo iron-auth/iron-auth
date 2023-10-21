@@ -30,21 +30,38 @@ export const useSession = <HasSession extends boolean = false>() =>
 	useContext<ISessionContext<HasSession>>(SessionContext);
 
 type Props = {
+	/**
+	 * The base path of the API.
+	 *
+	 * @default '/api/auth'
+	 */
 	basePath?: string;
+	/** The children to render. */
 	children: React.ReactNode;
+	/**
+	 * The session data to use. Useful for passing in a session retrieved in server side rendering.
+	 *
+	 * If not provided, the session will be fetched from the API when `fetchOnLoad` is true.
+	 */
 	session?: ValidSession | undefined | null;
+	/**
+	 * Whether to fetch the session on load - does not try fetching if a session is passed through.
+	 *
+	 * @default false
+	 */
 	fetchOnLoad?: boolean;
+	/**
+	 * Whether to listen to cross-tab communication session updates.
+	 *
+	 * @default true
+	 */
 	crossTabCommunication?: boolean;
 };
 
 /**
  * Session context provider for Iron Auth.
  *
- * @param props.basePath The base path of the API. Defaults to '/api/auth'.
- * @param props.children React children.
- * @param props.fetchOnLoad Whether to fetch the session on load - does not try fetching if a session is passed through. Defaults to false.
- * @param props.crossTabCommunication Whether to listen to cross-tab communication session updates. Defaults to true.
- * @param props.session The session data to use. If not provided, the session will be fetched from the API. Useful for passing in a session retrieved in server side rendering.
+ * @param props Props for the session provider.
  */
 export const SessionProvider = ({
 	basePath = fetchDefaults.basePath,
@@ -66,9 +83,7 @@ export const SessionProvider = ({
 		lastSession: pageSession,
 	});
 
-	/*
-	 * Helper to fetch the session, update the state, and broadcast the event between tabs.
-	 */
+	// Helper to fetch the session, update the state, and broadcast the event between tabs.
 	const fetchSession = useCallback(async (fromEvent?: boolean) => {
 		const newSession = await getSession({
 			basePath: basePathRef.current,
@@ -81,20 +96,20 @@ export const SessionProvider = ({
 			tabState.current.lastUpdate = Date.now();
 			tabState.current.lastSession = newSession;
 
-			// we dont need to notify on success here as it will notify in the getSession method.
+			// We dont need to notify on success here as it will notify in the `getSession` method.
 		} else {
 			// TODO: Decide if we should notify on getSession request failure.
 			// channel.current.notify({ event: 'no-session' });
 		}
 	}, []);
 
-	/*
-	 * Fetch session initially if no page session is provided.
-	 */
 	useEffect(() => {
 		if (fetchOnLoad && pageSession === undefined && tabState.current.lastSession === undefined) {
+			// Fetch session initially if no page session is provided.
 			setLoadingInitialSession(true);
-			// act as if this is being notified from an event so that we don't accidentally trigger a refetch on first page load.
+
+			// Act as if this is being notified from an event so that we don't accidentally trigger a
+			// refetch on first page load.
 			fetchSession(true).then(() => {
 				setLoadingInitialSession(false);
 				if (!tabState.current.lastSession) {
@@ -104,24 +119,23 @@ export const SessionProvider = ({
 		}
 	}, [fetchOnLoad, fetchSession, pageSession]);
 
-	/*
-	 * Listens for events from the update channel (through local storage) and handle them.
-	 */
+	// Listens for events from the update channel (through local storage) and handle them.
 	useEffect(() => {
+		/* istanbul ignore if -- @preserve */
 		if (!crossTabCommunication) {
 			// eslint-disable-next-line no-console
 			console.debug('Cross-tab communication for session updates is disabled.');
-			return;
+			return undefined;
 		}
 
-		const chan = channel.current;
-
-		const handleEvent = ({ event, userId }: EventShape) => {
+		// Handler for any events received via the cross-tab event channel.
+		const handleEvent = (e: EventShape) => {
 			// eslint-disable-next-line no-console
-			console.debug('Received cross-tab event:', { event, userId });
-			switch (event) {
+			console.debug('Received cross-tab event:', e);
+
+			switch (e.event) {
 				case 'session-updated': {
-					if (!!userId && tabState.current.lastSession?.user?.id !== userId) {
+					if (!!e.userId && tabState.current.lastSession?.user?.id !== e.userId) {
 						fetchSession(true);
 					}
 					break;
@@ -135,13 +149,13 @@ export const SessionProvider = ({
 					break;
 				}
 				case 'sign-in': {
-					if (!!userId && tabState.current.lastSession?.user?.id !== userId) {
+					if (!!e.userId && tabState.current.lastSession?.user?.id !== e.userId) {
 						fetchSession(true);
 					}
 					break;
 				}
 				case 'sign-up': {
-					if (!!userId && tabState.current.lastSession?.user?.id !== userId) {
+					if (!!e.userId && tabState.current.lastSession?.user?.id !== e.userId) {
 						fetchSession(true);
 					}
 					break;
@@ -155,17 +169,18 @@ export const SessionProvider = ({
 					break;
 				}
 				default: {
-					// do nothing as it is not a valid event.
+					// Do nothing as it is not a valid/supported event.
 					// eslint-disable-next-line no-console
-					console.debug('Invalid cross-tab event:', event);
+					console.debug('Invalid cross-tab event:', e.event);
 				}
 			}
 		};
 
+		const chan = channel.current;
+
 		chan.subscribe('session-provider', handleEvent);
 		chan.open();
 
-		// eslint-disable-next-line consistent-return
 		return () => {
 			chan.unsubscribe('session-provider');
 			chan.close();

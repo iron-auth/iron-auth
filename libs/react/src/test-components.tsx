@@ -149,14 +149,7 @@ export const SignOutComponent = <T extends ProviderType>({
 export const GetSessionComponent = <T extends ProviderType>({
 	postArgs,
 }: {
-	postArgs: Parameters<
-		GetAuthMethod<
-			T,
-			{
-				notifyOnSuccess?: boolean;
-			}
-		>
-	>;
+	postArgs: Parameters<GetAuthMethod<T, { notifyOnSuccess?: boolean }>>;
 }) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);

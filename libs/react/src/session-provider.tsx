@@ -64,6 +64,7 @@ type Props = {
  * @param props Props for the session provider.
  */
 export const SessionProvider = ({
+	/* istanbul ignore next -- @preserve */
 	basePath = fetchDefaults.basePath,
 	children,
 	fetchOnLoad = false,
@@ -134,33 +135,16 @@ export const SessionProvider = ({
 			console.debug('Received cross-tab event:', e);
 
 			switch (e.event) {
-				case 'session-updated': {
-					if (!!e.userId && tabState.current.lastSession?.user?.id !== e.userId) {
-						fetchSession(true);
-					}
-					break;
-				}
-				case 'no-session': {
-					if (tabState.current.lastSession) {
-						setSession(null);
-						tabState.current.lastSession = null;
-						tabState.current.lastUpdate = Date.now();
-					}
-					break;
-				}
-				case 'sign-in': {
-					if (!!e.userId && tabState.current.lastSession?.user?.id !== e.userId) {
-						fetchSession(true);
-					}
-					break;
-				}
+				case 'session-updated':
+				case 'sign-in':
 				case 'sign-up': {
 					if (!!e.userId && tabState.current.lastSession?.user?.id !== e.userId) {
 						fetchSession(true);
 					}
 					break;
 				}
-				case 'sign-out': {
+				case 'sign-out':
+				case 'no-session': {
 					if (tabState.current.lastSession) {
 						setSession(null);
 						tabState.current.lastSession = null;
@@ -171,7 +155,7 @@ export const SessionProvider = ({
 				default: {
 					// Do nothing as it is not a valid/supported event.
 					// eslint-disable-next-line no-console
-					console.debug('Invalid cross-tab event:', e.event);
+					console.debug(`Invalid cross-tab event: ${e.event}`);
 				}
 			}
 		};
